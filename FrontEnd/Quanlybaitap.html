@@ -15,6 +15,11 @@
     </style>
 </head>
 <body class="bg-gray-50 flex min-h-screen">
+    <script>
+        // API Configuration
+        if (!window.API_BASE) window.API_BASE = 'http://localhost:8000';
+        if (!window.API_TOKEN) window.API_TOKEN = 'dev-token';
+    </script>
 
     <!-- SIDEBAR -->
     <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-20 sticky top-0 h-screen">
@@ -153,22 +158,22 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <tr class="hover:bg-blue-50">
+                            <tr class="hover:bg-blue-50" data-user-id="1" data-assignment-id="1" data-score-id="">
                                 <td class="px-6 py-4 font-medium text-slate-800">Nguyễn Văn A <span class="text-gray-400 font-normal ml-1">(SV001)</span></td>
                                 <td class="px-6 py-4 text-green-600">10:30 24/11/2023 <span class="text-xs bg-green-100 px-1.5 py-0.5 rounded ml-1">Đúng hạn</span></td>
                                 <td class="px-6 py-4 text-blue-600 underline cursor-pointer">BTL_Nhom1.pdf</td>
-                                <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded font-bold">Chưa chấm</span></td>
+                                <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded font-bold grading-status">Chưa chấm</span></td>
                                 <td class="px-6 py-4 text-right">
-                                    <button onclick="openGradingModal('Nguyễn Văn A', 'BTL_Nhom1.pdf')" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700">Chấm bài</button>
+                                    <button onclick="openGradingModal('Nguyễn Văn A', 'BTL_Nhom1.pdf', '', 1, 1)" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 grading-action">Chấm bài</button>
                                 </td>
                             </tr>
                             <tr class="hover:bg-blue-50">
                                 <td class="px-6 py-4 font-medium text-slate-800">Trần Thị B <span class="text-gray-400 font-normal ml-1">(SV002)</span></td>
                                 <td class="px-6 py-4 text-green-600">09:15 23/11/2023</td>
                                 <td class="px-6 py-4 text-blue-600 underline cursor-pointer">Diagram_Final.png</td>
-                                <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-bold">8.5 / 10</span></td>
+                                <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-bold grading-status">8.5 / 10</span></td>
                                 <td class="px-6 py-4 text-right">
-                                    <button onclick="openGradingModal('Trần Thị B', 'Diagram_Final.png', '8.5')" class="px-3 py-1.5 border border-blue-600 text-blue-600 text-xs font-bold rounded hover:bg-blue-50">Sửa điểm</button>
+                                    <button onclick="openGradingModal('Trần Thị B', 'Diagram_Final.png', '8.5', 2, 1, 301)" class="px-3 py-1.5 border border-blue-600 text-blue-600 text-xs font-bold rounded hover:bg-blue-50 grading-action">Sửa điểm</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -313,12 +318,18 @@
         }
 
         // Modal chấm điểm
-        function openGradingModal(studentName, fileName, score = '') {
+        // userId, assignmentId are numeric ids; scoreId is optional (existing score record id)
+        let __grading_ctx = { userId: null, assignmentId: null, scoreId: null };
+        function openGradingModal(studentName, fileName, score = '', userId = null, assignmentId = null, scoreId = null) {
             document.getElementById('modal-student-name').innerText = 'Chấm bài: ' + studentName;
             document.getElementById('modal-file-name').innerText = 'File nộp: ' + fileName;
             document.getElementById('grading-score').value = score;
             document.getElementById('grading-feedback').value = score ? "Bài làm khá tốt, đáp ứng được yêu cầu cơ bản." : "";
             document.getElementById('modal-grading').classList.remove('hidden');
+
+            __grading_ctx.userId = userId;
+            __grading_ctx.assignmentId = assignmentId;
+            __grading_ctx.scoreId = scoreId || null;
 
             // Gắn lại sự kiện cho nút lưu
             document.getElementById('grading-save-btn').onclick = openConfirmModal;
@@ -336,14 +347,85 @@
             document.getElementById('modal-confirm').classList.add('hidden');
         }
 
-        function confirmSaveScore() {
+        const API_BASE = window.API_BASE || 'http://localhost:8000';
+        const API_TOKEN = window.API_TOKEN || 'dev-token';
+
+        async function confirmSaveScore() {
             closeConfirmModal();
-            closeGradingModal();
-            document.getElementById('modal-success').classList.remove('hidden');
+            // gather values
+            const val = parseFloat(document.getElementById('grading-score').value);
+            if (isNaN(val)) {
+                alert('Vui lòng nhập điểm hợp lệ');
+                return;
+            }
+            const payload = {
+                user_id: __grading_ctx.userId,
+                assignment_id: __grading_ctx.assignmentId,
+                score: val,
+                feedback: document.getElementById('grading-feedback').value || null
+            };
+
+            try {
+                if (__grading_ctx.scoreId) {
+                    // update existing
+                    const res = await fetch(`${API_BASE}/scores/${__grading_ctx.scoreId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_TOKEN },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!res.ok) throw new Error('Update failed');
+                    const updated = await res.json();
+                    // update UI
+                    updateRowAfterSave(payload.user_id, payload.assignment_id, updated.score, __grading_ctx.scoreId);
+                } else {
+                    // create new
+                    const res = await fetch(`${API_BASE}/scores`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_TOKEN },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!res.ok) throw new Error('Create failed');
+                    const created = await res.json();
+                    __grading_ctx.scoreId = created.id || created.ID || null;
+                    updateRowAfterSave(payload.user_id, payload.assignment_id, created.score, __grading_ctx.scoreId);
+                }
+
+                closeGradingModal();
+                document.getElementById('modal-success').classList.remove('hidden');
+            } catch (err) {
+                console.error(err);
+                alert('Lưu điểm thất bại: ' + err.message);
+            }
         }
 
         function closeSuccessModal() {
             document.getElementById('modal-success').classList.add('hidden');
+        }
+
+        // Update row UI after saving score
+        function updateRowAfterSave(userId, assignmentId, scoreValue, scoreId) {
+            // find the table row
+            const row = document.querySelector(`tr[data-user-id='${userId}'][data-assignment-id='${assignmentId}']`);
+            if (!row) return;
+            const statusEl = row.querySelector('.grading-status');
+            if (statusEl) {
+                statusEl.textContent = `${scoreValue} / 10`;
+                statusEl.classList.remove('bg-gray-100','text-gray-600');
+                statusEl.classList.add('bg-green-100','text-green-700');
+            }
+            // update button to 'Sửa điểm' and attach scoreId
+            const btn = row.querySelector('.grading-action');
+            if (btn) {
+                btn.textContent = 'Sửa điểm';
+                btn.classList.remove('bg-blue-600','text-white');
+                btn.classList.add('border','border-blue-600','text-blue-600');
+                // rewrite onclick to open modal with current values
+                btn.onclick = function() {
+                    openGradingModal(row.querySelector('td').innerText.trim(), row.querySelector('.px-6.py-4.text-blue-600') ? row.querySelector('.px-6.py-4.text-blue-600').innerText : '', scoreValue, userId, assignmentId, scoreId);
+                };
+                // set data-score-id on row
+                row.dataset.scoreId = scoreId || '';
+            }
         }
 
         // Khởi tạo

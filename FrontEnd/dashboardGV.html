@@ -15,6 +15,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <script>
+        // API Configuration
+        if (!window.API_BASE) window.API_BASE = 'http://localhost:8000';
+        if (!window.API_TOKEN) window.API_TOKEN = 'dev-token';
+    </script>
 
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
@@ -87,30 +92,103 @@
             <!-- Icons & Avatar -->
             <div class="header-right">
                 <button class="icon-btn" title="Trợ giúp"><i class="ri-question-line"></i></button>
-                <button class="icon-btn relative" title="Tin nhắn" id="btn-messages">
+                
+                <!-- Nút Tin nhắn -->
+                <button class="icon-btn icon-btn-relative" title="Tin nhắn" id="btn-messages">
                     <i class="ri-message-3-line"></i>
-                    <span class="badge-dot"></span>
+                    <span class="badge-dot active"></span>
                 </button>
-                <button class="icon-btn relative" title="Thông báo" id="btn-notifications">
+                <!-- Dropdown: Tin nhắn -->
+                <div id="dropdown-messages" class="dropdown-menu hidden">
+                    <div class="dropdown-header-title">
+                        <h3>Tin nhắn</h3>
+                    </div>
+                    <ul class="messages-list">
+                        <li class="message-item unread" data-id="101">
+                            <img src="https://ui-avatars.com/api/?name=Tran+Thi+B&background=F59E0B&color=fff" alt="Avatar" class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-name">Trần Thị B</span>
+                                    <span class="message-time">5 phút</span>
+                                </div>
+                                <p class="message-text">Thầy ơi, em xin phép nộp muộn bài tập tuần này!</p>
+                                <span class="unread-indicator"></span>
+                            </div>
+                        </li>
+                        <li class="message-item unread" data-id="102">
+                            <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=3B82F6&color=fff" alt="Avatar" class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-name">Nguyễn Văn A</span>
+                                    <span class="message-time">12 phút</span>
+                                </div>
+                                <p class="message-text">Em đã nộp bài tập RESTful API.</p>
+                                <span class="unread-indicator"></span>
+                            </div>
+                        </li>
+                        <li class="message-item" data-id="103">
+                            <img src="https://ui-avatars.com/api/?name=Le+Hoang+C&background=10B981&color=fff" alt="Avatar" class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-name">Lê Hoàng C</span>
+                                    <span class="message-time">1 giờ</span>
+                                </div>
+                                <p class="message-text">Cảm ơn thầy đã chấm bài ạ</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <button class="dropdown-view-all">Xem tất cả tin nhắn</button>
+                </div>
+                
+                <!-- Nút Thông báo -->
+                <button class="icon-btn icon-btn-relative" title="Thông báo" id="btn-notifications">
                     <i class="ri-notification-3-line"></i>
-                    <span class="badge-count">3</span>
+                    <span class="badge-count" id="notification-badge">3</span>
                 </button>
                 <!-- Dropdown: Thông báo -->
-                <div id="dropdown-notifications" class="dropdown-box hidden absolute right-24 top-16 bg-white rounded-xl shadow-lg w-80 p-4 z-50">
-                    <h2 class="text-base font-bold mb-3">Thông báo</h2>
-                    <ul class="space-y-2">
-                        <li class="border-b pb-2 text-gray-700">Bài tập mới đã được đăng trong lớp Lập trình Web.</li>
-                        <li class="border-b pb-2 text-gray-700">Có 5 bài cần chấm điểm trước 23:59 hôm nay.</li>
-                        <li class="border-b pb-2 text-gray-700">Sinh viên Nguyễn Văn A vừa nộp bài tập.</li>
+                <div id="dropdown-notifications" class="dropdown-menu hidden">
+                    <div class="dropdown-header-title">
+                        <h3>Thông báo</h3>
+                    </div>
+                    <ul class="notifications-list">
+                        <li class="notification-item unread" data-id="201">
+                            <div class="notification-icon bg-blue">
+                                <i class="ri-file-text-line"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p class="notification-title"><strong>Bài tập mới</strong></p>
+                                <p class="notification-text">Bài tập mới đã được đăng trong lớp Lập trình Web.</p>
+                                <span class="notification-class">Lập trình Web</span>
+                                <span class="notification-time">15 phút trước</span>
+                            </div>
+                            <span class="unread-dot"></span>
+                        </li>
+                        <li class="notification-item unread" data-id="202">
+                            <div class="notification-icon bg-orange">
+                                <i class="ri-alert-line"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p class="notification-title"><strong>Cần chấm điểm</strong></p>
+                                <p class="notification-text">Có 5 bài cần chấm điểm trước 23:59 hôm nay.</p>
+                                <span class="notification-class">Phát triển mã nguồn mở</span>
+                                <span class="notification-time">1 giờ trước</span>
+                            </div>
+                            <span class="unread-dot"></span>
+                        </li>
+                        <li class="notification-item unread" data-id="203">
+                            <div class="notification-icon bg-green">
+                                <i class="ri-upload-cloud-line"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p class="notification-title"><strong>Bài tập được nộp</strong></p>
+                                <p class="notification-text">Sinh viên Nguyễn Văn A vừa nộp bài tập.</p>
+                                <span class="notification-class">Lập trình Web</span>
+                                <span class="notification-time">2 giờ trước</span>
+                            </div>
+                            <span class="unread-dot"></span>
+                        </li>
                     </ul>
-                </div>
-                <!-- Dropdown: Tin nhắn -->
-                <div id="dropdown-messages" class="dropdown-box hidden absolute right-40 top-16 bg-white rounded-xl shadow-lg w-80 p-4 z-50">
-                    <h2 class="text-base font-bold mb-3">Tin nhắn</h2>
-                    <ul class="space-y-2">
-                        <li class="border-b pb-2 text-gray-700">Sinh viên Trần Thị B: "Thầy ơi, em xin phép nộp muộn bài tập tuần này!"</li>
-                        <li class="border-b pb-2 text-gray-700">Sinh viên Nguyễn Văn A: "Em đã nộp bài tập RESTful API."</li>
-                    </ul>
+                    <button class="dropdown-view-all">Xem tất cả thông báo</button>
                 </div>
 
                 <!-- AVATAR HEADER VỚI DROPDOWN (MỚI) -->
@@ -404,11 +482,14 @@
             const btnNotifications = document.getElementById('btn-notifications');
             const dropdownMessages = document.getElementById('dropdown-messages');
             const dropdownNotifications = document.getElementById('dropdown-notifications');
+            const notificationBadge = document.getElementById('notification-badge');
 
             // Bật/tắt khi click vào avatar
             trigger.addEventListener('click', function(e) {
                 e.stopPropagation();
                 menu.classList.toggle('show');
+                dropdownMessages.classList.add('hidden');
+                dropdownNotifications.classList.add('hidden');
             });
 
             // Đóng menu khi click bất cứ đâu bên ngoài
@@ -423,12 +504,39 @@
                 e.stopPropagation();
                 dropdownMessages.classList.toggle('hidden');
                 dropdownNotifications.classList.add('hidden');
+                menu.classList.remove('show');
+                
+                // Mark messages as read when opened
+                const unreadMessages = dropdownMessages.querySelectorAll('.message-item.unread');
+                unreadMessages.forEach(msg => {
+                    setTimeout(() => msg.classList.remove('unread'), 300);
+                });
             });
+
             // Dropdown thông báo
             btnNotifications.addEventListener('click', function(e) {
                 e.stopPropagation();
                 dropdownNotifications.classList.toggle('hidden');
                 dropdownMessages.classList.add('hidden');
+                menu.classList.remove('show');
+                
+                // Mark notifications as read when opened
+                const unreadNotifications = dropdownNotifications.querySelectorAll('.notification-item.unread');
+                let count = parseInt(notificationBadge.textContent);
+                unreadNotifications.forEach((notif, index) => {
+                    setTimeout(() => {
+                        notif.classList.remove('unread');
+                        if (count > 0) {
+                            count--;
+                            if (count === 0) {
+                                notificationBadge.textContent = '';
+                                notificationBadge.style.display = 'none';
+                            } else {
+                                notificationBadge.textContent = count;
+                            }
+                        }
+                    }, index * 100);
+                });
             });
 
             // Đóng dropdown khi click ra ngoài
@@ -440,6 +548,80 @@
                     dropdownNotifications.classList.add('hidden');
                 }
             });
+
+            // Click vào notification item để xem chi tiết (mark per item)
+            const notificationItems = dropdownNotifications.querySelectorAll('.notification-item');
+            notificationItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const notifId = this.dataset.id;
+                    // mark read on server
+                    if (notifId) {
+                        fetch(`/notifications/${notifId}/mark-read`, { method: 'POST' })
+                            .then(res => res.json())
+                            .then(() => {
+                                this.classList.remove('unread');
+                                const badge = notificationBadge;
+                                let count = parseInt(badge.textContent) || 0;
+                                if (count > 0) {
+                                    count = Math.max(0, count - 1);
+                                    if (count === 0) {
+                                        badge.textContent = '';
+                                        badge.style.display = 'none';
+                                    } else {
+                                        badge.textContent = count;
+                                    }
+                                }
+                            })
+                            .catch(err => console.warn('Mark notification read failed', err));
+                    }
+                    // Redirect to appropriate page or detail (placeholder)
+                    dropdownNotifications.classList.add('hidden');
+                });
+            });
+
+            // Click vào message item để mở chat (mark per message)
+            const messageItems = dropdownMessages.querySelectorAll('.message-item');
+            messageItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const msgId = this.dataset.id;
+                    if (msgId) {
+                        fetch(`/messages/${msgId}/mark-read`, { method: 'POST' })
+                            .then(res => res.json())
+                            .then(() => {
+                                this.classList.remove('unread');
+                                // remove message badge dot if none left (simple approach)
+                                const remaining = dropdownMessages.querySelectorAll('.message-item.unread').length;
+                                const dot = btnMessages.querySelector('.badge-dot');
+                                if (dot) {
+                                    if (remaining === 0) dot.classList.remove('active');
+                                }
+                            })
+                            .catch(err => console.warn('Mark message read failed', err));
+                    }
+                    // Open chat or navigate (placeholder)
+                    dropdownMessages.classList.add('hidden');
+                });
+            });
+
+            // View all notifications
+            const viewAllNotifications = dropdownNotifications.querySelector('.dropdown-view-all');
+            if (viewAllNotifications) {
+                viewAllNotifications.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    window.location.href = '#notifications-page';
+                });
+            }
+
+            // View all messages
+            const viewAllMessages = dropdownMessages.querySelector('.dropdown-view-all');
+            if (viewAllMessages) {
+                viewAllMessages.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    window.location.href = '#messages-page';
+                });
+            }
         });
     </script>
 </body>

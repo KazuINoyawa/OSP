@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from datetime import datetime
 from ..database import get_db
 from .. import models
+from ..deps import get_api_token
 
 router = APIRouter(prefix="/scores", tags=["scores"])
 
@@ -22,16 +24,19 @@ class ScoreRequest(BaseModel):
     user_id: int
     assignment_id: int
     score: float
+    feedback: str | None = None
 
-@router.post("/")
+@router.post("/", dependencies=[Depends(get_api_token)])
 def create_score(score_data: ScoreRequest, db: Session = Depends(get_db)):
-    db_score = models.Score(**score_data.dict())
+    payload = score_data.dict()
+    payload['graded_at'] = datetime.utcnow()
+    db_score = models.Score(**payload)
     db.add(db_score)
     db.commit()
     db.refresh(db_score)
     return db_score
 
-@router.put("/{score_id}")
+@router.put("/{score_id}", dependencies=[Depends(get_api_token)])
 def update_score(score_id: int, score_data: ScoreRequest, db: Session = Depends(get_db)):
     db_score = db.query(models.Score).filter(models.Score.id == score_id).first()
     if not db_score:
@@ -39,6 +44,8 @@ def update_score(score_id: int, score_data: ScoreRequest, db: Session = Depends(
     db_score.user_id = score_data.user_id
     db_score.assignment_id = score_data.assignment_id
     db_score.score = score_data.score
+    db_score.feedback = score_data.feedback
+    db_score.graded_at = datetime.utcnow()
     db.commit()
     db.refresh(db_score)
     return db_score

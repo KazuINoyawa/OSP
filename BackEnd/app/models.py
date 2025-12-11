@@ -19,6 +19,18 @@ class Message(Base):
 	receiver_id = Column(Integer, ForeignKey("users.id"))
 	content = Column(Text, nullable=False)
 	timestamp = Column(DateTime)
+	is_read = Column(Integer, default=0)  # 0: unread, 1: read
+
+
+class Notification(Base):
+	__tablename__ = "notifications"
+	id = Column(Integer, primary_key=True, index=True)
+	user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+	title = Column(String, nullable=False)
+	message = Column(Text)
+	class_name = Column(String, nullable=True)
+	timestamp = Column(DateTime)
+	is_read = Column(Integer, default=0)  # 0: unread, 1: read
 
 class User(Base):
 	__tablename__ = "users"
@@ -58,4 +70,6 @@ class Score(Base):
 	user_id = Column(Integer, ForeignKey("users.id"))
 	assignment_id = Column(Integer, ForeignKey("assignments.id"))
 	score = Column(Float)
+	feedback = Column(Text, nullable=True)
+	graded_at = Column(DateTime, nullable=True)
 	assignment = relationship("Assignment", back_populates="scores")

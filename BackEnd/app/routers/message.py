@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from ..database import get_db
 from .. import models
+from ..deps import get_api_token
 
 router = APIRouter(prefix="/messages", tags=["messages"])
 
@@ -31,3 +32,14 @@ def get_messages(sender_id: int, receiver_id: int, db: Session = Depends(get_db)
         ((models.Message.sender_id == sender_id) & (models.Message.receiver_id == receiver_id)) |
         ((models.Message.sender_id == receiver_id) & (models.Message.receiver_id == sender_id))
     ).order_by(models.Message.timestamp.asc()).all()
+
+
+@router.post("/{message_id}/mark-read", dependencies=[Depends(get_api_token)])
+def mark_message_read(message_id: int, db: Session = Depends(get_db)):
+    message = db.query(models.Message).filter(models.Message.id == message_id).first()
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    message.is_read = 1
+    db.add(message)
+    db.commit()
+    return {"status": "ok", "message_id": message_id}
