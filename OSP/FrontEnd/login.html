@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - LMS Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Hiệu ứng ảnh bên trái */
+        .login-image {
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .hidden-form { display: none; }
+        /* Custom checkbox */
+        .custom-checkbox:checked {
+            background-color: #2563EB;
+            border-color: #2563EB;
+        }
+    </style>
+</head>
+<body class="h-screen w-full bg-gray-50">
+
+    <div class="flex w-full h-full overflow-hidden bg-white shadow-2xl">
+        
+        <!-- LEFT SIDE: IMAGE & BRANDING (Ẩn trên mobile) -->
+        <div class="hidden md:flex md:w-1/2 lg:w-6/12 bg-blue-600 login-image relative flex-col justify-between p-12 text-white">
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-blue-900/60"></div>
+            
+            <!-- Content on top of image -->
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 text-2xl font-bold tracking-wide">
+                    <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                        <i class="ri-book-open-line"></i>
+                    </div>
+                    LMS EDU
+                </div>
+            </div>
+
+            <div class="relative z-10 mb-8">
+                <h1 class="text-4xl font-bold mb-4 leading-tight">Học tập mọi lúc, <br>Phát triển mọi nơi.</h1>
+                <p class="text-blue-100 text-lg">Nền tảng quản lý học tập trực tuyến hàng đầu dành cho giảng viên và sinh viên.</p>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: LOGIN FORM -->
+        <div class="w-full md:w-1/2 lg:w-6/12 flex items-center justify-center p-8 md:p-12 lg:p-20 overflow-y-auto">
+            <div class="w-full max-w-md">
+                
+                <!-- Mobile Logo (Hiện trên mobile) -->
+                <div class="md:hidden flex items-center gap-2 mb-8 text-blue-600 font-bold text-xl">
+                    <i class="ri-book-open-line"></i> LMS EDU
+                </div>
+
+                <!-- SECTION: ĐĂNG NHẬP -->
+                <div id="login-form" class="form-container">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-2">Đăng nhập</h2>
+                        <p class="text-slate-500">Chào mừng trở lại! Vui lòng nhập thông tin.</p>
+                    </div>
+
+                    <!-- Form sử dụng onsubmit để bắt sự kiện Enter hoặc Click nút submit -->
+                    <form onsubmit="handleLogin(event)" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Tên đăng nhập hoặc Email</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                                    <i class="ri-user-line"></i>
+                                </span>
+                                <input type="text" id="username" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Nhập tên đăng nhập" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Mật khẩu</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                                    <i class="ri-lock-line"></i>
+                                </span>
+                                <input type="password" id="password" class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="••••••••" required>
+                                <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600">
+                                    <i class="ri-eye-off-line"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 custom-checkbox">
+                                <span class="text-sm text-slate-600">Ghi nhớ đăng nhập</span>
+                            </label>
+                            <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline">Quên mật khẩu?</a>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                            <span>Đăng nhập</span>
+                            <i class="ri-arrow-right-line"></i>
+                        </button>
+                    </form>
+
+                    <!-- Demo Accounts Hint -->
+                    <div class="mt-8 p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600">
+                        <p class="font-bold text-slate-800 mb-2 flex items-center gap-1"><i class="ri-information-fill text-blue-500"></i> Tài khoản Demo (Click để điền nhanh):</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-white p-2 rounded border border-slate-200 cursor-pointer hover:border-blue-300 transition-colors" onclick="fillLogin('Kim Vũ', '123456')">
+                                <p class="font-bold text-blue-600">👨‍🏫 Giảng viên</p>
+                                <p>User: Kim Vũ</p>
+                                <p>Pass: 123456</p>
+                            </div>
+                            <div class="bg-white p-2 rounded border border-slate-200 cursor-pointer hover:border-blue-300 transition-colors" onclick="fillLogin('Nguyễn Văn A', '233484')">
+                                <p class="font-bold text-green-600">👨‍🎓 Sinh viên</p>
+                                <p>User: Nguyễn Văn A</p>
+                                <p>Pass: 233484</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center text-sm text-slate-600">
+                        Bạn chưa có tài khoản? 
+                        <button onclick="toggleForm('register')" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">Đăng ký ngay</button>
+                    </div>
+                </div>
+
+                <!-- SECTION: ĐĂNG KÝ (Ẩn mặc định) -->
+                <div id="register-form" class="form-container hidden-form">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-2">Tạo tài khoản</h2>
+                        <p class="text-slate-500">Nhập thông tin cá nhân để bắt đầu.</p>
+                    </div>
+
+                    <form onsubmit="handleRegister(event)" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Họ</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nguyễn" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Tên</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Văn A" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                            <input type="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="example@email.com" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Mật khẩu</label>
+                            <input type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Tối thiểu 8 ký tự" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Tôi là</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="role" class="peer sr-only" checked>
+                                    <div class="w-full py-3 px-4 text-center rounded-xl border border-gray-200 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all">
+                                        Sinh viên
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="role" class="peer sr-only">
+                                    <div class="w-full py-3 px-4 text-center rounded-xl border border-gray-200 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all">
+                                        Giảng viên
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all mt-2">
+                            Tạo tài khoản
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center text-sm text-slate-600">
+                        Đã có tài khoản? 
+                        <button onclick="toggleForm('login')" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">Đăng nhập</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chuyển đổi Login/Register
+        function toggleForm(formType) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (formType === 'register') {
+                loginForm.classList.add('hidden-form');
+                registerForm.classList.remove('hidden-form');
+            } else {
+                registerForm.classList.add('hidden-form');
+                loginForm.classList.remove('hidden-form');
+            }
+        }
+
+        // Hàm hỗ trợ điền nhanh (Demo)
+        function fillLogin(user, pass) {
+            document.getElementById('username').value = user;
+            document.getElementById('password').value = pass;
+        }
+
+        // Xử lý Đăng nhập
+        function handleLogin(e) {
+            e.preventDefault(); // Ngăn form reload trang
+            
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+
+            // Tài khoản Demo (Cứng)
+            const TEACHER_ACC = { user: "Kim Vũ", pass: "123456" };
+            const STUDENT_ACC = { user: "Nguyễn Văn A", pass: "233484" };
+
+            // Nút submit để hiển thị loading
+            const btn = e.target.querySelector('button[type="submit"]');
+            const btnContent = btn.innerHTML;
+
+            if (usernameInput === TEACHER_ACC.user && passwordInput === TEACHER_ACC.pass) {
+                // Hiệu ứng loading giả
+                btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    // Chuyển hướng đến Dashboard Giảng Viên
+                    window.location.href = "dashboardGV.html"; 
+                }, 1000);
+            } 
+            else if (usernameInput === STUDENT_ACC.user && passwordInput === STUDENT_ACC.pass) {
+                // Hiệu ứng loading giả
+                btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    // Chuyển hướng đến Dashboard Sinh Viên
+                    window.location.href = "dashboardSV.html"; 
+                }, 1000);
+            } 
+            else {
+                alert("❌ Tên đăng nhập hoặc mật khẩu không đúng!\nVui lòng kiểm tra lại hoặc dùng tài khoản demo bên dưới.");
+            }
+        }
+
+        // Xử lý Đăng ký
+        function handleRegister(e) {
+            e.preventDefault();
+            alert("🎉 Đăng ký thành công (Demo)! Vui lòng quay lại đăng nhập.");
+            toggleForm('login');
+        }
+    </script>
+</body>
+</html>

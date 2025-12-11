@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sinh viên - Teacher UI</title>
+    
+    <!-- Link file CSS (Sử dụng chung style.css để đồng bộ) -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Link thư viện Icon & Font -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboardGV.html" title="Bản tin">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Bản tin</span>
+                </a>
+            </li>
+            <li>
+                <a href="Quanlybaitap.html" title="Quản lý bài tập">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Quản lý bài tập</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="Quanlysv.html" title="Sinh viên">
+                    <i class="ri-group-line"></i>
+                    <span class="menu-text">Sinh viên</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item">
+                <a href="#" title="Cài đặt">
+                    <i class="ri-settings-3-line"></i>
+                    <span class="menu-text">Cài đặt</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff&bold=true" alt="Avatar GV" class="user-avatar-img">
+                <div class="user-info">
+                    <p class="name">GV. Kim Vũ</p>
+                    <p class="role">Khoa CNTT</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <h2 class="page-title">Quản lý Sinh viên</h2>
+            </div>
+
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" id="search-student" placeholder="Tìm kiếm sinh viên theo tên hoặc MSSV..." onkeyup="filterStudents()">
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button class="icon-btn"><i class="ri-question-line"></i></button>
+                <button class="icon-btn relative">
+                    <i class="ri-message-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn relative">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-count">3</span>
+                </button>
+                
+                <!-- Avatar Dropdown -->
+                <div class="header-avatar-container" id="avatar-dropdown-trigger">
+                    <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff&bold=true" alt="Avatar" class="header-avatar-img">
+                    <div class="user-dropdown" id="user-dropdown-menu">
+                        <div class="dropdown-header">
+                            <p class="dropdown-user-name">GV. Kim Vũ</p>
+                            <p class="dropdown-user-role">kim.vu@lms.edu.vn</p>
+                        </div>
+                        <a href="#" class="dropdown-item"><i class="ri-user-line"></i> Hồ sơ cá nhân</a>
+                        <a href="#" class="dropdown-item"><i class="ri-settings-3-line"></i> Cài đặt tài khoản</a>
+                        <a href="login.html" class="dropdown-item logout"><i class="ri-logout-box-r-line"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container">
+            
+            <!-- Filters & Actions -->
+            <div class="filter-action-bar">
+                <div class="filter-group">
+                    <select id="class-filter" onchange="filterStudents()" class="filter-select">
+                        <option value="all">Tất cả các lớp</option>
+                        <option value="Lập trình Web">Lập trình Web</option>
+                        <option value="Cơ sở dữ liệu">Cơ sở dữ liệu</option>
+                        <option value="Mạng máy tính">Mạng máy tính</option>
+                    </select>
+                    
+                    <select class="filter-select">
+                        <option>Sắp xếp theo tên</option>
+                        <option>Sắp xếp theo điểm</option>
+                        <option>Sắp xếp theo tiến độ</option>
+                    </select>
+                </div>
+
+                <div class="action-group">
+                    <button onclick="sendBulkNotification()" class="btn-secondary">
+                        <i class="ri-mail-send-line"></i> Gửi thông báo
+                    </button>
+                    <button class="btn-primary">
+                        <i class="ri-user-add-line"></i> Thêm sinh viên
+                    </button>
+                </div>
+            </div>
+
+            <!-- Students Table -->
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="student-table">
+                        <thead>
+                            <tr>
+                                <th class="w-checkbox">
+                                    <div class="checkbox-wrapper">
+                                        <div class="custom-checkbox" onclick="toggleAll(this)"></div>
+                                    </div>
+                                </th>
+                                <th>Sinh viên</th>
+                                <th>Lớp học</th>
+                                <th>Liên hệ</th>
+                                <th class="w-progress">Tiến độ học tập</th>
+                                <th class="text-center">Điểm TB</th>
+                                <th class="text-right">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-list-body">
+                            <!-- Dữ liệu sinh viên sẽ được render bằng JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        <p>Hiển thị <span class="font-medium">1</span> đến <span class="font-medium">5</span> trong số <span class="font-medium">45</span> kết quả</p>
+                    </div>
+                    <div class="pagination-controls">
+                        <nav class="pagination-nav">
+                            <a href="#" class="page-link prev"><i class="ri-arrow-left-s-line"></i></a>
+                            <a href="#" class="page-link active">1</a>
+                            <a href="#" class="page-link">2</a>
+                            <a href="#" class="page-link">3</a>
+                            <a href="#" class="page-link next"><i class="ri-arrow-right-s-line"></i></a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Dữ liệu mẫu Sinh viên
+        const studentsData = [
+            { id: "SV001", name: "Nguyễn Văn A", email: "van.a@lms.edu.vn", class: "Lập trình Web", progress: 85, score: 8.5, avatar: "NA", color: "bg-purple" },
+            { id: "SV002", name: "Trần Thị Bích Dung", email: "dung.b@lms.edu.vn", class: "Cơ sở dữ liệu", progress: 60, score: 7.2, avatar: "TB", color: "bg-blue" },
+            { id: "SV003", name: "Lê Hoàng Khang", email: "HoangK@lms.edu.vn", class: "Mạng máy tính", progress: 40, score: 6.5, avatar: "LC", color: "bg-green" },
+            { id: "SV004", name: "Hồ Vũ Triệt", email: "VTriet@lms.edu.vn", class: "Lập trình Web", progress: 92, score: 9.0, avatar: "PD", color: "bg-yellow" },
+            { id: "SV005", name: "Hoàng Yến ", email: "yen.e@lms.edu.vn", class: "Cơ sở dữ liệu", progress: 25, score: 5.0, avatar: "HE", color: "bg-red" },
+        ];
+
+        function renderStudents(data) {
+            const tbody = document.getElementById('student-list-body');
+            tbody.innerHTML = '';
+
+            data.forEach(student => {
+                const row = `
+                    <tr class="student-row" data-class="${student.class}">
+                        <td class="w-checkbox">
+                            <div class="checkbox-wrapper">
+                                <div class="custom-checkbox student-check" onclick="toggleCheck(this)"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="student-info">
+                                <div class="student-avatar ${student.color}">
+                                    ${student.avatar}
+                                </div>
+                                <div class="student-details">
+                                    <div class="student-name">${student.name}</div>
+                                    <div class="student-id">${student.id}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="class-badge">
+                                ${student.class}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="contact-info">
+                                <i class="ri-mail-line"></i> ${student.email}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="progress-wrapper">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill ${getProgressColor(student.progress)}" style="width: ${student.progress}%"></div>
+                                </div>
+                                <span class="progress-text">${student.progress}%</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="score-badge ${getScoreColor(student.score)}">${student.score}</span>
+                        </td>
+                        <td class="text-right action-cell">
+                            <button class="action-btn view" title="Xem chi tiết"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn message" title="Nhắn tin"><i class="ri-chat-1-line"></i></button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Helper: Màu sắc thanh tiến độ
+        function getProgressColor(percent) {
+            if (percent >= 80) return 'bg-green-fill';
+            if (percent >= 50) return 'bg-blue-fill';
+            if (percent >= 30) return 'bg-yellow-fill';
+            return 'bg-red-fill';
+        }
+
+        // Helper: Màu sắc điểm số
+        function getScoreColor(score) {
+            if (score >= 8.0) return 'text-green';
+            if (score >= 6.5) return 'text-blue';
+            if (score >= 5.0) return 'text-yellow';
+            return 'text-red';
+        }
+
+        // Filter & Search Logic
+        function filterStudents() {
+            const searchText = document.getElementById('search-student').value.toLowerCase();
+            const classFilter = document.getElementById('class-filter').value;
+
+            const filteredData = studentsData.filter(student => {
+                const matchName = student.name.toLowerCase().includes(searchText) || student.id.toLowerCase().includes(searchText);
+                const matchClass = classFilter === 'all' || student.class === classFilter;
+                return matchName && matchClass;
+            });
+
+            renderStudents(filteredData);
+        }
+
+        // Checkbox Logic
+        function toggleCheck(el) {
+            el.classList.toggle('checked');
+        }
+
+        function toggleAll(source) {
+            source.classList.toggle('checked');
+            const isChecked = source.classList.contains('checked');
+            document.querySelectorAll('.student-check').forEach(cb => {
+                if (isChecked) cb.classList.add('checked');
+                else cb.classList.remove('checked');
+            });
+        }
+
+        // Notification Logic
+        function sendBulkNotification() {
+            const checkedCount = document.querySelectorAll('.student-check.checked').length;
+            if (checkedCount > 0) {
+                alert(`Đã gửi thông báo đến ${checkedCount} sinh viên được chọn!`);
+            } else {
+                alert('Vui lòng chọn ít nhất một sinh viên để gửi thông báo.');
+            }
+        }
+
+        // Sidebar & Dropdown Logic
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderStudents(studentsData); // Initial Render
+
+            const trigger = document.getElementById('avatar-dropdown-trigger');
+            const menu = document.getElementById('user-dropdown-menu');
+
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!trigger.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

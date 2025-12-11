@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboardSV - Sinh viên</title>
+    
+    <!-- Link file CSS riêng -->
+    <link rel="stylesheet" href="student_style.css">
+    
+    <!-- Link thư viện Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="dashboardSV.html" title="Tổng quan">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Tổng quan</span>
+                </a>
+            </li>
+            <li>
+                <a href="BT.html" title="Bài tập của tôi">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Bài tập của tôi</span>
+                </a>
+            </li>
+              <li>
+                <a href="myclass.html" title="Lớp học của tôi">
+                    <i class="ri-team-line"></i>
+                    <span class="menu-text">Lớp học của tôi</span>
+                </a>
+            </li>
+            <li>
+                <a href="Kqua.html" title="Kết quả học tập">
+                    <i class="ri-bar-chart-box-line"></i>
+                    <span class="menu-text">Kết quả học tập</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item">
+                <a href="#" title="Hồ sơ cá nhân">
+                    <i class="ri-user-settings-line"></i>
+                    <span class="menu-text">Hồ sơ cá nhân</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">NA</div>
+                <div class="user-info">
+                    <p class="name">Nguyễn Văn A</p>
+                    <p class="role">SV2334376 - Khoa CNTT</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <h2 class="page-title">Tổng quan</h2>
+            </div>
+
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="Tìm kiếm bài tập, môn học...">
+                </div>
+            </div>
+
+
+            <div class="header-right">
+                <button class="icon-btn" title="Trợ giúp"><i class="ri-question-line"></i></button>
+                <button class="icon-btn relative" title="Tin nhắn">
+                    <i class="ri-message-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn relative" title="Thông báo">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <div class="header-user-menu relative">
+                    <div class="header-avatar cursor-pointer" onclick="toggleUserMenu()">
+                        <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar">
+                    </div>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="user-dropdown" class="user-dropdown hidden">
+                        <div class="dropdown-header">
+                            <p class="user-name">Nguyễn Văn A</p>
+                            <p class="user-email">sv.nguyenvana@lms.edu.vn</p>
+                        </div>
+                        <ul class="dropdown-list">
+                            <li>
+                                <a href="#">
+                                    <i class="ri-user-line"></i> Hồ sơ cá nhân
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="ri-settings-3-line"></i> Cài đặt tài khoản
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="login.html" class="logout-item">
+                                    <i class="ri-logout-box-line"></i> Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container">
+            
+            <!-- Greeting Banner -->
+            <div class="greeting-section">
+                <div class="greeting-text">
+                    <h1>Chào buổi sáng, Văn A! ☀️</h1>
+                    <p>Bạn có <span class="highlight-red">3 bài tập</span> cần hoàn thành trong tuần này.</p>
+                </div>
+            </div>
+
+            <!-- Dashboard Widgets Grid -->
+            <div class="dashboard-grid">
+                
+                <!-- Widget 1: Sắp đến hạn (Danh sách chi tiết) -->
+                <div class="card-container large-card">
+                    <div class="card-header">
+                        <h3>Sắp đến hạn</h3>
+                        <a href="BT.html" class="view-all-link">Xem lịch</a>
+                    </div>
+                    <div class="card-body-list">
+                        <ul class="deadline-list">
+                            <!-- Item 1: Rất gấp -->
+                            <li class="deadline-item" onclick="window.location.href='BT.html'">
+                                <div class="deadline-icon bg-urgent">
+                                    <i class="ri-fire-line"></i>
+                                </div>
+                                <div class="deadline-info">
+                                    <p class="deadline-course">Lập trình Web</p>
+                                    <p class="deadline-title">Xây dựng Website bán hàng (Frontend)</p>
+                                    <p class="deadline-time urgent">
+                                        <i class="ri-time-line"></i> Hôm nay, 23:59
+                                    </p>
+                                </div>
+                                <button class="arrow-btn" onclick="window.location.href='BT.html'"><i class="ri-arrow-right-s-line"></i></button>
+                            </li>
+
+                            <!-- Item 2: Cảnh báo -->
+                            <li class="deadline-item" onclick="window.location.href='BT.html'">
+                                <div class="deadline-icon bg-warning">
+                                    <i class="ri-alarm-warning-line"></i>
+                                </div>
+                                <div class="deadline-info">
+                                    <p class="deadline-course">Cơ sở dữ liệu</p>
+                                    <p class="deadline-title">Truy vấn SQL nâng cao & Trigger</p>
+                                    <p class="deadline-time warning">
+                                        <i class="ri-calendar-event-line"></i> Ngày mai, 17:00
+                                    </p>
+                                </div>
+                                <button class="arrow-btn" onclick="window.location.href='BT.html'"><i class="ri-arrow-right-s-line"></i></button>
+                            </li>
+
+                            <!-- Item 3: Bình thường -->
+                            <li class="deadline-item" onclick="window.location.href='BT.html'">
+                                <div class="deadline-icon bg-normal">
+                                    <i class="ri-file-text-line"></i>
+                                </div>
+                                <div class="deadline-info">
+                                    <p class="deadline-course">Mạng máy tính</p>
+                                    <p class="deadline-title">Báo cáo thực hành Packet Tracer</p>
+                                    <p class="deadline-time normal">
+                                        <i class="ri-calendar-line"></i> 25/11/2025
+                                    </p>
+                                </div>
+                                <button class="arrow-btn" onclick="window.location.href='BT.html'"><i class="ri-arrow-right-s-line"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Widget 2: Bài trễ hạn (Cảnh báo) -->
+                <div class="stat-card orange-card">
+                    <div class="stat-header">
+                        <span>Bài tập trễ hạn</span>
+                        <div class="icon-bg-svg orange">
+                            <i class="ri-error-warning-fill"></i>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number text-orange">1</div>
+                        <p class="stat-desc text-dark-orange">Bài tập chưa nộp</p>
+                        <div class="mini-alert orange">
+                            <strong>Giải tích 1</strong><br>
+                            <span>Hạn: 20/11/2025</span>
+                        </div>
+                    </div>
+                    <button class="btn-outline orange" onclick="window.location.href='BT.html'">Xem chi tiết</button>
+                </div>
+
+                <!-- Widget 3: Điểm số mới nhất -->
+                <div class="stat-card green-card">
+                    <div class="stat-header">
+                        <span>Điểm mới cập nhật</span>
+                        <div class="icon-bg-svg green">
+                            <i class="ri-checkbox-circle-fill"></i>
+                        </div>
+                    </div>
+                    <div class="stat-content center-content">
+                        <div class="score-circle">
+                            <span>8.5</span>
+                        </div>
+                        <p class="course-name">Lập trình Web</p>
+                        <p class="assignment-name">Bài tập API</p>
+                    </div>
+                    <button class="btn-outline green" onclick="window.location.href='Kqua.html'">Xem nhận xét</button>
+                </div>
+
+            </div>
+
+            <!-- Recent Activity / Thông báo -->
+            <div class="card-container full-width mt-6">
+                <div class="card-header">
+                    <h3>Thông báo mới</h3>
+                </div>
+                <div class="card-body-list">
+                    <ul class="activity-list">
+                        <li>
+                            <div class="avatar blue"><i class="ri-user-voice-fill"></i></div>
+                            <div class="activity-info">
+                                <p><strong>GV. Kim Vũ</strong> đã đăng bài tập mới trong lớp <strong class="text-blue">Lập trình Web</strong>.</p>
+                                <span class="time">1 giờ trước</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="avatar purple"><i class="ri-file-mark-fill"></i></div>
+                            <div class="activity-info">
+                                <p>Bài tập <strong>"CSDL Nâng cao"</strong> đã được chấm điểm.</p>
+                                <span class="time">3 giờ trước</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="avatar yellow"><i class="ri-calendar-event-fill"></i></div>
+                            <div class="activity-info">
+                                <p>Lịch thi cuối kỳ môn <strong>Triết học</strong> đã được cập nhật.</p>
+                                <span class="time">1 ngày trước</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Đóng menu khi click ra ngoài
+        window.addEventListener('click', function(e) {
+            const userMenu = document.querySelector('.header-user-menu');
+            const dropdown = document.getElementById('user-dropdown');
+            
+            // Nếu click không nằm trong vùng userMenu và dropdown đang mở thì đóng lại
+            if (!userMenu.contains(e.target) && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

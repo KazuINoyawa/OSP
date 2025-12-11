@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả học tập - Student UI</title>
+    
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="kqua_style.css">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-slate-800 min-h-screen flex">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboardSV.html" title="Tổng quan">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Tổng quan</span>
+                </a>
+            </li>
+            <li>
+                <a href="BT.html" title="Bài tập của tôi">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Bài tập của tôi</span>
+                </a>
+            </li>
+            <li>
+                <a href="myclass.html" title="Lớp học của tôi">
+                    <i class="ri-team-line"></i>
+                    <span class="menu-text">Lớp học của tôi</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="Kqua.html" title="Kết quả học tập">
+                    <i class="ri-bar-chart-box-line"></i>
+                    <span class="menu-text">Kết quả học tập</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item">
+                <a href="#" title="Hồ sơ cá nhân">
+                    <i class="ri-user-settings-line"></i>
+                    <span class="menu-text">Hồ sơ cá nhân</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">NA</div>
+                <div class="user-info">
+                    <p class="name">Nguyễn Văn A</p>
+                    <p class="role">Sinh viên K15</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <h2 class="page-title flex items-center gap-2">
+                    <i class="ri-medal-line text-yellow-500"></i> Kết quả học tập
+                </h2>
+            </div>
+
+            <div class="header-center">
+                <!-- Có thể thêm search bar nếu cần -->
+            </div>
+
+            <div class="header-right">
+                <button class="icon-btn" title="Trợ giúp"><i class="ri-question-line"></i></button>
+                <button class="icon-btn relative" title="Tin nhắn">
+                    <i class="ri-message-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn relative" title="Thông báo">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-count">3</span>
+                </button>
+                
+                <!-- Avatar with Dropdown -->
+                <div class="header-avatar-container" id="avatar-dropdown-trigger">
+                    <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-gray-200 cursor-pointer hover:border-blue-500 transition-colors">
+                    <div id="user-dropdown" class="user-dropdown hidden">
+                        <div class="dropdown-header">
+                            <p class="font-bold text-slate-800 text-sm">Nguyễn Văn A</p>
+                            <p class="text-xs text-gray-500">sv.nguyenvana@lms.edu.vn</p>
+                        </div>
+                        <a href="#" class="dropdown-item"><i class="ri-user-line mr-2"></i> Hồ sơ cá nhân</a>
+                        <a href="#" class="dropdown-item"><i class="ri-settings-3-line mr-2"></i> Cài đặt tài khoản</a>
+                        <a href="login.html" class="dropdown-item logout"><i class="ri-logout-box-r-line mr-2"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container">
+            
+            <!-- 1. Filter Bar -->
+            <div class="filter-bar">
+                <div class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                    <i class="ri-filter-3-line"></i> Bộ lọc:
+                </div>
+                <select class="filter-select">
+                    <option value="all">Tất cả các lớp</option>
+                    <option value="web">Lập trình Web</option>
+                    <option value="db">Cơ sở dữ liệu</option>
+                    <option value="net">Mạng máy tính</option>
+                </select>
+                <select class="filter-select">
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="graded">Đã chấm</option>
+                    <option value="submitted">Đã nộp (Chờ chấm)</option>
+                    <option value="pending">Chưa nộp</option>
+                </select>
+                <select class="filter-select">
+                    <option value="sem1">Học kỳ 1 - 2025</option>
+                    <option value="sem2">Học kỳ 2 - 2024</option>
+                </select>
+                <button class="ml-auto text-blue-600 text-sm font-medium hover:underline">Xóa bộ lọc</button>
+            </div>
+
+            <!-- 2. Overview Cards -->
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="overview-icon bg-blue-light"><i class="ri-book-open-line"></i></div>
+                    <div>
+                        <p class="text-sm text-gray-500">Điểm trung bình (GPA)</p>
+                        <p class="text-2xl font-bold text-slate-800">8.2</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon bg-green-light"><i class="ri-checkbox-circle-line"></i></div>
+                    <div>
+                        <p class="text-sm text-gray-500">Bài tập đã hoàn thành</p>
+                        <p class="text-2xl font-bold text-slate-800">12/15</p>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-icon bg-purple-light"><i class="ri-star-smile-line"></i></div>
+                    <div>
+                        <p class="text-sm text-gray-500">Đạt điểm tối đa</p>
+                        <p class="text-2xl font-bold text-slate-800">3 bài</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Grade List -->
+            <div class="grade-list">
+                
+                <!-- Card 1: Đã chấm -->
+                <div class="grade-card">
+                    <div class="grade-info">
+                        <h4>Báo cáo thực hành Packet Tracer</h4>
+                        <div class="grade-meta">
+                            <span><i class="ri-book-line"></i> Mạng máy tính</span>
+                            <span><i class="ri-calendar-check-line"></i> Nộp: 19/11/2025</span>
+                        </div>
+                    </div>
+                    <div class="grade-status">
+                        <div class="score-box">
+                            <div class="score-val text-green-600">9.0</div>
+                            <div class="score-max">/ 10</div>
+                        </div>
+                        <div class="flex flex-col gap-2 items-end">
+                            <span class="status-badge status-graded"><i class="ri-check-double-line"></i> Đã chấm</span>
+                            <button onclick="openResultModal('net')" class="text-sm text-blue-600 hover:underline font-medium">Xem chi tiết</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Đã nộp (Chờ chấm) -->
+                <div class="grade-card">
+                    <div class="grade-info">
+                        <h4>Tiểu luận triết học Mác - Lênin</h4>
+                        <div class="grade-meta">
+                            <span><i class="ri-book-line"></i> Triết học</span>
+                            <span><i class="ri-calendar-check-line"></i> Nộp: 21/11/2025</span>
+                        </div>
+                    </div>
+                    <div class="grade-status">
+                        <div class="score-box">
+                            <div class="score-val text-gray-400">--</div>
+                            <div class="score-max">/ 10</div>
+                        </div>
+                        <div class="flex flex-col gap-2 items-end">
+                            <span class="status-badge status-submitted"><i class="ri-loader-4-line"></i> Đã nộp</span>
+                            <span class="text-xs text-gray-400">Đang chờ giảng viên chấm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Đã chấm -->
+                <div class="grade-card">
+                    <div class="grade-info">
+                        <h4>Xây dựng API với NodeJS</h4>
+                        <div class="grade-meta">
+                            <span><i class="ri-book-line"></i> Lập trình Web</span>
+                            <span><i class="ri-calendar-check-line"></i> Nộp: 20/11/2025</span>
+                        </div>
+                    </div>
+                    <div class="grade-status">
+                        <div class="score-box">
+                            <div class="score-val text-purple-600">8.5</div>
+                            <div class="score-max">/ 10</div>
+                        </div>
+                        <div class="flex flex-col gap-2 items-end">
+                            <span class="status-badge status-graded"><i class="ri-check-double-line"></i> Đã chấm</span>
+                            <button onclick="openResultModal('web')" class="text-sm text-blue-600 hover:underline font-medium">Xem chi tiết</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Nộp trễ -->
+                <div class="grade-card">
+                    <div class="grade-info">
+                        <h4>Bài tập lớn: Quản lý thư viện</h4>
+                        <div class="grade-meta">
+                            <span><i class="ri-book-line"></i> Cơ sở dữ liệu</span>
+                            <span class="text-red-500"><i class="ri-error-warning-line"></i> Hạn: 15/11/2025</span>
+                        </div>
+                    </div>
+                    <div class="grade-status">
+                        <div class="score-box">
+                            <div class="score-val text-red-500">0</div>
+                            <div class="score-max">/ 10</div>
+                        </div>
+                        <div class="flex flex-col gap-2 items-end">
+                            <span class="status-badge status-late"><i class="ri-close-circle-line"></i> Chưa nộp</span>
+                            <span class="text-xs text-red-500">Đã quá hạn nộp bài</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL CHI TIẾT KẾT QUẢ -->
+    <div id="result-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center modal-overlay px-4">
+        <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+            
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-lg text-slate-800" id="modal-title">Chi tiết kết quả</h3>
+                <button onclick="closeResultModal()" class="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200 transition-colors">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6 overflow-y-auto">
+                
+                <!-- Điểm số lớn -->
+                <div class="text-center mb-6">
+                    <div class="inline-flex flex-col items-center justify-center w-24 h-24 rounded-full border-4 border-green-500 bg-green-50 mb-2">
+                        <span class="text-3xl font-bold text-green-700" id="modal-score">9.0</span>
+                    </div>
+                    <p class="text-sm text-gray-500" id="modal-status">Nộp đúng hạn</p>
+                </div>
+
+                <!-- Thông tin chi tiết -->
+                <div class="space-y-1">
+                    <div class="detail-row">
+                        <span class="detail-label">Môn học</span>
+                        <span class="detail-value" id="modal-course">Mạng máy tính</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Ngày nộp</span>
+                        <span class="detail-value" id="modal-date">19/11/2025 10:30</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">File bài làm</span>
+                        <a href="#" class="text-blue-600 hover:underline flex items-center gap-1 font-medium">
+                            <i class="ri-file-download-line"></i> <span id="modal-file">Lab3_NguyenVanA.zip</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Rubric (Nếu có) -->
+                <div class="mt-6">
+                    <h4 class="text-sm font-bold text-gray-700 mb-2">Chi tiết điểm thành phần</h4>
+                    <table class="rubric-table">
+                        <thead>
+                            <tr>
+                                <th>Tiêu chí</th>
+                                <th class="text-right">Điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-rubric">
+                            <!-- JS sẽ render -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback-box">
+                    <div class="feedback-header">
+                        <i class="ri-chat-quote-line"></i> Phản hồi của giảng viên
+                    </div>
+                    <p class="feedback-content" id="modal-feedback">
+                        "Bài làm rất tốt, cấu hình định tuyến chính xác. Các PC ping thông mạng thành công."
+                    </p>
+                </div>
+
+            </div>
+            
+            <!-- Footer -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-right">
+                <button onclick="closeResultModal()" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // Dropdown Menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const trigger = document.getElementById('avatar-dropdown-trigger');
+            const menu = document.getElementById('user-dropdown');
+
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!trigger.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+            });
+        });
+
+        // Dữ liệu giả lập cho Modal
+        const resultData = {
+            'net': {
+                title: "Báo cáo thực hành Packet Tracer",
+                course: "Mạng máy tính",
+                score: "9.0",
+                status: "Nộp đúng hạn",
+                date: "19/11/2025 10:30",
+                file: "Lab3_NguyenVanA.zip",
+                rubric: [
+                    { criteria: "Cấu hình IP", score: "2.0/2.0" },
+                    { criteria: "Định tuyến tĩnh", score: "3.0/3.0" },
+                    { criteria: "Ping kiểm tra", score: "2.0/2.0" },
+                    { criteria: "Báo cáo PDF", score: "2.0/3.0" }
+                ],
+                feedback: "Bài làm tốt, cấu hình đúng. Tuy nhiên phần báo cáo cần giải thích rõ hơn về bảng định tuyến."
+            },
+            'web': {
+                title: "Xây dựng API với NodeJS",
+                course: "Lập trình Web",
+                score: "8.5",
+                status: "Nộp đúng hạn",
+                date: "20/11/2025 15:45",
+                file: "API_SourceCode.zip",
+                rubric: [
+                    { criteria: "Cấu trúc Project", score: "2.0/2.0" },
+                    { criteria: "Chức năng CRUD", score: "4.0/5.0" },
+                    { criteria: "Xử lý lỗi", score: "2.5/3.0" }
+                ],
+                feedback: "Code sạch, cấu trúc tốt. Cần chú ý xử lý các trường hợp ngoại lệ (try-catch) kỹ hơn trong controller."
+            }
+        };
+
+        function openResultModal(id) {
+            const data = resultData[id];
+            if(!data) return;
+
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-course').innerText = data.course;
+            document.getElementById('modal-score').innerText = data.score;
+            document.getElementById('modal-status').innerText = data.status;
+            document.getElementById('modal-date').innerText = data.date;
+            document.getElementById('modal-file').innerText = data.file;
+            document.getElementById('modal-feedback').innerText = `"${data.feedback}"`;
+
+            // Render Rubric
+            const rubricBody = document.getElementById('modal-rubric');
+            rubricBody.innerHTML = '';
+            data.rubric.forEach(item => {
+                rubricBody.innerHTML += `
+                    <tr>
+                        <td>${item.criteria}</td>
+                        <td class="text-right font-medium text-gray-800">${item.score}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        function closeResultModal() {
+            document.getElementById('result-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
