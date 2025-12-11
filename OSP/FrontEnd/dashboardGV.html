@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Edu Dashboard</title>
+    
+    <!-- Link file CSS -->
+    <link rel="stylesheet" href="dashboardGV.css">
+    
+    <!-- Link thư viện Icon (RemixIcon) -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Link Font chữ (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <!-- Logo hiển thị khi mở rộng -->
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="dashboardGV.html" title="Bản tin">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Bản tin</span>
+                </a>
+            </li>
+            <li>
+                <a href="Quanlybaitap.html" title="Quản lý bài tập">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Quản lý bài tập</span>
+                </a>
+            </li>
+            <li>
+                <a href="Quanlysv.html" title="Sinh viên">
+                    <i class="ri-group-line"></i>
+                    <span class="menu-text">Sinh viên</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item">
+                <a href="#" title="Cài đặt">
+                    <i class="ri-settings-3-line"></i>
+                    <span class="menu-text">Cài đặt</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <!-- Avatar Sidebar: Cập nhật cho đồng bộ -->
+                <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff&bold=true" alt="Avatar GV" class="user-avatar-img">
+                <div class="user-info">
+                    <p class="name">GV. Kim Vũ</p>
+                    <p class="role">Khoa CNTT</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <h2 class="page-title">Tổng quan</h2>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="Tìm kiếm lớp học, sinh viên...">
+                </div>
+            </div>
+
+            <!-- Icons & Avatar -->
+            <div class="header-right">
+                <button class="icon-btn" title="Trợ giúp"><i class="ri-question-line"></i></button>
+                <button class="icon-btn relative" title="Tin nhắn" id="btn-messages">
+                    <i class="ri-message-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn relative" title="Thông báo" id="btn-notifications">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-count">3</span>
+                </button>
+                <!-- Dropdown: Thông báo -->
+                <div id="dropdown-notifications" class="dropdown-box hidden absolute right-24 top-16 bg-white rounded-xl shadow-lg w-80 p-4 z-50">
+                    <h2 class="text-base font-bold mb-3">Thông báo</h2>
+                    <ul class="space-y-2">
+                        <li class="border-b pb-2 text-gray-700">Bài tập mới đã được đăng trong lớp Lập trình Web.</li>
+                        <li class="border-b pb-2 text-gray-700">Có 5 bài cần chấm điểm trước 23:59 hôm nay.</li>
+                        <li class="border-b pb-2 text-gray-700">Sinh viên Nguyễn Văn A vừa nộp bài tập.</li>
+                    </ul>
+                </div>
+                <!-- Dropdown: Tin nhắn -->
+                <div id="dropdown-messages" class="dropdown-box hidden absolute right-40 top-16 bg-white rounded-xl shadow-lg w-80 p-4 z-50">
+                    <h2 class="text-base font-bold mb-3">Tin nhắn</h2>
+                    <ul class="space-y-2">
+                        <li class="border-b pb-2 text-gray-700">Sinh viên Trần Thị B: "Thầy ơi, em xin phép nộp muộn bài tập tuần này!"</li>
+                        <li class="border-b pb-2 text-gray-700">Sinh viên Nguyễn Văn A: "Em đã nộp bài tập RESTful API."</li>
+                    </ul>
+                </div>
+
+                <!-- AVATAR HEADER VỚI DROPDOWN (MỚI) -->
+                <div class="header-avatar-container" id="avatar-dropdown-trigger">
+                    <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff&bold=true" alt="Avatar" class="header-avatar-img">
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="user-dropdown" id="user-dropdown-menu">
+                        <div class="dropdown-header">
+                            <p class="dropdown-user-name">GV. Kim Vũ</p>
+                            <p class="dropdown-user-role">kim.vu@lms.edu.vn</p>
+                        </div>
+                        <ul class="dropdown-list">
+                            <li>
+                                <a href="#" class="dropdown-item">
+                                    <i class="ri-user-line"></i> Hồ sơ cá nhân
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown-item">
+                                    <i class="ri-settings-3-line"></i> Cài đặt tài khoản
+                                </a>
+                            </li>
+                            <li class="border-t border-gray-100 mt-1 pt-1">
+                                <a href="login.html" class="dropdown-item logout">
+                                    <i class="ri-logout-box-r-line"></i> Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container">
+            <!-- Greeting Section (Đã bỏ nút Tạo lớp ở đây) -->
+            <div class="greeting-section">
+                <div class="greeting-text">
+                    <h1>Xin chào, thầy Vũ! 👋</h1>
+                    <p>Hôm nay có <span class="highlight">26 bài</span> cần chấm điểm.</p>
+                </div>
+             
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <!-- Card 1 -->
+                <div class="stat-card blue-card">
+                    <div class="stat-header">
+                        <span>Tổng số sinh viên</span>
+                        <div class="icon-bg-svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                    </div>
+                    <div class="stat-number">160</div>
+                    <div class="stat-trend positive">
+                        <i class="ri-arrow-right-up-line"></i> +40 sinh viên mới
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="stat-card orange-card">
+                    <div class="stat-header">
+                        <span>Bài đang chờ chấm</span>
+                        <div class="icon-bg-svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="18"></line><line x1="12" y1="8" x2="12" y2="14"></line></svg>
+                        </div>
+                    </div>
+                    <div class="stat-number text-orange">12</div>
+                    <div class="stat-trend">
+                        Cần hoàn thành...
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="stat-card green-card">
+                    <div class="stat-header">
+                        <span>Tổng bài đã nộp</span>
+                        <div class="icon-bg-svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="stat-number">400</div>
+                    <div class="stat-trend positive">
+                        <i class="ri-arrow-right-up-line"></i> +93% tỷ lệ nộp bài
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Activity Section -->
+            <div class="dashboard-middle">
+                <!-- Chart Section -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Thống kê nộp bài (7 ngày qua)</h3>
+                        <select class="chart-filter">
+                            <option>Tuần này</option>
+                        </select>
+                    </div>
+                    <div class="bar-chart">
+                        <div class="bar-group"><div class="bar" style="height: 40%;"></div><span class="label">T2</span></div>
+                        <div class="bar-group"><div class="bar active" style="height: 65%;"></div><span class="label">T3</span></div>
+                        <div class="bar-group"><div class="bar" style="height: 80%;"></div><span class="label">T4</span></div>
+                        <div class="bar-group"><div class="bar" style="height: 30%;"></div><span class="label">T5</span></div>
+                        <div class="bar-group"><div class="bar" style="height: 55%;"></div><span class="label">T6</span></div>
+                        <div class="bar-group"><div class="bar" style="height: 15%;"></div><span class="label">T7</span></div>
+                        <div class="bar-group"><div class="bar" style="height: 35%;"></div><span class="label">CN</span></div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-container">
+                    <h3>Hoạt động gần đây</h3>
+                    <ul class="activity-list">
+                        <li>
+                            <div class="avatar yellow">TA</div>
+                            <div class="activity-info">
+                                <p><strong>Thạch Kim Bảo</strong> đã nộp bài tập.</p>
+                                <span class="time">25 phút trước</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="avatar red">TT</div>
+                            <div class="activity-info">
+                                <p><strong>Trần Cảnh Tâm</strong> đã nộp bài muộn.</p>
+                                <span class="time">1 phút trước</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="avatar orange">VA</div>
+                            <div class="activity-info">
+                                <p><strong>Vũ Minh An</strong> đã bình luận vào lớp học.</p>
+                                <span class="time">10 phút trước</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <button class="btn-outline-full">Xem tất cả</button>
+                </div>
+            </div>
+
+            <!-- Class List Section -->
+            <div class="classes-section">
+                <div class="section-header">
+                    <div class="header-left">
+                        <h3>Các lớp đang dạy</h3>
+                        <span class="badge-count bg-gray-200 text-gray-600">4</span>
+                    </div>
+                    <div class="header-actions">
+                        <a href="#" class="view-all">Xem tất cả</a>
+                        <!-- Nút Tạo lớp học được dời xuống đây -->
+                        <button class="btn-primary btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Tạo lớp mới
+                        </button>
+                    </div>
+                </div>
+
+                <div class="class-grid">
+                    <!-- Card Lớp 1 -->
+                    <div class="class-card">
+                        <div class="card-header blue-header">
+                            <div>
+                                <h4>Lập trình web</h4>
+                                <span class="class-code">INF2034 - HK1 23-24</span>
+                            </div>
+                            <button class="more-btn"><i class="ri-more-fill"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="class-stats">
+                                <div class="stat-item">
+                                    <span class="label">Sinh viên</span>
+                                    <span class="value"><i class="ri-group-line"></i> 45</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">Bài tập</span>
+                                    <span class="value"><i class="ri-file-text-line"></i> 5</span>
+                                </div>
+                            </div>
+                            <div class="grading-alert">
+                                <span>Cần chấm điểm</span>
+                                <span class="count">5 bài</span>
+                            </div>
+                            <button class="btn-enter-class">Vào lớp học</button>
+                        </div>
+                    </div>
+
+                    <!-- Card Lớp 2 -->
+                    <div class="class-card">
+                        <div class="card-header purple-header">
+                            <div>
+                                <h4>Phát triển mã nguồn mở</h4>
+                                <span class="class-code">INF2032 - HK1 2025</span>
+                            </div>
+                            <button class="more-btn"><i class="ri-more-fill"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="class-stats">
+                                <div class="stat-item">
+                                    <span class="label">Sinh viên</span>
+                                    <span class="value"><i class="ri-group-line"></i> 50</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">Bài tập</span>
+                                    <span class="value"><i class="ri-file-text-line"></i> 8</span>
+                                </div>
+                            </div>
+                            <div class="grading-alert">
+                                <span>Cần chấm điểm</span>
+                                <span class="count">10 bài</span>
+                            </div>
+                            <button class="btn-enter-class" onclick="window.location.href='Quanlybaitap.html'">Vào lớp học</button>
+                        </div>
+                    </div>
+
+                    <!-- Card Lớp 3 (MỚI) -->
+                    <div class="class-card">
+                        <div class="card-header orange-header">
+                            <div>
+                                <h4>Mạng máy tính</h4>
+                                <span class="class-code">NT101 - HK1 2024</span>
+                            </div>
+                            <button class="more-btn"><i class="ri-more-fill"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="class-stats">
+                                <div class="stat-item">
+                                    <span class="label">Sinh viên</span>
+                                    <span class="value"><i class="ri-group-line"></i> 62</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">Bài tập</span>
+                                    <span class="value"><i class="ri-file-text-line"></i> 3</span>
+                                </div>
+                            </div>
+                            <div class="grading-alert success">
+                                <span>Đã chấm hết</span>
+                                <span class="count"><i class="ri-check-double-line"></i></span>
+                            </div>
+                            <button class="btn-enter-class">Vào lớp học</button>
+                        </div>
+                    </div>
+
+                    <!-- Card Lớp 4 (MỚI) -->
+                    <div class="class-card">
+                        <div class="card-header green-header">
+                            <div>
+                                <h4>Trí tuệ nhân tạo</h4>
+                                <span class="class-code">AI301 - HK2 2024</span>
+                            </div>
+                            <button class="more-btn"><i class="ri-more-fill"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="class-stats">
+                                <div class="stat-item">
+                                    <span class="label">Sinh viên</span>
+                                    <span class="value"><i class="ri-group-line"></i> 35</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="label">Bài tập</span>
+                                    <span class="value"><i class="ri-file-text-line"></i> 2</span>
+                                </div>
+                            </div>
+                            <div class="grading-alert">
+                                <span>Cần chấm điểm</span>
+                                <span class="count">11 bài</span>
+                            </div>
+                            <button class="btn-enter-class">Vào lớp học</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript để xử lý Sidebar -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const body = document.body;
+            sidebar.classList.toggle('collapsed');
+            body.classList.toggle('sidebar-collapsed');
+        }
+
+        // Xử lý Dropdown Menu & Dropdown thông báo/tin nhắn
+        document.addEventListener('DOMContentLoaded', function() {
+            const trigger = document.getElementById('avatar-dropdown-trigger');
+            const menu = document.getElementById('user-dropdown-menu');
+            const btnMessages = document.getElementById('btn-messages');
+            const btnNotifications = document.getElementById('btn-notifications');
+            const dropdownMessages = document.getElementById('dropdown-messages');
+            const dropdownNotifications = document.getElementById('dropdown-notifications');
+
+            // Bật/tắt khi click vào avatar
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menu.classList.toggle('show');
+            });
+
+            // Đóng menu khi click bất cứ đâu bên ngoài
+            document.addEventListener('click', function(e) {
+                if (!trigger.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+            });
+
+            // Dropdown tin nhắn
+            btnMessages.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMessages.classList.toggle('hidden');
+                dropdownNotifications.classList.add('hidden');
+            });
+            // Dropdown thông báo
+            btnNotifications.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownNotifications.classList.toggle('hidden');
+                dropdownMessages.classList.add('hidden');
+            });
+
+            // Đóng dropdown khi click ra ngoài
+            document.addEventListener('click', function(e) {
+                if (!btnMessages.contains(e.target) && !dropdownMessages.contains(e.target)) {
+                    dropdownMessages.classList.add('hidden');
+                }
+                if (!btnNotifications.contains(e.target) && !dropdownNotifications.contains(e.target)) {
+                    dropdownNotifications.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

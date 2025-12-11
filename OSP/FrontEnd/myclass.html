@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lớp học của tôi - Student UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="class.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS bổ sung cho Dropdown (inline để đảm bảo hoạt động ngay) */
+        .header-avatar-container {
+            position: relative;
+            cursor: pointer;
+        }
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 220px;
+            background-color: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideDown 0.2s ease-out;
+        }
+        .user-dropdown.show { display: flex; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid #F3F4F6;
+            background-color: #F9FAFB;
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #4B5563;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .dropdown-item:hover {
+            background-color: #F3F4F6;
+            color: #3B82F6;
+        }
+        .dropdown-item.logout {
+            color: #EF4444;
+            border-top: 1px solid #F3F4F6;
+        }
+        .dropdown-item.logout:hover {
+            background-color: #FEF2F2;
+            color: #DC2626;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800 min-h-screen flex">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboardSV.html" title="Tổng quan">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Tổng quan</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="myclass.html" title="Lớp học của tôi">
+                    <i class="ri-team-line"></i>
+                    <span class="menu-text">Lớp học của tôi</span>
+                </a>
+            </li>
+            <li>
+                <a href="Kqua.html" title="Kết quả học tập">
+                    <i class="ri-bar-chart-box-line"></i>
+                    <span class="menu-text">Kết quả học tập</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item">
+                <a href="#" title="Hồ sơ cá nhân">
+                    <i class="ri-user-settings-line"></i>
+                    <span class="menu-text">Hồ sơ cá nhân</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">NA</div>
+                <div class="user-info">
+                    <p class="name">Nguyễn Văn A</p>
+                    <p class="role">Sinh viên K15</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <h2 class="page-title">Lớp học của tôi</h2>
+            </div>
+
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="Tìm kiếm lớp học...">
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button class="icon-btn"><i class="ri-question-line"></i></button>
+                <button class="icon-btn relative" title="Tin nhắn">
+                    <i class="ri-message-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn relative">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                
+                <!-- AVATAR HEADER VỚI DROPDOWN -->
+                <div class="header-avatar-container" id="avatar-dropdown-trigger">
+                    <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar" class="w-10 h-10 rounded-full border-2 border-gray-200 cursor-pointer hover:border-blue-500 transition-colors">
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="user-dropdown" class="user-dropdown hidden">
+                        <div class="dropdown-header">
+                            <p class="font-bold text-slate-800 text-sm">Nguyễn Văn A</p>
+                            <p class="text-xs text-gray-500">sv.nguyenvana@lms.edu.vn</p>
+                        </div>
+                        <a href="#" class="dropdown-item">
+                            <i class="ri-user-line mr-2"></i> Hồ sơ cá nhân
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="ri-settings-3-line mr-2"></i> Cài đặt tài khoản
+                        </a>
+                        <a href="login.html" class="dropdown-item logout">
+                            <i class="ri-logout-box-r-line mr-2"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container">
+            
+            <!-- Class List Grid -->
+            <div class="class-grid">
+                
+                <!-- Class Card 1: Lập trình Web -->
+                <div class="class-card">
+                    <div class="card-banner blue-gradient">
+                        <div class="class-subject-code">INF2054 - HK1 2025</div>
+                        <h3 class="class-subject-name">Lập trình Web</h3>
+                        <div class="lecturer-badge">
+                            <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff" alt="GV" class="lecturer-img">
+                            <span>GV. Kim Vũ</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <i class="ri-group-line"></i>
+                                <span>45 Sinh viên</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="ri-file-list-3-line"></i>
+                                <span>5 Bài tập</span>
+                            </div>
+                        </div>
+                        <div class="card-notification warning">
+                            <i class="ri-notification-badge-line"></i>
+                            <span>1 Bài tập mới chưa nộp</span>
+                        </div>
+                        <button onclick="window.location.href='BT.html'" class="btn-enter-class">
+                            Vào lớp học <i class="ri-arrow-right-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Class Card 2: Cơ sở dữ liệu -->
+                <div class="class-card">
+                    <div class="card-banner purple-gradient">
+                        <div class="class-subject-code">DAT301 - HK1 2025</div>
+                        <h3 class="class-subject-name">Cơ sở dữ liệu</h3>
+                        <div class="lecturer-badge">
+                            <img src="https://ui-avatars.com/api/?name=Tran+Hung&background=7C3AED&color=fff" alt="GV" class="lecturer-img">
+                            <span>GV. Trần Hùng</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <i class="ri-group-line"></i>
+                                <span>60 Sinh viên</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="ri-file-list-3-line"></i>
+                                <span>8 Bài tập</span>
+                            </div>
+                        </div>
+                        <!-- Empty notification space for layout consistency -->
+                        <div class="h-8 mb-4"></div>
+                        
+                        <button onclick="window.location.href='BT.html'" class="btn-enter-class">
+                            Vào lớp học <i class="ri-arrow-right-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Class Card 3: Mạng máy tính -->
+                <div class="class-card">
+                    <div class="card-banner orange-gradient">
+                        <div class="class-subject-code">NET102 - HK1 2025</div>
+                        <h3 class="class-subject-name">Mạng máy tính</h3>
+                        <div class="lecturer-badge">
+                            <img src="https://ui-avatars.com/api/?name=Le+An&background=D97706&color=fff" alt="GV" class="lecturer-img">
+                            <span>GV. Lê An</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <i class="ri-group-line"></i>
+                                <span>55 Sinh viên</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="ri-file-list-3-line"></i>
+                                <span>4 Bài tập</span>
+                            </div>
+                        </div>
+                        <div class="card-notification info">
+                            <i class="ri-information-line"></i>
+                            <span>Thông báo nghỉ học tuần sau</span>
+                        </div>
+                        <button onclick="window.location.href='BT.html'" class="btn-enter-class">
+                            Vào lớp học <i class="ri-arrow-right-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Class Card 4: Triết học -->
+                <div class="class-card">
+                    <div class="card-banner green-gradient">
+                        <div class="class-subject-code">PHI101 - HK1 2025</div>
+                        <h3 class="class-subject-name">Triết học Mác - Lênin</h3>
+                        <div class="lecturer-badge">
+                            <img src="https://ui-avatars.com/api/?name=Pham+Minh&background=059669&color=fff" alt="GV" class="lecturer-img">
+                            <span>GV. Phạm Minh</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <i class="ri-group-line"></i>
+                                <span>90 Sinh viên</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="ri-file-list-3-line"></i>
+                                <span>3 Bài tập</span>
+                            </div>
+                        </div>
+                        <div class="h-8 mb-4"></div>
+                        <button onclick="window.location.href='Student_Assignment_Management.html'" class="btn-enter-class">
+                            Vào lớp học <i class="ri-arrow-right-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // Dropdown Menu Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const trigger = document.getElementById('avatar-dropdown-trigger');
+            const menu = document.getElementById('user-dropdown');
+
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!trigger.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

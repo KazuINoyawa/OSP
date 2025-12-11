@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập của tôi - Student UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="chitietbt.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-slate-800 min-h-screen flex">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboardSV.html" title="Tổng quan">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Tổng quan</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="BT.html" title="Bài tập của tôi">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Bài tập của tôi</span>
+                </a>
+            </li>
+             <li>
+                <a href="myclass.html" title="Lớp học của tôi">
+                    <i class="ri-team-line"></i>
+                    <span class="menu-text">Lớp học của tôi</span>
+                </a>
+            </li>
+            <li>
+                <a href="Kqua.html" title="Kết quả học tập">
+                    <i class="ri-bar-chart-box-line"></i>
+                    <span class="menu-text">Kết quả học tập</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item">
+                <a href="#" title="Hồ sơ cá nhân">
+                    <i class="ri-user-settings-line"></i>
+                    <span class="menu-text">Hồ sơ cá nhân</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">NA</div>
+                <div class="user-info">
+                    <p class="name">Nguyễn Văn A</p>
+                    <p class="role">SV2334376 - Khoa CNTT</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <!-- ID page-title để đổi tên khi chuyển trang -->
+                <h2 class="page-title" id="page-title">Bài tập của tôi</h2>
+            </div>
+
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="Tìm kiếm bài tập...">
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button class="icon-btn"><i class="ri-question-line"></i></button>
+                <button class="icon-btn relative" title="Tin nhắn" id="btn-messages">
+                    <i class="ri-message-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn relative" title="Thông báo" id="btn-notifications">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+        <!-- Modal: Thông báo -->
+        <div id="modal-notifications" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+                <h2 class="text-lg font-bold mb-4">Thông báo</h2>
+                <ul class="space-y-3">
+                    <li class="border-b pb-2 text-gray-700">Bạn có 3 bài tập cần hoàn thành trong tuần này.</li>
+                    <li class="border-b pb-2 text-gray-700">Điểm số mới đã được cập nhật cho bài tập API.</li>
+                    <li class="border-b pb-2 text-gray-700">Giảng viên Kim Vũ vừa gửi thông báo mới.</li>
+                </ul>
+                <button onclick="closeModal('modal-notifications')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">&times;</button>
+            </div>
+        </div>
+
+        <!-- Modal: Tin nhắn -->
+        <div id="modal-messages" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+                <h2 class="text-lg font-bold mb-4">Tin nhắn</h2>
+                <ul class="space-y-3">
+                    <li class="border-b pb-2 text-gray-700">Giảng viên Kim Vũ: "Bạn nhớ nộp bài tập đúng hạn nhé!"</li>
+                    <li class="border-b pb-2 text-gray-700">Bạn vừa nhận được nhận xét cho bài tập RESTful API.</li>
+                </ul>
+                <button onclick="closeModal('modal-messages')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">&times;</button>
+            </div>
+        </div>
+
+                <div class="header-user-menu relative">
+                    <div class="header-avatar cursor-pointer" onclick="toggleUserMenu()">
+                        <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar">
+                    </div>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="user-dropdown" class="user-dropdown hidden">
+                        <div class="dropdown-header">
+                            <p class="user-name">Nguyễn Văn A</p>
+                            <p class="user-email">sv.nguyenvana@lms.edu.vn</p>
+                        </div>
+                        <ul class="dropdown-list">
+                            <li>
+                                <a href="#">
+                                    <i class="ri-user-line"></i> Hồ sơ cá nhân
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="ri-settings-3-line"></i> Cài đặt tài khoản
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="login.html" class="logout-item">
+                                    <i class="ri-logout-box-line"></i> Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+
+        <div class="content-container">
+
+            <!-- VIEW 1: DANH SÁCH BÀI TẬP (List View) -->
+            <div id="view-list" class="view-section active fade-in">
+                
+                <!-- Filter Tabs -->
+                <div class="flex gap-6 mb-6 border-b border-gray-200">
+                    <button class="tab-btn pb-3 px-1 text-sm font-bold text-blue-600 border-b-2 border-blue-600 transition-colors" data-type="all">Tất cả</button>
+                    <button class="tab-btn pb-3 px-1 text-sm font-medium text-gray-500 hover:text-slate-800 transition-colors" data-type="pending">Chưa nộp</button>
+                    <button class="tab-btn pb-3 px-1 text-sm font-medium text-gray-500 hover:text-slate-800 transition-colors" data-type="submitted">Đã nộp</button>
+                    <button class="tab-btn pb-3 px-1 text-sm font-medium text-gray-500 hover:text-slate-800 transition-colors" data-type="graded">Đã chấm</button>
+                </div>
+
+                <div class="space-y-4 max-w-5xl mx-auto">
+                    
+                    <!-- Card 1: Chưa nộp (Sắp đến hạn) -->
+                     <div onclick="openDetail('web')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-500"></div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-5 items-start">
+                                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl mt-1">
+                                    <i class="ri-code-s-slash-line text-2xl"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-blue-100 text-blue-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded">Lập trình Web</span>
+                                        <span class="text-xs text-orange-600 font-bold flex items-center gap-1">
+                                            <i class="ri-time-line"></i> Deadline: Hôm nay, 23:59
+                                        </span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Xây dựng Website bán hàng (Frontend)</h3>
+                                    <p class="text-sm text-gray-500 mt-1 line-clamp-1">Yêu cầu: Sử dụng ReactJS/VueJS thiết kế giao diện trang chủ và trang chi tiết sản phẩm.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-full border border-gray-200">Chưa nộp</span>
+                                <i class="ri-arrow-right-s-line text-2xl text-gray-300 group-hover:text-blue-600 transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: SQL (Click -> openDetail('sql')) -->
+                    <div onclick="openDetail('sql')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-yellow-500"></div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-5 items-start">
+                                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl mt-1">
+                                    <i class="ri-database-2-line text-2xl"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-purple-100 text-purple-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded">Cơ sở dữ liệu</span>
+                                        <span class="text-xs text-yellow-600 font-bold flex items-center gap-1">
+                                            <i class="ri-calendar-event-line"></i> Hạn: Ngày mai, 17:00
+                                        </span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-800 group-hover:text-purple-600 transition-colors">Truy vấn SQL nâng cao & Trigger</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Bài thực hành số 4: Viết các Store Procedure và Trigger kiểm tra dữ liệu.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-full border border-gray-200">Chưa nộp</span>
+                                <i class="ri-arrow-right-s-line text-2xl text-gray-300 group-hover:text-purple-600 transition-colors"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Đã nộp -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all cursor-pointer group opacity-90 hover:opacity-100 relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-5 items-start">
+                                <div class="p-3 bg-green-50 text-green-600 rounded-xl mt-1">
+                                    <i class="ri-book-mark-line text-2xl"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-emerald-100 text-emerald-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded">Triết học</span>
+                                        <span class="text-xs text-gray-400">Hạn: 22/11/2025</span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-800 group-hover:text-green-600">Tiểu luận triết học Mác - Lênin</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Nộp bài thành công lúc 10:30, 21/11/2025.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full border border-blue-200">Đã nộp</span>
+                                <i class="ri-check-line text-2xl text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Đã chấm -->
+                    <div onclick="openDetail('graded')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all cursor-pointer group opacity-80 hover:opacity-100 relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500"></div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-5 items-start">
+                                <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl mt-1">
+                                    <i class="ri-global-line text-2xl"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-indigo-100 text-indigo-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded">Mạng máy tính</span>
+                                        <span class="text-xs text-gray-400">Đã đóng: 20/11/2025</span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-800 group-hover:text-indigo-600">Báo cáo thực hành Packet Tracer</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Điểm số: <span class="font-bold text-green-600 text-base">9.0 / 10</span></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full border border-purple-200">Đã chấm</span>
+                                <i class="ri-file-list-3-line text-2xl text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- VIEW 2: CHI TIẾT BÀI TẬP (Detail View) -->
+           <div id="view-detail" class="view-section max-w-6xl mx-auto hidden">
+                
+                <!-- Back Button -->
+                <button onclick="switchView('view-list')" class="mb-6 flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors font-medium">
+                    <i class="ri-arrow-left-line"></i> Quay lại danh sách
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Cột Trái: Thông tin đề bài -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+                            
+                            <!-- Header Info -->
+                            <div class="flex justify-between items-start mb-6 pb-6 border-b border-gray-100">
+                                <div>
+                                    <!-- ID: detail-title -->
+                                    <h1 class="text-2xl font-bold text-slate-800 mb-2 leading-snug" id="detail-title">Xây dựng Website bán hàng (Frontend)</h1>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <!-- ID: detail-course -->
+                                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold text-xs" id="detail-course">Lập trình Web</span>
+                                        <span class="text-gray-400">•</span>
+                                        <span class="text-gray-600 flex items-center gap-1"><i class="ri-user-line"></i> GV. Kim Vũ</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-500 uppercase font-bold mb-1">Hạn nộp</p>
+                                    <!-- ID: detail-deadline -->
+                                    <div class="flex items-center gap-1 text-red-600 font-bold text-lg bg-red-50 px-3 py-1 rounded-lg border border-red-100" id="detail-deadline">
+                                        <i class="ri-alarm-warning-line"></i> 23:59, Hôm nay
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content (ID: detail-desc) -->
+                            <div class="prose prose-slate max-w-none text-gray-700 mb-8 leading-relaxed" id="detail-desc">
+                                <!-- Nội dung này sẽ được JS ghi đè -->
+                                <p class="font-bold mb-2">Yêu cầu bài tập:</p>
+                                <p>Sinh viên thực hiện thiết kế giao diện Frontend cho website bán hàng điện tử. Yêu cầu sử dụng ReactJS hoặc VueJS.</p>
+                                <ul class="list-disc pl-5 space-y-2 mt-2 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                    <li>Thiết kế trang chủ (Home) với Banner, Danh sách sản phẩm nổi bật.</li>
+                                    <li>Thiết kế trang chi tiết sản phẩm (Product Detail) đầy đủ thông tin.</li>
+                                    <li>Responsive trên Mobile và Tablet.</li>
+                                    <li>Nộp mã nguồn (Link Github) và báo cáo (PDF).</li>
+                                </ul>
+                            </div>
+
+                            <!-- Attachment (ID: detail-file-name) -->
+                            <div>
+                                <p class="text-sm font-bold text-gray-500 mb-3 uppercase">Tài liệu đính kèm</p>
+                                <div class="flex gap-4">
+                                    <div class="bg-white border border-gray-200 rounded-xl p-3 flex items-center gap-3 w-fit hover:border-blue-400 hover:shadow-md cursor-pointer transition-all">
+                                        <div class="bg-red-100 text-red-600 w-10 h-10 rounded-lg flex items-center justify-center text-xl">
+                                            <i class="ri-file-pdf-line"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-slate-700" id="detail-file-name">De_bai_Assignment_1.pdf</p>
+                                            <p class="text-xs text-gray-400">1.5 MB</p>
+                                        </div>
+                                        <div class="ml-2 text-gray-400">
+                                            <i class="ri-download-line"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Private Comments -->
+                        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                            <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                                <i class="ri-chat-private-line text-blue-600"></i> Nhận xét riêng tư
+                            </h3>
+                            <div class="relative">
+                                <input type="text" placeholder="Nhắn tin cho giảng viên..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-colors pr-12">
+                                <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 p-1 rounded transition-colors">
+                                    <i class="ri-send-plane-fill text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cột Phải: Khu vực nộp bài -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden sticky top-6">
+                            
+                            <!-- Header Card -->
+                            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                                <h3 class="font-bold text-slate-800">Bài làm của bạn</h3>
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded flex items-center gap-1">
+                                    <i class="ri-error-warning-line"></i> Chưa nộp
+                                </span>
+                            </div>
+
+                            <!-- Content Card -->
+                            <div class="p-6">
+                                <!-- Upload Area -->
+                                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer mb-4 group bg-gray-50">
+                                    <div class="w-12 h-12 bg-white border border-gray-200 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 group-hover:shadow-md transition-all">
+                                        <i class="ri-upload-cloud-2-line text-2xl"></i>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-700">Thêm hoặc tạo mới</p>
+                                    <p class="text-xs text-gray-400 mt-1">Kéo thả file hoặc bấm để chọn</p>
+                                </div>
+
+                                <button class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-md hover:bg-blue-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 transform active:scale-95">
+                                    <i class="ri-send-plane-fill"></i> Nộp bài
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Toggle Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // Modal thông báo/tin nhắn
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnMessages = document.getElementById('btn-messages');
+            const btnNotifications = document.getElementById('btn-notifications');
+            const modalMessages = document.getElementById('modal-messages');
+            const modalNotifications = document.getElementById('modal-notifications');
+
+            btnMessages.addEventListener('click', function(e) {
+                e.stopPropagation();
+                modalMessages.classList.remove('hidden');
+            });
+            btnNotifications.addEventListener('click', function(e) {
+                e.stopPropagation();
+                modalNotifications.classList.remove('hidden');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!modalMessages.contains(e.target) && !btnMessages.contains(e.target)) {
+                    modalMessages.classList.add('hidden');
+                }
+                if (!modalNotifications.contains(e.target) && !btnNotifications.contains(e.target)) {
+                    modalNotifications.classList.add('hidden');
+                }
+            });
+        });
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Dữ liệu bài tập mẫu cho filter
+        const assignmentsList = [
+            {
+                id: 'web',
+                type: 'pending',
+                title: "Xây dựng Website bán hàng (Frontend)",
+                course: "Lập trình Web",
+                deadline: 'Hôm nay, 23:59',
+                status: 'Chưa nộp',
+                icon: 'ri-code-s-slash-line',
+                color: 'blue',
+                desc: "Yêu cầu: Sử dụng ReactJS/VueJS thiết kế giao diện trang chủ và trang chi tiết sản phẩm."
+            },
+            {
+                id: 'sql',
+                type: 'pending',
+                title: "Truy vấn SQL nâng cao & Trigger",
+                course: "Cơ sở dữ liệu",
+                deadline: 'Ngày mai, 17:00',
+                status: 'Chưa nộp',
+                icon: 'ri-database-2-line',
+                color: 'purple',
+                desc: "Bài thực hành số 4: Viết các Store Procedure và Trigger kiểm tra dữ liệu."
+            },
+            {
+                id: 'philosophy',
+                type: 'submitted',
+                title: "Tiểu luận triết học Mác - Lênin",
+                course: "Triết học",
+                deadline: '22/11/2025',
+                status: 'Đã nộp',
+                icon: 'ri-book-mark-line',
+                color: 'green',
+                desc: "Nộp bài thành công lúc 10:30, 21/11/2025."
+            },
+            {
+                id: 'graded',
+                type: 'graded',
+                title: "Báo cáo thực hành Packet Tracer",
+                course: "Mạng máy tính",
+                deadline: '20/11/2025',
+                status: 'Đã chấm',
+                icon: 'ri-global-line',
+                color: 'indigo',
+                desc: "Điểm số: 9.0 / 10"
+            }
+        ];
+
+        // Hàm render bài tập theo loại
+        function renderAssignments(type) {
+            const container = document.querySelector('.space-y-4');
+            container.innerHTML = '';
+            let filtered = assignmentsList;
+            if (type !== 'all') {
+                filtered = assignmentsList.filter(a => a.type === type);
+            }
+            filtered.forEach(a => {
+                let statusClass = '';
+                if (a.type === 'pending') statusClass = 'bg-gray-100 text-gray-600';
+                if (a.type === 'submitted') statusClass = 'bg-blue-100 text-blue-700';
+                if (a.type === 'graded') statusClass = 'bg-purple-100 text-purple-700';
+                container.innerHTML += `
+                <div onclick="openDetail('${a.id}')" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-${a.color}-500"></div>
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-5 items-start">
+                            <div class="p-3 bg-${a.color}-50 text-${a.color}-600 rounded-xl mt-1">
+                                <i class="${a.icon} text-2xl"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="bg-${a.color}-100 text-${a.color}-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded">${a.course}</span>
+                                    <span class="text-xs font-bold flex items-center gap-1">
+                                        <i class="ri-time-line"></i> Deadline: ${a.deadline}
+                                    </span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors">${a.title}</h3>
+                                <p class="text-sm text-gray-500 mt-1 line-clamp-1">${a.desc}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="px-3 py-1 ${statusClass} text-xs font-bold rounded-full border border-gray-200">${a.status}</span>
+                            <i class="ri-arrow-right-s-line text-2xl text-gray-300 group-hover:text-blue-600 transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+        }
+
+        // Sự kiện click tab
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600', 'font-bold'));
+                this.classList.add('text-blue-600', 'border-b-2', 'border-blue-600', 'font-bold');
+                renderAssignments(this.dataset.type);
+            });
+        });
+
+        // Khởi tạo mặc định
+        renderAssignments('all');
+
+        // Chuyển đổi View (List <-> Detail)
+        function switchView(viewId) {
+            // Ẩn tất cả view
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('active');
+                el.classList.add('hidden'); // Thêm class hidden để ẩn hẳn
+            });
+            
+            // Hiện view được chọn
+            const activeView = document.getElementById(viewId);
+            activeView.classList.remove('hidden');
+            setTimeout(() => activeView.classList.add('active'), 10); // Timeout nhỏ để animation chạy
+
+            // Cập nhật tiêu đề Header
+            const pageTitle = document.getElementById('page-title');
+            if (viewId === 'view-detail') {
+                pageTitle.innerText = 'Chi tiết';
+            } else {
+                pageTitle.innerText = 'Bài tập của tôi';
+            }
+        }
+
+        // Mở trang chi tiết (Giả lập)
+        function openDetail(type) {
+            // Nếu là bài đã chấm, chuyển hướng
+            if (type === 'graded') {
+                window.location.href = 'chamdiem.html';
+                return;
+            }
+
+            // Nếu là bài chưa nộp (web hoặc sql)
+            const data = assignmentsData[type];
+            if (data) {
+                // Cập nhật nội dung trang chi tiết
+                document.getElementById('detail-title').innerText = data.title;
+                document.getElementById('detail-course').innerText = data.course;
+                document.getElementById('detail-deadline').innerHTML = data.deadline;
+                document.getElementById('detail-file-name').innerText = data.fileName;
+                document.getElementById('detail-desc').innerHTML = data.description;
+
+                // Chuyển sang view chi tiết
+                switchView('view-detail');
+                document.querySelector('.main-content').scrollTop = 0;
+            }
+        }
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+         window.addEventListener('click', function(e) {
+            const userMenu = document.querySelector('.header-user-menu');
+            const dropdown = document.getElementById('user-dropdown');
+            
+            // Nếu click không nằm trong vùng userMenu và dropdown đang mở thì đóng lại
+            if (!userMenu.contains(e.target) && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

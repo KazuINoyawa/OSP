@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết bài đã chấm - Student UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="student_style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-slate-800 min-h-screen flex">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboardSV.html" title="Tổng quan">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Tổng quan</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Lớp học của tôi">
+                    <i class="ri-team-line"></i>
+                    <span class="menu-text">Lớp học của tôi</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="BT.html" title="Bài tập của tôi">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Bài tập của tôi</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Kết quả học tập">
+                    <i class="ri-bar-chart-box-line"></i>
+                    <span class="menu-text">Kết quả học tập</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item">
+                <a href="#" title="Hồ sơ cá nhân">
+                    <i class="ri-user-settings-line"></i>
+                    <span class="menu-text">Hồ sơ cá nhân</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">NA</div>
+                <div class="user-info">
+                    <p class="name">Nguyễn Văn A</p>
+                    <p class="role">SV2334376 - Khoa CNTT</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <h2 class="page-title">Chi tiết bài làm</h2>
+            </div>
+
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="Tìm kiếm bài tập...">
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button class="icon-btn"><i class="ri-question-line"></i></button>
+                <button class="icon-btn relative" title="Tin nhắn">
+                    <i class="ri-message-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="icon-btn relative">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <div class="header-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container">
+            
+            <!-- Back Button -->
+            <button onclick="window.location.href='BT.html'" class="mb-6 flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors font-medium">
+                <i class="ri-arrow-left-line"></i> Quay lại danh sách
+            </button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Cột Trái: Thông tin đề bài -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+                        
+                        <!-- Header Info -->
+                        <div class="flex justify-between items-start mb-6 pb-6 border-b border-gray-100">
+                            <div>
+                                <h1 class="text-2xl font-bold text-slate-800 mb-2 leading-snug">Báo cáo thực hành Packet Tracer</h1>
+                                <div class="flex items-center gap-3 text-sm">
+                                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-bold text-xs">Mạng máy tính</span>
+                                    <span class="text-gray-400">•</span>
+                                    <span class="text-gray-600 flex items-center gap-1"><i class="ri-user-line"></i> GV. Kim Vũ</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-500 uppercase font-bold mb-1">Ngày nộp</p>
+                                <div class="flex items-center gap-1 text-slate-600 font-bold text-lg bg-gray-100 px-3 py-1 rounded-lg border border-gray-200">
+                                    <i class="ri-calendar-check-line"></i> 19/11/2025
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="prose prose-slate max-w-none text-gray-700 mb-8 leading-relaxed">
+                            <p class="font-bold mb-2">Yêu cầu bài tập:</p>
+                            <p>Sinh viên hoàn thành bài lab cấu hình định tuyến tĩnh (Static Routing) trên phần mềm Cisco Packet Tracer.</p>
+                            <ul class="list-disc pl-5 space-y-2 mt-2 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <li>Cấu hình địa chỉ IP cho các interface theo sơ đồ mạng.</li>
+                                <li>Thiết lập Static Route trên các Router để các PC ping thấy nhau.</li>
+                                <li>Nộp file .pkt và báo cáo giải thích (PDF).</li>
+                            </ul>
+                        </div>
+
+                        <!-- Attachment -->
+                        <div>
+                            <p class="text-sm font-bold text-gray-500 mb-3 uppercase">Tài liệu đính kèm</p>
+                            <div class="flex gap-4">
+                                <div class="bg-white border border-gray-200 rounded-xl p-3 flex items-center gap-3 w-fit hover:border-blue-400 hover:shadow-md cursor-pointer transition-all">
+                                    <div class="bg-blue-100 text-blue-600 w-10 h-10 rounded-lg flex items-center justify-center text-xl">
+                                        <i class="ri-file-pdf-line"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-700">Huong_dan_Lab_3.pdf</p>
+                                        <p class="text-xs text-gray-400">850 KB</p>
+                                    </div>
+                                    <div class="ml-2 text-gray-400">
+                                        <i class="ri-download-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Private Comments -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                        <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                            <i class="ri-chat-private-line text-blue-600"></i> Trao đổi riêng
+                        </h3>
+                        <!-- Message List -->
+                        <div class="space-y-4 mb-4 max-h-60 overflow-y-auto pr-2">
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-xs font-bold">NA</div>
+                                <div class="bg-gray-100 p-3 rounded-lg rounded-tl-none text-sm text-gray-700">
+                                    <p>Thầy ơi, em nộp file .pkt bị lỗi font chữ thì có sao không ạ?</p>
+                                    <span class="text-xs text-gray-400 mt-1 block">19/11 10:00</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 flex-row-reverse">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex-shrink-0 flex items-center justify-center text-xs font-bold">KV</div>
+                                <div class="bg-blue-50 p-3 rounded-lg rounded-tr-none text-sm text-gray-700">
+                                    <p>Không sao em nhé, thầy chấm dựa trên cấu hình lệnh là chính.</p>
+                                    <span class="text-xs text-blue-300 mt-1 block text-right">19/11 10:15</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="relative">
+                            <input type="text" placeholder="Nhắn tin cho giảng viên..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:bg-white transition-colors pr-12">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600 p-1 rounded transition-colors">
+                                <i class="ri-send-plane-fill text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột Phải: Kết quả chấm -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-lg border border-purple-100 overflow-hidden sticky top-6">
+                        
+                        <!-- Header Card -->
+                        <div class="px-6 py-4 border-b border-purple-50 flex justify-between items-center bg-purple-50">
+                            <h3 class="font-bold text-purple-900">Kết quả đánh giá</h3>
+                            <span class="px-2 py-1 bg-purple-200 text-purple-700 text-xs font-bold rounded flex items-center gap-1">
+                                <i class="ri-checkbox-circle-line"></i> Đã chấm
+                            </span>
+                        </div>
+
+                        <!-- Content Card -->
+                        <div class="p-6 space-y-6">
+                            
+                            <!-- Score -->
+                            <div class="text-center py-4 border-b border-dashed border-gray-200">
+                                <span class="block text-sm text-gray-500 mb-1">Tổng điểm</span>
+                                <div class="text-5xl font-bold text-purple-600 mb-2">9.0</div>
+                                <span class="text-sm font-medium text-gray-400">Thang điểm 10</span>
+                            </div>
+
+                            <!-- Feedback -->
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                                    <i class="ri-feedback-line text-purple-500"></i> Nhận xét của giảng viên
+                                </h4>
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-sm text-slate-600 italic relative">
+                                    <i class="ri-double-quotes-l absolute top-2 left-2 text-gray-300 text-xl"></i>
+                                    <p class="pl-4 relative z-10">"Bài làm rất tốt, cấu hình định tuyến chính xác. Các PC ping thông mạng thành công. Tuy nhiên phần báo cáo cần trình bày chi tiết hơn về bảng định tuyến."</p>
+                                </div>
+                            </div>
+
+                            <!-- Submission File (Read-only) -->
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-700 mb-3">Bài nộp của bạn</h4>
+                                <div class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl hover:border-purple-300 transition-colors cursor-pointer group">
+                                    <div class="bg-green-100 text-green-600 w-10 h-10 rounded-lg flex items-center justify-center text-xl group-hover:bg-green-200 transition-colors">
+                                        <i class="ri-file-zip-line"></i>
+                                    </div>
+                                    <div class="flex-1 overflow-hidden">
+                                        <p class="text-sm font-bold text-slate-700 truncate group-hover:text-purple-700 transition-colors">Lab3_NguyenVanA.zip</p>
+                                        <p class="text-xs text-gray-500">ZIP • 2.5 MB • 19/11</p>
+                                    </div>
+                                    <a href="#" class="text-gray-400 hover:text-purple-600 p-1">
+                                        <i class="ri-download-2-line text-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="text-center pt-2">
+                                <p class="text-xs text-gray-400">Được chấm lúc 14:30, 20/11/2025</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>

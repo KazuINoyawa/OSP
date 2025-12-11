@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Bài tập - Teacher UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-enter { animation: fadeIn 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-20 sticky top-0 h-screen">
+        <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-800">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <span class="font-bold text-lg tracking-wide">LMS Edu</span>
+        </div>
+        <nav class="flex-1 py-6 px-3 space-y-2">
+            <a href="dashboardGV.html" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span class="font-medium">Bảng tin</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-lg shadow-blue-900/50 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <span class="font-medium">Quản lý Bài tập</span>
+            </a>
+            <a href="Quanlysv.html" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span class="font-medium">Sinh viên</span>
+            </a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <div class="flex items-center gap-3 bg-slate-800/50 p-3 rounded-lg">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-400 to-blue-600 flex items-center justify-center text-sm font-bold">TM</div>
+                <div><p class="text-sm font-semibold">GV. Kim Vũ</p><p class="text-xs text-slate-400">Khoa CNTT</p></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+        <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 flex-shrink-0 z-10">
+            <div class="flex items-center gap-2 text-sm text-gray-500" id="breadcrumbs">
+                <span class="font-bold text-slate-800 text-lg">Quản lý Bài tập</span>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="switchView('view-create')" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 shadow-sm transition-all" id="btn-create-top">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Tạo bài tập mới
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 bg-gray-50">
+
+            <!-- VIEW 1: DANH SÁCH BÀI TẬP -->
+            <div id="view-list" class="view-section active max-w-6xl mx-auto">
+                <div class="flex gap-6 mb-6 border-b border-gray-200">
+                    <button class="tab-btn pb-3 px-1 text-sm font-bold text-blue-600 border-b-2 border-blue-600" data-type="all">Tất cả</button>
+                    <button class="tab-btn pb-3 px-1 text-sm font-medium text-gray-500 hover:text-slate-800" data-type="pending">Chưa chấm</button>
+                    <button class="tab-btn pb-3 px-1 text-sm font-medium text-gray-500 hover:text-slate-800" data-type="graded">Đã chấm</button>
+                    <button class="tab-btn pb-3 px-1 text-sm font-medium text-gray-500 hover:text-slate-800" data-type="late">Quá hạn</button>
+                </div>
+                <div class="grid grid-cols-1 gap-4 assignment-list"></div>
+            </div>
+
+            <!-- VIEW 2: TẠO BÀI TẬP -->
+            <div id="view-create" class="view-section max-w-3xl mx-auto">
+                <!-- Form tạo bài tập (giữ nguyên như cũ) -->
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-slate-800">Tạo Bài Tập Mới</h2>
+                        <button onclick="switchView('view-list')" class="text-gray-400 hover:text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
+                    </div>
+                    <div class="p-8 space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Tiêu đề bài tập <span class="text-red-500">*</span></label>
+                            <input type="text" placeholder="VD: Bài tập lớn cuối kỳ..." class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Mô tả chi tiết</label>
+                            <textarea rows="4" placeholder="Nhập hướng dẫn làm bài..." class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Hạn nộp (Deadline) <span class="text-red-500">*</span></label>
+                                <input type="datetime-local" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Điểm tối đa</label>
+                                <input type="number" value="10" min="0" max="100" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Giao cho lớp <span class="text-red-500">*</span></label>
+                            <select class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <option>Lập trình Web Nâng cao (INT3306)</option>
+                                <option>Công nghệ phần mềm (SE104)</option>
+                                <option>Triết học Mác - Lênin (SSH1120)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-8 py-5 border-t border-gray-200 flex justify-end gap-3">
+                        <button onclick="switchView('view-list')" class="px-6 py-2.5 border border-gray-300 text-slate-600 font-medium rounded-lg hover:bg-white">Hủy bỏ</button>
+                        <button onclick="switchView('view-list'); alert('Đã tạo bài tập thành công!');" class="px-6 py-2.5 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700">Tạo Bài Tập</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: CHI TIẾT BÀI TẬP -->
+            <div id="view-detail" class="view-section max-w-6xl mx-auto">
+                <button onclick="switchView('view-list')" class="mb-4 flex items-center gap-2 text-gray-500 hover:text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Quay lại
+                </button>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Phân tích thiết kế hệ thống hướng đối tượng</h2>
+                            <p class="text-blue-600 font-medium">Lớp: Lập trình Web Nâng cao</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="block text-xs text-gray-500 uppercase font-bold">Hạn nộp</span>
+                            <span class="text-red-600 font-bold text-lg">23:59, 25/11/2023</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800">Danh sách sinh viên nộp bài (42/60)</h3>
+                        <input type="text" placeholder="Tìm sinh viên..." class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                    </div>
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3">Sinh viên</th>
+                                <th class="px-6 py-3">Thời gian nộp</th>
+                                <th class="px-6 py-3">File nộp</th>
+                                <th class="px-6 py-3 text-center">Trạng thái chấm</th>
+                                <th class="px-6 py-3 text-right">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 font-medium text-slate-800">Nguyễn Văn A <span class="text-gray-400 font-normal ml-1">(SV001)</span></td>
+                                <td class="px-6 py-4 text-green-600">10:30 24/11/2023 <span class="text-xs bg-green-100 px-1.5 py-0.5 rounded ml-1">Đúng hạn</span></td>
+                                <td class="px-6 py-4 text-blue-600 underline cursor-pointer">BTL_Nhom1.pdf</td>
+                                <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded font-bold">Chưa chấm</span></td>
+                                <td class="px-6 py-4 text-right">
+                                    <button onclick="openGradingModal('Nguyễn Văn A', 'BTL_Nhom1.pdf')" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700">Chấm bài</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-blue-50">
+                                <td class="px-6 py-4 font-medium text-slate-800">Trần Thị B <span class="text-gray-400 font-normal ml-1">(SV002)</span></td>
+                                <td class="px-6 py-4 text-green-600">09:15 23/11/2023</td>
+                                <td class="px-6 py-4 text-blue-600 underline cursor-pointer">Diagram_Final.png</td>
+                                <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-bold">8.5 / 10</span></td>
+                                <td class="px-6 py-4 text-right">
+                                    <button onclick="openGradingModal('Trần Thị B', 'Diagram_Final.png', '8.5')" class="px-3 py-1.5 border border-blue-600 text-blue-600 text-xs font-bold rounded hover:bg-blue-50">Sửa điểm</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL CHẤM ĐIỂM -->
+    <div id="modal-grading" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-6xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800" id="modal-student-name">Chấm bài: Sinh viên</h2>
+                    <p class="text-sm text-gray-500" id="modal-file-name">File: ...</p>
+                </div>
+                <button onclick="closeGradingModal()" class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <div class="flex-1 grid grid-cols-3 overflow-hidden">
+                <div class="col-span-2 bg-gray-100 flex items-center justify-center">
+                    <div class="text-center p-10">
+                        <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        </div>
+                        <p class="text-gray-600 font-medium mb-4">Xem trước tài liệu</p>
+                        <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-sm font-medium hover:bg-gray-50">Tải xuống file gốc</button>
+                    </div>
+                </div>
+
+                <div class="col-span-1 bg-white flex flex-col h-full overflow-y-auto">
+                    <div class="p-6 space-y-6 flex-1">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Điểm số (Thang 10)</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="grading-score" min="0" max="10" step="0.1" placeholder="0.0" class="w-full px-4 py-3 text-2xl font-bold text-center border-2 border-blue-100 rounded-xl focus:outline-none focus:border-blue-500 text-blue-600">
+                                <span class="text-xl font-bold text-gray-400">/10</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Nhận xét / Feedback</label>
+                            <textarea id="grading-feedback" rows="8" placeholder="Nhập nhận xét chi tiết..." class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none text-sm"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="p-6 border-t border-gray-100 bg-gray-50">
+                        <button id="grading-save-btn" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl shadow hover:bg-blue-700 mb-3">
+                            Lưu & Gửi Kết Quả
+                        </button>
+                        <button onclick="closeGradingModal()" class="w-full py-2.5 text-gray-500 font-medium hover:text-gray-700 text-sm">Hủy bỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận -->
+    <div id="modal-confirm" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-xs p-6 text-center">
+            <h2 class="text-lg font-bold mb-4">Xác nhận lưu điểm?</h2>
+            <p class="mb-6 text-gray-600">Bạn có chắc muốn lưu điểm này không?</p>
+            <div class="flex gap-4 justify-center">
+                <button onclick="confirmSaveScore()" class="px-4 py-2 bg-blue-600 text-white rounded font-bold">Xác nhận</button>
+                <button onclick="closeConfirmModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded font-bold">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thành công -->
+    <div id="modal-success" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-20 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-xs p-6 text-center">
+            <h2 class="text-lg font-bold mb-4 text-green-600">Lưu điểm thành công!</h2>
+            <button onclick="closeSuccessModal()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded font-bold">Đóng</button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu mẫu
+        const assignmentsList = [
+            { id: 1, type: 'pending', title: 'Phân tích thiết kế hệ thống hướng đối tượng', course: 'Lập trình Web', deadline: '25/11/2023 (23:59)', color: 'blue' },
+            { id: 2, type: 'pending', title: 'Tiểu luận: Phép biện chứng duy vật', course: 'Triết học Mác - Lênin', deadline: '30/11/2023', color: 'emerald' },
+            { id: 3, type: 'graded', title: 'Xây dựng RESTful API với ExpressJS', course: 'Phát triển ứng dụng', deadline: '05/12/2023', color: 'purple' },
+            { id: 4, type: 'late', title: 'Tìm hiểu về Docker Container', course: 'Công nghệ phần mềm', deadline: '15/11/2023 (Đã đóng)', color: 'gray' }
+        ];
+
+        function renderAssignments(type = 'all') {
+            const container = document.querySelector('.assignment-list');
+            container.innerHTML = '';
+            const filtered = type === 'all' ? assignmentsList : assignmentsList.filter(a => a.type === type);
+            filtered.forEach(a => {
+                container.innerHTML += `
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all">
+                    <div class="flex justify-between items-start">
+                        <div class="flex gap-4">
+                            <div class="p-3 bg-${a.color}-50 text-${a.color}-600 rounded-lg h-fit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="bg-${a.color}-100 text-${a.color}-700 text-xs font-bold px-2 py-0.5 rounded">${a.course}</span>
+                                    <span class="text-xs text-gray-400">Đăng ngày: 20/11/2023</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800">${a.title}</h3>
+                                <div class="flex items-center gap-6 mt-2 text-sm text-gray-600">
+                                    <span class="flex items-center gap-1 text-red-500 font-medium">Deadline: ${a.deadline}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="switchView('view-detail')" class="px-4 py-2 border border-gray-200 text-slate-600 rounded-lg hover:bg-${a.color}-50 hover:text-${a.color}-600 hover:border-${a.color}-200 text-sm font-medium">
+                            Xem chi tiết
+                        </button>
+                    </div>
+                </div>`;
+            });
+        }
+
+        // Tab filter
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600', 'font-bold'));
+                this.classList.add('text-blue-600', 'border-b-2', 'border-blue-600', 'font-bold');
+                renderAssignments(this.dataset.type);
+            });
+        });
+
+        // Chuyển view
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+
+            const btn = document.getElementById('btn-create-top');
+            if (viewId === 'view-list') {
+                btn.style.display = 'flex';
+                document.getElementById('breadcrumbs').innerHTML = '<span class="font-bold text-slate-800 text-lg">Quản lý Bài tập</span>';
+            } else {
+                btn.style.display = 'none';
+                document.getElementById('breadcrumbs').innerHTML = '<span class="text-gray-400">Quản lý Bài tập</span> <span class="mx-2">/</span> <span class="font-bold text-slate-800 text-lg">Chi tiết</span>';
+            }
+        }
+
+        // Modal chấm điểm
+        function openGradingModal(studentName, fileName, score = '') {
+            document.getElementById('modal-student-name').innerText = 'Chấm bài: ' + studentName;
+            document.getElementById('modal-file-name').innerText = 'File nộp: ' + fileName;
+            document.getElementById('grading-score').value = score;
+            document.getElementById('grading-feedback').value = score ? "Bài làm khá tốt, đáp ứng được yêu cầu cơ bản." : "";
+            document.getElementById('modal-grading').classList.remove('hidden');
+
+            // Gắn lại sự kiện cho nút lưu
+            document.getElementById('grading-save-btn').onclick = openConfirmModal;
+        }
+
+        function closeGradingModal() {
+            document.getElementById('modal-grading').classList.add('hidden');
+        }
+
+        function openConfirmModal() {
+            document.getElementById('modal-confirm').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('modal-confirm').classList.add('hidden');
+        }
+
+        function confirmSaveScore() {
+            closeConfirmModal();
+            closeGradingModal();
+            document.getElementById('modal-success').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('modal-success').classList.add('hidden');
+        }
+
+        // Khởi tạo
+        renderAssignments('all');
+    </script>
+</body>
+</html>
