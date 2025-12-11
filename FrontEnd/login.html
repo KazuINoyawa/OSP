@@ -222,30 +222,31 @@
 
             // Nút submit để hiển thị loading
             const btn = e.target.querySelector('button[type="submit"]');
-            const btnContent = btn.innerHTML;
 
             if (usernameInput === TEACHER_ACC.user && passwordInput === TEACHER_ACC.pass) {
                 // Hiệu ứng loading giả
                 btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
                 btn.disabled = true;
 
+                // Chuyển hướng trực tiếp đến Dashboard Giảng Viên
                 setTimeout(() => {
-                    // Chuyển hướng đến Dashboard Giảng Viên
-                    window.location.href = "dashboardGV.html"; 
-                }, 1000);
+                    location.replace('./dashboardGV.html');
+                }, 500);
             } 
             else if (usernameInput === STUDENT_ACC.user && passwordInput === STUDENT_ACC.pass) {
                 // Hiệu ứng loading giả
                 btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
                 btn.disabled = true;
 
+                // Chuyển hướng trực tiếp đến Dashboard Sinh Viên
                 setTimeout(() => {
-                    // Chuyển hướng đến Dashboard Sinh Viên
-                    window.location.href = "dashboardSV.html"; 
-                }, 1000);
+                    location.replace('./dashboardSV.html');
+                }, 500);
             } 
             else {
                 alert("❌ Tên đăng nhập hoặc mật khẩu không đúng!\nVui lòng kiểm tra lại hoặc dùng tài khoản demo bên dưới.");
+                btn.innerHTML = '<span>Đăng nhập</span><i class="ri-arrow-right-line"></i>';
+                btn.disabled = false;
             }
         }
 
