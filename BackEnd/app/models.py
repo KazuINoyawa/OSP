@@ -73,3 +73,13 @@ class Score(Base):
 	feedback = Column(Text, nullable=True)
 	graded_at = Column(DateTime, nullable=True)
 	assignment = relationship("Assignment", back_populates="scores")
+
+class PeerReview(Base):
+	__tablename__ = "peer_reviews"
+	id = Column(Integer, primary_key=True, index=True)
+	reviewer_id = Column(Integer, ForeignKey("users.id"), nullable=False)  # sinh viên review
+	submission_id = Column(Integer, ForeignKey("scores.id"), nullable=False)  # bài tập được review
+	rating = Column(Integer, nullable=False)  # điểm đánh giá (1-5)
+	comment = Column(Text, nullable=True)  # nhận xét
+	created_at = Column(DateTime, nullable=True)
+	submission = relationship("Score")

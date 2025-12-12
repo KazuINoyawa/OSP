@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bài tập của tôi - Student UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="student_style.css">
     <link rel="stylesheet" href="chitietbt.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -85,47 +86,101 @@
             </div>
 
             <div class="header-right">
-                <button class="icon-btn"><i class="ri-question-line"></i></button>
-                <button class="icon-btn relative" title="Tin nhắn" id="btn-messages">
+                <button class="icon-btn" title="Trợ giúp"><i class="ri-question-line"></i></button>
+                
+                <!-- Nút Tin nhắn -->
+                <button class="icon-btn icon-btn-relative" title="Tin nhắn" id="btn-messages">
                     <i class="ri-message-3-line"></i>
-                    <span class="badge-dot"></span>
+                    <span class="badge-dot active"></span>
                 </button>
-                <button class="icon-btn relative" title="Thông báo" id="btn-notifications">
+                <!-- Dropdown: Tin nhắn -->
+                <div id="dropdown-messages" class="dropdown-menu hidden">
+                    <div class="dropdown-header-title">
+                        <h3>Tin nhắn</h3>
+                    </div>
+                    <ul class="messages-list">
+                        <li class="message-item unread" data-id="111">
+                            <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=3B82F6&color=fff" alt="Avatar" class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-name">GV. Kim Vũ</span>
+                                    <span class="message-time">3 phút</span>
+                                </div>
+                                <p class="message-text">Bài tập của em đã được chấm. Điểm: 8.5</p>
+                                <span class="unread-indicator"></span>
+                            </div>
+                        </li>
+                        <li class="message-item unread" data-id="112">
+                            <img src="https://ui-avatars.com/api/?name=Tran+Thi+B&background=F59E0B&color=fff" alt="Avatar" class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-name">Trần Thị B</span>
+                                    <span class="message-time">15 phút</span>
+                                </div>
+                                <p class="message-text">Bạn có thể giúp em hiểu thêm về bài đó không?</p>
+                                <span class="unread-indicator"></span>
+                            </div>
+                        </li>
+                        <li class="message-item" data-id="113">
+                            <img src="https://ui-avatars.com/api/?name=Le+Hoang+C&background=10B981&color=fff" alt="Avatar" class="message-avatar">
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-name">Lê Hoàng C</span>
+                                    <span class="message-time">2 giờ</span>
+                                </div>
+                                <p class="message-text">Okie, mình tập lúc 3h30 chiều nhé</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <button class="dropdown-view-all">Xem tất cả tin nhắn</button>
+                </div>
+                
+                <!-- Nút Thông báo -->
+                <button class="icon-btn icon-btn-relative" title="Thông báo" id="btn-notifications">
                     <i class="ri-notification-3-line"></i>
-                    <span class="badge-dot"></span>
+                    <span class="badge-dot active" id="notification-badge"></span>
                 </button>
-        <!-- Modal: Thông báo -->
-        <div id="modal-notifications" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
-            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-                <h2 class="text-lg font-bold mb-4">Thông báo</h2>
-                <ul class="space-y-3">
-                    <li class="border-b pb-2 text-gray-700">Bạn có 3 bài tập cần hoàn thành trong tuần này.</li>
-                    <li class="border-b pb-2 text-gray-700">Điểm số mới đã được cập nhật cho bài tập API.</li>
-                    <li class="border-b pb-2 text-gray-700">Giảng viên Kim Vũ vừa gửi thông báo mới.</li>
-                </ul>
-                <button onclick="closeModal('modal-notifications')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">&times;</button>
-            </div>
-        </div>
-
-        <!-- Modal: Tin nhắn -->
-        <div id="modal-messages" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
-            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-                <h2 class="text-lg font-bold mb-4">Tin nhắn</h2>
-                <ul class="space-y-3">
-                    <li class="border-b pb-2 text-gray-700">Giảng viên Kim Vũ: "Bạn nhớ nộp bài tập đúng hạn nhé!"</li>
-                    <li class="border-b pb-2 text-gray-700">Bạn vừa nhận được nhận xét cho bài tập RESTful API.</li>
-                </ul>
-                <button onclick="closeModal('modal-messages')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700">&times;</button>
-            </div>
-        </div>
-
+                <!-- Dropdown: Thông báo -->
+                <div id="dropdown-notifications" class="dropdown-menu hidden">
+                    <div class="dropdown-header-title">
+                        <h3>Thông báo</h3>
+                    </div>
+                    <ul class="notifications-list">
+                        <li class="notification-item unread" data-id="211">
+                            <div class="notification-icon bg-blue">
+                                <i class="ri-file-text-line"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p class="notification-title"><strong>Bài tập được chấm</strong></p>
+                                <p class="notification-text">GV. Kim Vũ đã chấm bài tập "Lập trình Web - Assignment 3"</p>
+                                <span class="notification-class">Lập trình Web</span>
+                                <span class="notification-time">2 giờ trước</span>
+                            </div>
+                            <span class="unread-dot"></span>
+                        </li>
+                        <li class="notification-item unread" data-id="212">
+                            <div class="notification-icon bg-orange">
+                                <i class="ri-alert-line"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p class="notification-title"><strong>Deadline sắp tới</strong></p>
+                                <p class="notification-text">Bài tập "Phát triển mã nguồn mở" sắp hết hạn trong 2 ngày.</p>
+                                <span class="notification-class">Phát triển mã nguồn mở</span>
+                                <span class="notification-time">1 giờ trước</span>
+                            </div>
+                            <span class="unread-dot"></span>
+                        </li>
+                    </ul>
+                    <button class="dropdown-view-all">Xem tất cả thông báo</button>
+                </div>
+                
                 <div class="header-user-menu relative">
-                    <div class="header-avatar cursor-pointer" onclick="toggleUserMenu()">
+                    <div class="header-avatar cursor-pointer" id="avatar-dropdown-trigger">
                         <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar">
                     </div>
                     
                     <!-- Dropdown Menu -->
-                    <div id="user-dropdown" class="user-dropdown hidden">
+                    <div id="user-dropdown" class="user-dropdown">
                         <div class="dropdown-header">
                             <p class="user-name">Nguyễn Văn A</p>
                             <p class="user-email">sv.nguyenvana@lms.edu.vn</p>
@@ -150,7 +205,6 @@
                         </ul>
                     </div>
                 </div>
-            
             </div>
         </div>
 
@@ -397,35 +451,53 @@
             document.getElementById('sidebar').classList.toggle('collapsed');
         }
 
-        // Modal thông báo/tin nhắn
+        // Dropdown functionality
         document.addEventListener('DOMContentLoaded', function() {
+            const trigger = document.getElementById('avatar-dropdown-trigger');
+            const menu = document.getElementById('user-dropdown');
             const btnMessages = document.getElementById('btn-messages');
             const btnNotifications = document.getElementById('btn-notifications');
-            const modalMessages = document.getElementById('modal-messages');
-            const modalNotifications = document.getElementById('modal-notifications');
+            const dropdownMessages = document.getElementById('dropdown-messages');
+            const dropdownNotifications = document.getElementById('dropdown-notifications');
+            const notificationBadge = document.getElementById('notification-badge');
 
+            // Avatar dropdown
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menu.classList.toggle('hidden');
+                dropdownMessages.classList.add('hidden');
+                dropdownNotifications.classList.add('hidden');
+            });
+
+            // Dropdown tin nhắn
             btnMessages.addEventListener('click', function(e) {
                 e.stopPropagation();
-                modalMessages.classList.remove('hidden');
-            });
-            btnNotifications.addEventListener('click', function(e) {
-                e.stopPropagation();
-                modalNotifications.classList.remove('hidden');
+                dropdownMessages.classList.toggle('hidden');
+                dropdownNotifications.classList.add('hidden');
+                menu.classList.add('hidden');
             });
 
+            // Dropdown thông báo
+            btnNotifications.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownNotifications.classList.toggle('hidden');
+                dropdownMessages.classList.add('hidden');
+                menu.classList.add('hidden');
+            });
+
+            // Đóng dropdown khi click ra ngoài
             document.addEventListener('click', function(e) {
-                if (!modalMessages.contains(e.target) && !btnMessages.contains(e.target)) {
-                    modalMessages.classList.add('hidden');
+                if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.add('hidden');
                 }
-                if (!modalNotifications.contains(e.target) && !btnNotifications.contains(e.target)) {
-                    modalNotifications.classList.add('hidden');
+                if (!btnMessages.contains(e.target) && !dropdownMessages.contains(e.target)) {
+                    dropdownMessages.classList.add('hidden');
+                }
+                if (!btnNotifications.contains(e.target) && !dropdownNotifications.contains(e.target)) {
+                    dropdownNotifications.classList.add('hidden');
                 }
             });
         });
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
 
         // Dữ liệu bài tập mẫu cho filter
         const assignmentsList = [
