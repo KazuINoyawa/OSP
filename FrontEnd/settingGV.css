@@ -1,0 +1,202 @@
+/* --- Settings Layout --- */
+.settings-layout {
+    display: flex;
+    gap: 30px;
+    position: relative;
+    align-items: flex-start;
+}
+
+/* Sidebar Menu Settings (Left) */
+.settings-sidebar {
+    width: 250px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    padding: 20px;
+    position: sticky;
+    top: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.settings-menu-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #9CA3AF;
+    font-weight: 700;
+    margin-bottom: 15px;
+    padding-left: 10px;
+}
+
+.settings-menu {
+    list-style: none;
+}
+
+.settings-menu li {
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #4B5563;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.settings-menu li:hover {
+    background-color: #F3F4F6;
+    color: #111827;
+}
+
+.settings-menu li.active {
+    background-color: #EFF6FF;
+    color: #2563EB;
+}
+
+.settings-menu li i {
+    font-size: 1.2rem;
+}
+
+/* Content Area (Right) */
+.settings-content {
+    flex: 1;
+    min-width: 0; /* Prevent overflow */
+}
+
+.settings-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 100px; /* Offset for sticky header if any */
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #E5E7EB;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* Card Styles */
+.card-setting {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #F9FAFB;
+    padding: 15px 24px;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #E5E7EB;
+    font-size: 1rem;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+/* Form Elements */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4B5563;
+    margin-bottom: 6px;
+}
+
+.form-input {
+    padding: 10px 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+    background-color: white;
+}
+
+.form-input:focus {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Buttons */
+.btn-secondary {
+    background: white;
+    border: 1px solid #D1D5DB;
+    color: #374151;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover { background-color: #F3F4F6; border-color: #9CA3AF; }
+
+.btn-outline {
+    color: #2563EB;
+    border: 1px solid #2563EB;
+    background: transparent;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-outline:hover { background: #EFF6FF; }
+
+.btn-sm { font-size: 0.85rem; padding: 6px 12px; }
+
+/* Toggle Switch */
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #E5E7EB; transition: .4s; border-radius: 24px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+input:checked + .slider { background-color: #3B82F6; }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* Settings Row (Flex between Label and Toggle) */
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.divider { height: 1px; background: #F3F4F6; margin: 15px 0; }
+
+/* Theme Option */
+.theme-option {
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.theme-option:hover { border-color: #BFDBFE; }
+.theme-option.active { border-color: #3B82F6; background-color: #EFF6FF; color: #2563EB; }
+.theme-option span { font-size: 0.85rem; font-weight: 500; display: block; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .settings-layout { flex-direction: column; }
+    .settings-sidebar { width: 100%; position: static; overflow-x: auto; }
+    .settings-menu { display: flex; gap: 10px; }
+    .settings-menu li { white-space: nowrap; margin-bottom: 0; }
+}

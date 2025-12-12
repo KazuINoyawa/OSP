@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài đặt - Teacher UI</title>
+    
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css"> <!-- CSS chung -->
+    <link rel="stylesheet" href="settingGV.css"> <!-- CSS riêng -->
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-slate-800 min-h-screen flex">
+
+    <!-- SIDEBAR CHÍNH (Giữ nguyên từ Dashboard) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon"><i class="ri-book-open-line"></i></div>
+                <span class="logo-text">LMS EDU</span>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboardGV.html" title="Bản tin">
+                    <i class="ri-dashboard-line"></i>
+                    <span class="menu-text">Bản tin</span>
+                </a>
+            </li>
+            <li>
+                <a href="Quanlybaitap.html" title="Quản lý bài tập">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Quản lý bài tập</span>
+                </a>
+            </li>
+            <li>
+                <a href="Quanlysv.html" title="Sinh viên">
+                    <i class="ri-group-line"></i>
+                    <span class="menu-text">Sinh viên</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="menu-item active">
+                <a href="settingGV.html" title="Cài đặt" class="text-blue-600 font-medium">
+                    <i class="ri-settings-3-line"></i>
+                    <span class="menu-text">Cài đặt</span>
+                </a>
+            </div>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff&bold=true" alt="Avatar GV" class="user-avatar-img">
+                <div class="user-info">
+                    <p class="name">GV. Kim Vũ</p>
+                    <p class="role">Khoa CNTT</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <div class="top-header">
+            <div class="header-left">
+                <button class="icon-btn" id="toggle-sidebar" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <h2 class="page-title">Cài đặt hệ thống</h2>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn relative"><i class="ri-notification-3-line"></i><span class="badge-count">3</span></button>
+                <div class="header-avatar-container">
+                    <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff&bold=true" alt="Avatar" class="header-avatar-img">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-container settings-layout">
+            
+            <!-- LEFT MENU SETTINGS -->
+            <div class="settings-sidebar">
+                <h3 class="settings-menu-title">Danh mục</h3>
+                <ul class="settings-menu">
+                    <li class="active" onclick="scrollToSection('account')"><i class="ri-user-settings-line"></i> Tài khoản</li>
+                    <li onclick="scrollToSection('teaching')"><i class="ri-briefcase-line"></i> Giảng dạy</li>
+                    <li onclick="scrollToSection('notification')"><i class="ri-notification-badge-line"></i> Thông báo</li>
+                    <li onclick="scrollToSection('display')"><i class="ri-layout-masonry-line"></i> Giao diện</li>
+                    <li onclick="scrollToSection('class-mgmt')"><i class="ri-team-line"></i> Quản lý lớp</li>
+                    <li onclick="scrollToSection('support')"><i class="ri-customer-service-2-line"></i> Hỗ trợ</li>
+                    <li onclick="scrollToSection('danger')" class="text-red-600"><i class="ri-delete-bin-line"></i> Vùng nguy hiểm</li>
+                </ul>
+            </div>
+
+            <!-- RIGHT CONTENT SETTINGS -->
+            <div class="settings-content">
+
+                <!-- 1. Cài đặt tài khoản -->
+                <div id="account" class="settings-section">
+                    <h2 class="section-title">Cài đặt tài khoản</h2>
+                    
+                    <!-- 1.1 Thông tin cá nhân -->
+                    <div class="card-setting">
+                        <h3 class="card-header">Thông tin cá nhân</h3>
+                        <div class="card-body">
+                            <div class="flex items-center gap-6 mb-6">
+                                <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=0D8ABC&color=fff&size=128" class="w-24 h-24 rounded-full border-4 border-gray-100">
+                                <div>
+                                    <button class="btn-secondary btn-sm mb-2">Thay đổi ảnh đại diện</button>
+                                    <p class="text-xs text-gray-500">JPG, GIF hoặc PNG. Tối đa 2MB.</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <label>Họ và tên</label>
+                                    <input type="text" class="form-input" value="Kim Vũ">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email đăng nhập</label>
+                                    <input type="email" class="form-input bg-gray-100" value="kim.vu@lms.edu.vn" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Số điện thoại</label>
+                                    <input type="tel" class="form-input" value="0909 123 456">
+                                </div>
+                                <div class="form-group">
+                                    <label>Bio mô tả</label>
+                                    <input type="text" class="form-input" value="Giảng viên Khoa CNTT - Chuyên ngành Web">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1.2 Bảo mật -->
+                    <div class="card-setting">
+                        <h3 class="card-header">Bảo mật tài khoản</h3>
+                        <div class="card-body space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-slate-800">Đổi mật khẩu</p>
+                                    <p class="text-sm text-gray-500">Cập nhật mật khẩu định kỳ để bảo vệ tài khoản</p>
+                                </div>
+                                <button class="btn-outline">Cập nhật</button>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-slate-800">Xác thực hai bước (2FA)</p>
+                                    <p class="text-sm text-gray-500">Thêm một lớp bảo mật bằng mã OTP</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-slate-800">Đăng xuất khỏi tất cả thiết bị</p>
+                                    <p class="text-sm text-gray-500">Nếu bạn thấy hoạt động đáng ngờ</p>
+                                </div>
+                                <button class="text-red-600 font-medium hover:underline">Đăng xuất ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Cài đặt giảng dạy -->
+                <div id="teaching" class="settings-section">
+                    <h2 class="section-title">Cài đặt giảng dạy</h2>
+                    
+                    <div class="card-setting">
+                        <h3 class="card-header">Thông tin giảng dạy</h3>
+                        <div class="card-body grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label>Bộ môn</label>
+                                <select class="form-input">
+                                    <option>Công nghệ thông tin</option>
+                                    <option>Khoa học máy tính</option>
+                                    <option>Hệ thống thông tin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Học kỳ hiện tại</label>
+                                <select class="form-input">
+                                    <option>Học kỳ 1 - 2025</option>
+                                    <option>Học kỳ 2 - 2024</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-setting">
+                        <h3 class="card-header">Cấu hình chấm điểm & Bài tập</h3>
+                        <div class="card-body space-y-4">
+                            <div class="setting-row">
+                                <span>Cho phép sinh viên xem điểm ngay sau khi chấm</span>
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="setting-row">
+                                <span>Nhận bài nộp trễ (Late Submission)</span>
+                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            </div>
+                            <div class="setting-row">
+                                <span>Cảnh báo hạn nộp trước 24h</span>
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label>Thang điểm mặc định</label>
+                                <select class="form-input w-full md:w-1/3">
+                                    <option>Thang 10 (0-10)</option>
+                                    <option>Thang 100 (0-100)</option>
+                                    <option>Thang chữ (A, B, C...)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Cài đặt thông báo -->
+                <div id="notification" class="settings-section">
+                    <h2 class="section-title">Cài đặt thông báo</h2>
+                    <div class="card-setting">
+                        <h3 class="card-header">Email Notifications</h3>
+                        <div class="card-body space-y-3">
+                            <div class="setting-row">
+                                <span>Khi có sinh viên nộp bài</span>
+                                <input type="checkbox" class="accent-blue-600 w-5 h-5" checked>
+                            </div>
+                            <div class="setting-row">
+                                <span>Khi có bình luận mới trong lớp</span>
+                                <input type="checkbox" class="accent-blue-600 w-5 h-5" checked>
+                            </div>
+                            <div class="setting-row">
+                                <span>Tin nhắn riêng từ sinh viên</span>
+                                <input type="checkbox" class="accent-blue-600 w-5 h-5" checked>
+                            </div>
+                            <div class="setting-row">
+                                <span>Báo cáo tổng hợp hàng tuần (Digest)</span>
+                                <input type="checkbox" class="accent-blue-600 w-5 h-5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Cài đặt giao diện -->
+                <div id="display" class="settings-section">
+                    <h2 class="section-title">Cài đặt giao diện</h2>
+                    <div class="card-setting">
+                        <div class="card-body">
+                            <div class="grid grid-cols-3 gap-4 mb-4">
+                                <div class="theme-option active">
+                                    <div class="h-8 bg-gray-200 rounded mb-2"></div>
+                                    <span>Sáng</span>
+                                </div>
+                                <div class="theme-option">
+                                    <div class="h-8 bg-gray-800 rounded mb-2"></div>
+                                    <span>Tối</span>
+                                </div>
+                                <div class="theme-option">
+                                    <div class="h-8 bg-gradient-to-r from-gray-200 to-gray-800 rounded mb-2"></div>
+                                    <span>Hệ thống</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Ngôn ngữ hiển thị</label>
+                                <select class="form-input">
+                                    <option>Tiếng Việt</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Quản lý lớp học -->
+                <div id="class-mgmt" class="settings-section">
+                    <h2 class="section-title">Quản lý lớp học</h2>
+                    <div class="card-setting">
+                        <div class="card-body space-y-4">
+                            <div class="setting-row">
+                                <span>Cho phép sinh viên tự vào lớp (cần phê duyệt)</span>
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="setting-row">
+                                <span>Yêu cầu mã giới thiệu khi vào lớp</span>
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                            <div class="setting-row">
+                                <span>Cho phép sinh viên đăng tài liệu lên lớp</span>
+                                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Hỗ trợ -->
+                <div id="support" class="settings-section">
+                    <h2 class="section-title">Trung tâm hỗ trợ</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-setting hover:border-blue-400 cursor-pointer transition-colors p-4 flex items-center gap-4">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl"><i class="ri-question-line"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-700">Câu hỏi thường gặp (FAQ)</h4>
+                                <p class="text-xs text-gray-500">Tìm kiếm câu trả lời nhanh</p>
+                            </div>
+                        </div>
+                        <div class="card-setting hover:border-blue-400 cursor-pointer transition-colors p-4 flex items-center gap-4">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl"><i class="ri-customer-service-line"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-700">Liên hệ Admin</h4>
+                                <p class="text-xs text-gray-500">Báo lỗi hoặc yêu cầu hỗ trợ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Xóa tài khoản -->
+                <div id="danger" class="settings-section">
+                    <h2 class="section-title text-red-600">Vùng nguy hiểm</h2>
+                    <div class="card-setting border-red-200 bg-red-50">
+                        <div class="card-body flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-red-700">Xóa tài khoản vĩnh viễn</h4>
+                                <p class="text-sm text-red-500">Hành động này không thể hoàn tác. Mọi dữ liệu sẽ bị mất.</p>
+                            </div>
+                            <button class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors">Xóa tài khoản</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // Scroll to Section Function
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            // Update Active Menu Item
+            document.querySelectorAll('.settings-menu li').forEach(li => li.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // Auto Active Menu on Scroll (Optional but good UX)
+        // Code này sẽ phức tạp hơn, tạm thời để click active đơn giản.
+    </script>
+</body>
+</html>
