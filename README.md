@@ -86,15 +86,16 @@ OSP/
 1. **Start the frontend server:**
    ```bash
    cd FrontEnd
-   python3 -m http.server 3000
+   python3 -m http.server 8080
    ```
    
-   The frontend will be available at `http://localhost:3000`
+   The frontend will be available at `http://localhost:8080`
 
 2. **Access the application:**
-   - Teacher Dashboard: `http://localhost:3000/dashboardGV.html`
-   - Student Dashboard: `http://localhost:3000/dashboardSV.html`
-   - Assignment Management: `http://localhost:3000/Quanlybaitap.html`
+   - Login: `http://localhost8080/login.html`
+   - Teacher Dashboard: `http://localhost:8080/dashboardGV.html`
+   - Student Dashboard: `http://localhost:8080/dashboardSV.html`
+   - Assignment Management: `http://localhost:8080/Quanlybaitap.html`
 
 ## API Configuration
 
@@ -185,7 +186,7 @@ fetch(`${API_BASE}/scores`, {
 3. Add role-based access control (RBAC)
 4. Integrate with OAuth2 authentication
 5. Add unit and integration tests
-6. Deploy to production (Docker, cloud services)
+6. Deploy to production ( Vercel )
 
 ---
 
