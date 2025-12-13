@@ -40,13 +40,16 @@ body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; color: #1F29
 .user-info .role { font-size: 0.7rem; color: #6B7280; white-space: nowrap; }
 
 /* --- Main Content --- */
-.main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+.main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 0; }
 
-.top-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: #fff; border-bottom: 1px solid #E5E7EB; height: 70px; flex-shrink: 0; }
+.top-header { 
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 15px 30px; background-color: #fff; border-bottom: 1px solid #E5E7EB; 
+    height: 70px; flex-shrink: 0; 
+    overflow: visible; /* allow dropdowns to overflow header */
+}
 .header-left { display: flex; align-items: center; gap: 15px; }
 .page-title { font-size: 1.2rem; color: #111827; font-weight: 600; }
-.icon-btn { background: none; border: none; font-size: 1.3rem; color: #6B7280; cursor: pointer; padding: 5px; border-radius: 50%; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; }
-.icon-btn:hover { background-color: #F3F4F6; color: #3B82F6; }
 
 .header-center { flex: 1; display: flex; justify-content: center; padding: 0 20px; }
 .search-wrapper { position: relative; width: 100%; max-width: 400px; }
@@ -61,323 +64,141 @@ body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; color: #1F29
 .header-avatar img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #E5E7EB; cursor: pointer; }
 
 /* Dropdown Menu Styles */
-.dropdown-menu {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    width: 380px;
-    background-color: white;
-    border: 1px solid #E5E7EB;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    z-index: 50;
-    display: none;
-    flex-direction: column;
-    max-height: 600px;
-    overflow-y: auto;
-    animation: slideDown 0.2s ease-out;
-}
+.header-right { display: flex; align-items: center; gap: 12px; height: 100%; }
 
-.dropdown-menu.hidden {
-    display: none;
-}
-
-.dropdown-menu:not(.hidden) {
-    display: flex;
-}
-
-.dropdown-header-title {
-    padding: 16px;
-    border-bottom: 1px solid #E5E7EB;
-    background-color: #F9FAFB;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.dropdown-header-title h3 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1F2937;
-    margin: 0;
-}
-
-/* Messages List */
-.messages-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex: 1;
-}
-
-.message-item {
-    display: flex;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #F3F4F6;
-    cursor: pointer;
-    transition: background-color 0.2s;
+/* FIX: Container cho các icon có dropdown để căn giữa */
+.header-dropdown-container {
     position: relative;
-}
-
-.message-item:hover {
-    background-color: #F9FAFB;
-}
-
-.message-item.unread {
-    background-color: #EFF6FF;
-}
-
-.message-item.unread:hover {
-    background-color: #DBEAFE;
-}
-
-.message-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.message-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    position: relative;
-}
-
-.message-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-}
-
-.message-name {
-    font-weight: 600;
-    color: #1F2937;
-    font-size: 0.9rem;
-}
-
-.message-time {
-    font-size: 0.75rem;
-    color: #9CA3AF;
-}
-
-.message-item.unread .message-name {
-    font-weight: 700;
-}
-
-.message-text {
-    font-size: 0.85rem;
-    color: #6B7280;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.message-item.unread .message-text {
-    color: #1F2937;
-    font-weight: 500;
-}
-
-.unread-indicator {
-    position: absolute;
-    top: 50%;
-    right: 16px;
-    width: 10px;
-    height: 10px;
-    background-color: #3B82F6;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    display: none;
-}
-
-.message-item.unread .unread-indicator {
-    display: block;
-}
-
-/* Notifications List */
-.notifications-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex: 1;
-}
-
-.notification-item {
-    display: flex;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #F3F4F6;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    position: relative;
-}
-
-.notification-item:hover {
-    background-color: #F9FAFB;
-}
-
-.notification-item.unread {
-    background-color: #FEF3C7;
-}
-
-.notification-item.unread:hover {
-    background-color: #FDE68A;
-}
-
-.notification-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 1.2rem;
-    flex-shrink: 0;
+    height: 40px; /* Chiều cao cố định để căn đều */
+    width: 40px;
+    overflow: visible; /* allow absolute children to show without clipping */
+}
+/* Riêng Avatar container cần rộng hơn */
+.header-avatar-container.header-dropdown-container {
+    width: auto;
+    margin-left: 8px;
+    /* keep right-align for avatar dropdowns if needed */
 }
 
-.notification-icon.bg-blue {
-    background-color: #DBEAFE;
-    color: #3B82F6;
-}
-
-.notification-icon.bg-orange {
-    background-color: #FFEDD5;
-    color: #F97316;
-}
-
-.notification-icon.bg-green {
-    background-color: #D1FAE5;
-    color: #10B981;
-}
-
-.notification-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.notification-title {
-    margin: 0 0 4px 0;
-    font-size: 0.9rem;
-    color: #1F2937;
-}
-
-.notification-text {
-    font-size: 0.85rem;
-    color: #6B7280;
-    margin: 0 0 6px 0;
-}
-
-.notification-class {
-    display: inline-block;
-    font-size: 0.75rem;
-    color: #fff;
-    background-color: #3B82F6;
-    padding: 2px 8px;
-    border-radius: 12px;
-    width: fit-content;
-    margin-bottom: 4px;
-}
-
-.notification-time {
-    font-size: 0.7rem;
-    color: #9CA3AF;
-}
-
-.unread-dot {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 8px;
-    height: 8px;
-    background-color: #EF4444;
+/* FIX: Button Icon */
+.icon-btn {
+    background: none; border: none; cursor: pointer; padding: 0; 
+    display: flex; align-items: center; justify-content: center; 
+    position: relative;
+    width: 40px; height: 40px; /* Kích thước cố định */
     border-radius: 50%;
-    display: none;
-}
-
-.notification-item.unread .unread-dot {
-    display: block;
-}
-
-/* View All Button */
-.dropdown-view-all {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-top: 1px solid #E5E7EB;
-    background-color: #F9FAFB;
-    color: #4F46E5;
-    font-weight: 500;
-    font-size: 0.9rem;
-    cursor: pointer;
     transition: background-color 0.2s;
-    border-radius: 0 0 12px 12px;
+}
+.icon-btn:hover { background-color: #F3F4F6; }
+/* Xóa style hover cũ đè lên SVG nếu có */
+.icon-btn .p-2 { padding: 8px; } 
+
+/* Badge Styles */
+.badge-dot-new {
+    position: absolute; top: 8px; right: 8px;
+    width: 8px; height: 8px;
+    background-color: #EF4444; border-radius: 50%; border: 2px solid #fff;
+    pointer-events: none; /* Tránh click nhầm vào badge */
+}
+.badge-count-new {
+    position: absolute; top: -2px; right: -2px;
+    background-color: #EF4444; color: white;
+    font-size: 0.6rem; font-weight: 700;
+    min-width: 18px; height: 18px;
+    border-radius: 10px; border: 2px solid white;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
 }
 
-.dropdown-view-all:hover {
-    background-color: #F3F4F6;
-    color: #2563EB;
-}
-
-.content-container { padding: 30px; }
-
-.user-dropdown {
+/* --- HEADER POPUP (Notification & Message) --- */
+.dropdown-popup {
     position: absolute;
-    top: 50px;
-    right: 0;
-    width: 220px;
+    top: calc(100% + 8px); /* directly under the icon container */
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%); /* center under icon */
+    width: 320px;
+    max-width: 95vw;
+    min-width: 220px;
     background-color: white;
     border: 1px solid #E5E7EB;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    overflow: hidden;
-    animation: slideDown 0.2s ease-out;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    z-index: 1200;
+    display: none; /* default hidden */
+    flex-direction: column; overflow: hidden;
+    transform-origin: top center; /* animation origin */
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.user-dropdown.hidden { display: none; }
-
-.dropdown-header {
-    padding: 15px;
-    border-bottom: 1px solid #F3F4F6;
-    background-color: #F9FAFB;
+/* Variant to anchor the popup to the right edge of the container (avatar usage) */
+.dropdown-popup.align-right,
+.user-dropdown,
+.dropdown-menu {
+    left: auto;
+    right: 0;
+    transform: none;
+    top: calc(100% + 8px);
 }
 
-.user-name { font-weight: 600; font-size: 0.9rem; color: #1F2937; }
-.user-email { font-size: 0.75rem; color: #6B7280; }
+/* Show/Hide utilities for toggling (JS should toggle .show/.hidden) */
+.dropdown-popup.show { display: flex; opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.dropdown-menu.show { display: flex; opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.dropdown-popup.hidden { display: none !important; opacity: 0; pointer-events: none !important; }
 
-.dropdown-list { list-style: none; padding: 5px 0; }
-.dropdown-list li a {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    font-size: 0.9rem;
-    color: #4B5563;
-    text-decoration: none;
-    transition: background-color 0.2s;
+/* Keep existing user-dropdown show/hide consistent */
+.user-dropdown { 
+    position: absolute;
+    top: calc(100% + 8px); /* ensure aligned under avatar */
+    right: 0;
+    width: 240px;
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    display: none; 
+    flex-direction: column; overflow: hidden;
+    transform-origin: top right;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+.user-dropdown.show { display: flex; opacity: 1; pointer-events: auto; }
+.dropdown-menu { display: none; }
+.dropdown-menu.show { display: flex; opacity: 1; pointer-events: auto; }
+.user-dropdown.hidden { display: none !important; opacity: 0; pointer-events: none !important; }
+
+/* Avoid badge capturing pointer events and allow icon to receive clicks easily */
+.badge-dot, .badge-dot-new, .badge-count-new { pointer-events: none; }
+
+/* Responsive: on smaller viewports, dropdowns expand to nearly full width and align within screen */
+@media (max-width: 768px) {
+    .dropdown-popup,
+    .user-dropdown {
+        left: 8px;
+        right: 8px;
+        width: auto;
+        max-width: calc(100% - 16px);
+        transform: none;
+        top: calc(100% + 6px);
+        border-radius: 10px;
+    }
+    .header-dropdown-container { width: 40px; }
 }
 
-.dropdown-list li a:hover { background-color: #F3F4F6; color: #2563EB; }
-.dropdown-list li a i { margin-right: 10px; font-size: 1.1rem; }
-
-.divider { height: 1px; background-color: #F3F4F6; margin: 5px 0; }
-
-.logout-item { color: #EF4444 !important; }
-.logout-item:hover { background-color: #FEF2F2 !important; }
-
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Prevent clipping if header has small height - move popups above header if needed */
+@media (max-width: 420px) {
+    .dropdown-popup,
+    .user-dropdown { top: calc(100% + 6px); }
 }
 
+/* --- Greeting & Text Highlight --- */
 .content-container { padding: 30px; }
 /* Greeting */
 .greeting-section { margin-bottom: 30px; }
@@ -386,7 +207,7 @@ body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; color: #1F29
 .highlight-red { color: #EF4444; font-weight: 600; }
 
 
-/* Dashboard Grid */
+/* --- Dashboard Grid --- */
 .dashboard-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 20px; }
 
 /* Card Styles */

@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from datetime import datetime
 from ..database import get_db
 from .. import models
 
@@ -28,7 +29,13 @@ class AssignmentRequest(BaseModel):
 
 @router.post("/")
 def create_assignment(assignment_data: AssignmentRequest, db: Session = Depends(get_db)):
-    db_assignment = models.Assignment(**assignment_data.dict())
+    payload = assignment_data.dict()
+    if payload.get('due_date'):
+        try:
+            payload['due_date'] = datetime.fromisoformat(payload['due_date'])
+        except Exception:
+            payload['due_date'] = None
+    db_assignment = models.Assignment(**payload)
     db.add(db_assignment)
     db.commit()
     db.refresh(db_assignment)
@@ -49,6 +56,11 @@ def update_assignment(assignment_id: int, assignment_data: AssignmentRequest, db
     if not assignment:
         raise HTTPException(status_code=404, detail="Assignment not found")
     for key, value in assignment_data.dict().items():
+        if key == 'due_date' and value:
+            try:
+                value = datetime.fromisoformat(value)
+            except Exception:
+                value = None
         setattr(assignment, key, value)
     db.commit()
     db.refresh(assignment)
