@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dashboardSV - Sinh viên</title>
+    <title>Student Dashboard - Sinh viên</title>
     
     <!-- Link file CSS riêng -->
     <link rel="stylesheet" href="student_style.css">
@@ -13,11 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <script>
-        // API Configuration
-        if (!window.API_BASE) window.API_BASE = 'http://localhost:8000';
-        if (!window.API_TOKEN) window.API_TOKEN = 'dev-token';
-    </script>
 
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
@@ -36,25 +31,19 @@
                 </a>
             </li>
             <li>
-                <a href="BT.html" title="Bài tập của tôi">
-                    <i class="ri-file-list-3-line"></i>
-                    <span class="menu-text">Bài tập của tôi</span>
-                </a>
-            </li>
-            <li>
-                <a href="peer-review.html" title="Peer Review">
-                    <i class="ri-chat-quote-line"></i>
-                    <span class="menu-text">Peer Review</span>
-                </a>
-            </li>
-            <li>
-                <a href="myclass.html" title="Lớp học của tôi">
+                <a href="Student_MyClasses.html" title="Lớp học của tôi">
                     <i class="ri-team-line"></i>
                     <span class="menu-text">Lớp học của tôi</span>
                 </a>
             </li>
             <li>
-                <a href="Kqua.html" title="Kết quả học tập">
+                <a href="Student_Assignment_Management.html" title="Bài tập của tôi">
+                    <i class="ri-file-list-3-line"></i>
+                    <span class="menu-text">Bài tập của tôi</span>
+                </a>
+            </li>
+            <li>
+                <a href="Student_Grades.html" title="Kết quả học tập">
                     <i class="ri-bar-chart-box-line"></i>
                     <span class="menu-text">Kết quả học tập</span>
                 </a>
@@ -63,16 +52,17 @@
 
         <div class="sidebar-footer">
             <div class="menu-item">
-                <a href="#" title="Hồ sơ cá nhân">
+                <a href="Student_Profile.html" title="Hồ sơ cá nhân">
                     <i class="ri-user-settings-line"></i>
                     <span class="menu-text">Hồ sơ cá nhân</span>
                 </a>
             </div>
             <div class="user-profile">
-                <div class="user-avatar">NA</div>
+                <!-- Avatar Sidebar (sẽ được JS cập nhật) -->
+                <div class="user-avatar" id="sidebar-avatar">NA</div>
                 <div class="user-info">
-                    <p class="name">Nguyễn Văn A</p>
-                    <p class="role">SV2334376 - Khoa CNTT</p>
+                    <p class="name" id="sidebar-name">Nguyễn Văn A</p>
+                    <p class="role">Sinh viên K15</p>
                 </div>
             </div>
         </div>
@@ -96,125 +86,157 @@
                 </div>
             </div>
 
-
             <div class="header-right">
-                <button class="icon-btn" title="Trợ giúp"><i class="ri-question-line"></i></button>
-                
-                <!-- Nút Tin nhắn -->
-                <button class="icon-btn icon-btn-relative" title="Tin nhắn" id="btn-messages">
-                    <i class="ri-message-3-line"></i>
-                    <span class="badge-dot active"></span>
-                </button>
-                <!-- Dropdown: Tin nhắn -->
-                <div id="dropdown-messages" class="dropdown-menu hidden">
-                    <div class="dropdown-header-title">
-                        <h3>Tin nhắn</h3>
+                <button class="icon-btn group" title="Trợ giúp">
+                    <div class="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 group-hover:text-blue-600">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
                     </div>
-                    <ul class="messages-list">
-                        <li class="message-item unread" data-id="111">
-                            <img src="https://ui-avatars.com/api/?name=Kim+Vu&background=3B82F6&color=fff" alt="Avatar" class="message-avatar">
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-name">GV. Kim Vũ</span>
-                                    <span class="message-time">3 phút</span>
+                </button>
+                
+                <!-- DROPDOWN TIN NHẮN -->
+                <div class="relative header-dropdown-container" id="message-container">
+                    <button class="icon-btn group relative" title="Tin nhắn" onclick="toggleDropdown('message')">
+                        <div class="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 group-hover:text-blue-600">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                            </svg>
+                        </div>
+                        <span class="badge-dot-new"></span>
+                    </button>
+                    <!-- Message Dropdown -->
+                    <div id="message-dropdown" class="dropdown-popup hidden">
+                        <div class="popup-header">
+                            <h3>Tin nhắn</h3>
+                            <a href="#">Đánh dấu đã đọc</a>
+                        </div>
+                        <div class="popup-body">
+                            <!-- Item Tin nhắn 1 (Chưa đọc) -->
+                            <div class="popup-item unread" onclick="window.location.href='#'">
+                                <div class="item-avatar bg-blue-100 text-blue-600">KV</div>
+                                <div class="item-content">
+                                    <p class="font-bold text-sm">GV. Kim Vũ</p>
+                                    <p class="text-xs text-gray-500 truncate font-bold">Về bài tập Lập trình Web...</p>
+                                    <span class="time-ago">5 phút trước</span>
                                 </div>
-                                <p class="message-text">Bài tập của em đã được chấm. Điểm: 8.5</p>
-                                <span class="unread-indicator"></span>
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mt-2"></span>
                             </div>
-                        </li>
-                        <li class="message-item unread" data-id="112">
-                            <img src="https://ui-avatars.com/api/?name=Tran+Thi+B&background=F59E0B&color=fff" alt="Avatar" class="message-avatar">
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-name">Trần Thị B</span>
-                                    <span class="message-time">15 phút</span>
+                            <!-- Item Tin nhắn 2 -->
+                            <div class="popup-item" onclick="window.location.href='#'">
+                                <div class="item-avatar bg-purple-100 text-purple-600">TH</div>
+                                <div class="item-content">
+                                    <p class="font-bold text-sm">GV. Trần Hùng</p>
+                                    <p class="text-xs text-gray-500 truncate">Nhớ nộp bài đúng hạn nhé em.</p>
+                                    <span class="time-ago">1 giờ trước</span>
                                 </div>
-                                <p class="message-text">Bạn có thể giúp em hiểu thêm về bài đó không?</p>
-                                <span class="unread-indicator"></span>
                             </div>
-                        </li>
-                        <li class="message-item" data-id="113">
-                            <img src="https://ui-avatars.com/api/?name=Le+Hoang+C&background=10B981&color=fff" alt="Avatar" class="message-avatar">
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-name">Lê Hoàng C</span>
-                                    <span class="message-time">2 giờ</span>
+                             <!-- Item Tin nhắn 3 -->
+                             <div class="popup-item" onclick="window.location.href='#'">
+                                <div class="item-avatar bg-gray-200 text-gray-600">SV</div>
+                                <div class="item-content">
+                                    <p class="font-bold text-sm">Phòng Công tác SV</p>
+                                    <p class="text-xs text-gray-500 truncate">Thông báo về việc đóng học phí...</p>
+                                    <span class="time-ago">1 ngày trước</span>
                                 </div>
-                                <p class="message-text">Okie, mình tập lúc 3h30 chiều nhé</p>
                             </div>
-                        </li>
-                    </ul>
-                    <button class="dropdown-view-all">Xem tất cả tin nhắn</button>
+                        </div>
+                        <div class="popup-footer">
+                            <a href="#">Xem tất cả tin nhắn</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DROPDOWN THÔNG BÁO -->
+                <div class="relative header-dropdown-container" id="notification-container">
+                    <button class="icon-btn group relative" title="Thông báo" onclick="toggleDropdown('notification')">
+                        <div class="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 group-hover:text-blue-600">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                        </div>
+                        <span class="badge-count-new" id="notif-badge">3</span>
+                    </button>
+                    <!-- Notification Dropdown -->
+                    <div id="notification-dropdown" class="dropdown-popup hidden">
+                        <div class="popup-header">
+                            <h3>Thông báo</h3>
+                            <a href="#">Đánh dấu đã đọc</a>
+                        </div>
+                        <div class="popup-body">
+                            <!-- Item Thông báo 1 (Bài tập mới) -->
+                            <div class="popup-item unread" onclick="window.location.href='Student_Assignment_Management.html'">
+                                <div class="item-icon bg-blue-50 text-blue-600"><i class="ri-file-text-line"></i></div>
+                                <div class="item-content">
+                                    <p class="text-sm font-bold">Bài tập mới: Lập trình Web</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Xây dựng Website bán hàng (Frontend)</p>
+                                    <span class="time-ago">10 phút trước</span>
+                                </div>
+                                <span class="w-2 h-2 bg-red-500 rounded-full mt-2"></span>
+                            </div>
+                            <!-- Item Thông báo 2 (Đã chấm điểm) -->
+                            <div class="popup-item unread" onclick="window.location.href='Student_Grades.html'">
+                                <div class="item-icon bg-green-50 text-green-600"><i class="ri-checkbox-circle-line"></i></div>
+                                <div class="item-content">
+                                    <p class="text-sm font-bold">Đã chấm điểm: Cơ sở dữ liệu</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Bài tập Truy vấn SQL nâng cao</p>
+                                    <span class="time-ago">30 phút trước</span>
+                                </div>
+                                <span class="w-2 h-2 bg-red-500 rounded-full mt-2"></span>
+                            </div>
+                             <!-- Item Thông báo 3 (Thông báo lớp) -->
+                             <div class="popup-item unread" onclick="window.location.href='Student_MyClasses.html'">
+                                <div class="item-icon bg-yellow-50 text-yellow-600"><i class="ri-calendar-event-line"></i></div>
+                                <div class="item-content">
+                                    <p class="text-sm font-bold">Lịch thi môn Triết học</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Đã có lịch thi cuối kỳ dự kiến</p>
+                                    <span class="time-ago">2 giờ trước</span>
+                                </div>
+                                <span class="w-2 h-2 bg-red-500 rounded-full mt-2"></span>
+                            </div>
+                            <!-- Item Thông báo 4 (Đã đọc) -->
+                            <div class="popup-item" onclick="window.location.href='#'">
+                                <div class="item-icon bg-gray-100 text-gray-600"><i class="ri-megaphone-line"></i></div>
+                                <div class="item-content">
+                                    <p class="text-sm text-gray-700">Thông báo nghỉ lễ 02/09</p>
+                                    <span class="time-ago">3 ngày trước</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="popup-footer">
+                            <a href="#">Xem tất cả thông báo</a>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- Nút Thông báo -->
-                <button class="icon-btn icon-btn-relative" title="Thông báo" id="btn-notifications">
-                    <i class="ri-notification-3-line"></i>
-                    <span class="badge-dot active" id="notification-badge"></span>
-                </button>
-                <!-- Dropdown: Thông báo -->
-                <div id="dropdown-notifications" class="dropdown-menu hidden">
-                    <div class="dropdown-header-title">
-                        <h3>Thông báo</h3>
-                    </div>
-                    <ul class="notifications-list">
-                        <li class="notification-item unread" data-id="211">
-                            <div class="notification-icon bg-blue">
-                                <i class="ri-file-text-line"></i>
-                            </div>
-                            <div class="notification-content">
-                                <p class="notification-title"><strong>Bài tập được chấm</strong></p>
-                                <p class="notification-text">GV. Kim Vũ đã chấm bài tập "Lập trình Web - Assignment 3"</p>
-                                <span class="notification-class">Lập trình Web</span>
-                                <span class="notification-time">2 giờ trước</span>
-                            </div>
-                            <span class="unread-dot"></span>
-                        </li>
-                        <li class="notification-item unread" data-id="212">
-                            <div class="notification-icon bg-orange">
-                                <i class="ri-alert-line"></i>
-                            </div>
-                            <div class="notification-content">
-                                <p class="notification-title"><strong>Deadline sắp tới</strong></p>
-                                <p class="notification-text">Bài tập "Phát triển mã nguồn mở" sắp hết hạn trong 2 ngày.</p>
-                                <span class="notification-class">Phát triển mã nguồn mở</span>
-                                <span class="notification-time">1 giờ trước</span>
-                            </div>
-                            <span class="unread-dot"></span>
-                        </li>
-                    </ul>
-                    <button class="dropdown-view-all">Xem tất cả thông báo</button>
-                </div>
-                
-                <div class="header-user-menu relative">
-                    <div class="header-avatar cursor-pointer" id="avatar-dropdown-trigger">
-                        <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar">
-                    </div>
+                <!-- AVATAR HEADER VỚI DROPDOWN -->
+                <div class="header-avatar-container" id="avatar-container">
+                    <img src="https://ui-avatars.com/api/?name=Nguyen+Van+A&background=8B5CF6&color=fff" alt="Avatar" class="header-avatar-img cursor-pointer" onclick="toggleDropdown('avatar')">
                     
                     <!-- Dropdown Menu -->
-                    <div id="user-dropdown" class="user-dropdown">
+                    <div id="avatar-dropdown" class="user-dropdown hidden">
                         <div class="dropdown-header">
-                            <p class="user-name">Nguyễn Văn A</p>
-                            <p class="user-email">sv.nguyenvana@lms.edu.vn</p>
+                            <p class="font-bold text-slate-800 text-sm">Nguyễn Văn A</p>
+                            <p class="text-xs text-gray-500">sv.nguyenvana@lms.edu.vn</p>
                         </div>
-                        <ul class="dropdown-list">
-                            <li>
-                                <a href="#">
-                                    <i class="ri-user-line"></i> Hồ sơ cá nhân
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="ri-settings-3-line"></i> Cài đặt tài khoản
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="login.html" class="logout-item">
-                                    <i class="ri-logout-box-line"></i> Đăng xuất
-                                </a>
-                            </li>
-                        </ul>
+                        <a href="Student_Profile.html" class="dropdown-item">
+                            <i class="ri-user-line mr-2"></i> Hồ sơ cá nhân
+                        </a>
+                        <a href="Student_Profile.html" class="dropdown-item">
+                            <i class="ri-settings-3-line mr-2"></i> Cài đặt tài khoản
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="ri-lock-password-line mr-2"></i> Đổi mật khẩu
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="ri-question-line mr-2"></i> Trợ giúp
+                        </a>
+                        <a href="login.html" class="dropdown-item logout" onclick="handleLogout()">
+                            <i class="ri-logout-box-r-line mr-2"></i> Đăng xuất
+                        </a>
                     </div>
                 </div>
             </div>
@@ -225,24 +247,23 @@
             <!-- Greeting Banner -->
             <div class="greeting-section">
                 <div class="greeting-text">
-                    <h1>Chào buổi sáng, <span id="greeting-name">Văn A</span>! ☀️</h1>
+                    <h1 id="greeting-name">Chào buổi sáng! ☀️</h1>
                     <p>Bạn có <span class="highlight-red">3 bài tập</span> cần hoàn thành trong tuần này.</p>
                 </div>
             </div>
 
             <!-- Dashboard Widgets Grid -->
             <div class="dashboard-grid">
-                
-                <!-- Widget 1: Sắp đến hạn (Danh sách chi tiết) -->
-                <div class="card-container large-card">
+                 <!-- Widget 1: Sắp đến hạn (Danh sách chi tiết) -->
+                 <div class="card-container large-card">
                     <div class="card-header">
                         <h3>Sắp đến hạn</h3>
-                        <a href="BT.html" class="view-all-link">Xem lịch</a>
+                        <a href="Student_Assignment_Management.html" class="view-all-link">Xem lịch</a>
                     </div>
                     <div class="card-body-list">
                         <ul class="deadline-list">
                             <!-- Item 1: Rất gấp -->
-                            <li class="deadline-item" onclick="window.location.href='BT.html'">
+                            <li class="deadline-item" onclick="window.location.href='Student_Assignment_Management.html'">
                                 <div class="deadline-icon bg-urgent">
                                     <i class="ri-fire-line"></i>
                                 </div>
@@ -253,11 +274,11 @@
                                         <i class="ri-time-line"></i> Hôm nay, 23:59
                                     </p>
                                 </div>
-                                <button class="arrow-btn" onclick="window.location.href='BT.html'"><i class="ri-arrow-right-s-line"></i></button>
+                                <button class="arrow-btn"><i class="ri-arrow-right-s-line"></i></button>
                             </li>
 
                             <!-- Item 2: Cảnh báo -->
-                            <li class="deadline-item" onclick="window.location.href='BT.html'">
+                            <li class="deadline-item" onclick="window.location.href='Student_Assignment_Management.html'">
                                 <div class="deadline-icon bg-warning">
                                     <i class="ri-alarm-warning-line"></i>
                                 </div>
@@ -268,11 +289,11 @@
                                         <i class="ri-calendar-event-line"></i> Ngày mai, 17:00
                                     </p>
                                 </div>
-                                <button class="arrow-btn" onclick="window.location.href='BT.html'"><i class="ri-arrow-right-s-line"></i></button>
+                                <button class="arrow-btn"><i class="ri-arrow-right-s-line"></i></button>
                             </li>
 
                             <!-- Item 3: Bình thường -->
-                            <li class="deadline-item" onclick="window.location.href='BT.html'">
+                            <li class="deadline-item" onclick="window.location.href='Student_Assignment_Management.html'">
                                 <div class="deadline-icon bg-normal">
                                     <i class="ri-file-text-line"></i>
                                 </div>
@@ -283,7 +304,7 @@
                                         <i class="ri-calendar-line"></i> 25/11/2025
                                     </p>
                                 </div>
-                                <button class="arrow-btn" onclick="window.location.href='BT.html'"><i class="ri-arrow-right-s-line"></i></button>
+                                <button class="arrow-btn"><i class="ri-arrow-right-s-line"></i></button>
                             </li>
                         </ul>
                     </div>
@@ -305,7 +326,7 @@
                             <span>Hạn: 20/11/2025</span>
                         </div>
                     </div>
-                    <button class="btn-outline orange" onclick="window.location.href='BT.html'">Xem chi tiết</button>
+                    <button class="btn-outline orange">Xem chi tiết</button>
                 </div>
 
                 <!-- Widget 3: Điểm số mới nhất -->
@@ -323,9 +344,8 @@
                         <p class="course-name">Lập trình Web</p>
                         <p class="assignment-name">Bài tập API</p>
                     </div>
-                    <button class="btn-outline green" onclick="window.location.href='Kqua.html'">Xem nhận xét</button>
+                    <button class="btn-outline green">Xem nhận xét</button>
                 </div>
-
             </div>
 
             <!-- Recent Activity / Thông báo -->
@@ -365,158 +385,108 @@
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
+            document.getElementById('sidebar').classList.toggle('collapsed');
         }
 
+        // HÀM QUẢN LÝ DROPDOWN CHUNG
+        function toggleDropdown(type) {
+            const messageDropdown = document.getElementById('message-dropdown');
+            const notifDropdown = document.getElementById('notification-dropdown');
+            const avatarDropdown = document.getElementById('avatar-dropdown');
+
+            const dropdowns = {
+                'message': messageDropdown,
+                'notification': notifDropdown,
+                'avatar': avatarDropdown
+            };
+
+            for (const key in dropdowns) {
+                if (key !== type) {
+                    dropdowns[key].classList.add('hidden');
+                    dropdowns[key].classList.remove('show');
+                }
+            }
+
+            const currentDropdown = dropdowns[type];
+            if (type === 'avatar') {
+                if (currentDropdown.classList.contains('hidden')) {
+                    currentDropdown.classList.remove('hidden');
+                    currentDropdown.classList.add('show');
+                } else {
+                    currentDropdown.classList.add('hidden');
+                    currentDropdown.classList.remove('show');
+                }
+            } else {
+                currentDropdown.classList.toggle('hidden');
+                if (type === 'notification' && !currentDropdown.classList.contains('hidden')) {
+                     const badge = document.getElementById('notif-badge');
+                     if (badge) badge.style.display = 'none';
+                }
+            }
+        }
+
+        window.addEventListener('click', function(e) {
+            const isClickInsideButton = e.target.closest('.icon-btn') || e.target.closest('.header-avatar-img');
+            const isClickInsideDropdown = e.target.closest('.dropdown-popup') || e.target.closest('.user-dropdown');
+
+            if (!isClickInsideButton && !isClickInsideDropdown) {
+                document.getElementById('message-dropdown').classList.add('hidden');
+                document.getElementById('notification-dropdown').classList.add('hidden');
+                
+                const avatarDropdown = document.getElementById('avatar-dropdown');
+                avatarDropdown.classList.add('hidden');
+                avatarDropdown.classList.remove('show');
+            }
+        });
+
+        // HÀM XỬ LÝ ĐĂNG XUẤT
+        function handleLogout() {
+            localStorage.removeItem('currentUser'); // Xóa session
+            window.location.href = 'login.html';
+        }
+
+        // --- CẬP NHẬT THÔNG TIN USER TỪ LOCALSTORAGE ---
         document.addEventListener('DOMContentLoaded', function() {
-            const trigger = document.getElementById('avatar-dropdown-trigger');
-            const menu = document.getElementById('user-dropdown');
-            const btnMessages = document.getElementById('btn-messages');
-            const btnNotifications = document.getElementById('btn-notifications');
-            const dropdownMessages = document.getElementById('dropdown-messages');
-            const dropdownNotifications = document.getElementById('dropdown-notifications');
-            const notificationBadge = document.getElementById('notification-badge');
+            const currentUserJson = localStorage.getItem('currentUser');
+            
+            if (currentUserJson) {
+                const currentUser = JSON.parse(currentUserJson);
+                const userName = currentUser.name;
+                // Tạo Avatar text (2 chữ cái đầu) nếu không có ảnh
+                const avatarText = userName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                // Hoặc dùng UI Avatars service
+                const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=8B5CF6&color=fff&bold=true`;
 
-            // Avatar dropdown
-            if (trigger && menu) {
-                trigger.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    menu.classList.toggle('hidden');
-                    if (dropdownMessages) dropdownMessages.classList.add('hidden');
-                    if (dropdownNotifications) dropdownNotifications.classList.add('hidden');
-                });
-            }
-
-            // Dropdown tin nhắn
-            if (btnMessages && dropdownMessages) {
-                btnMessages.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dropdownMessages.classList.toggle('hidden');
-                    if (dropdownNotifications) dropdownNotifications.classList.add('hidden');
-                    if (menu) menu.classList.add('hidden');
-                });
-            }
-
-            // Dropdown thông báo
-            if (btnNotifications && dropdownNotifications) {
-                btnNotifications.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dropdownNotifications.classList.toggle('hidden');
-                    if (dropdownMessages) dropdownMessages.classList.add('hidden');
-                    if (menu) menu.classList.add('hidden');
-                });
-            }
-
-            // Đóng dropdown khi click ra ngoài
-            document.addEventListener('click', function(e) {
-                if (trigger && menu && !trigger.contains(e.target) && !menu.contains(e.target)) {
-                    menu.classList.add('hidden');
+                // 1. Cập nhật Sidebar Avatar & Name
+                const sidebarAvatar = document.querySelector('.user-avatar'); // Class này đang chứa text 'NA'
+                if (sidebarAvatar) {
+                    sidebarAvatar.innerText = avatarText;
+                    // Nếu muốn dùng ảnh thay vì text ở sidebar, bạn cần thay đổi cấu trúc HTML sidebar một chút
+                    // Nhưng ở đây ta giữ nguyên text cho sidebar theo design cũ, chỉ update text
                 }
-                if (btnMessages && dropdownMessages && !btnMessages.contains(e.target) && !dropdownMessages.contains(e.target)) {
-                    dropdownMessages.classList.add('hidden');
+                const sidebarName = document.querySelector('.user-info .name');
+                if (sidebarName) sidebarName.innerText = userName;
+
+                // 2. Cập nhật Header Avatar (Ảnh)
+                const headerImg = document.getElementById('header-avatar-img');
+                if (headerImg) headerImg.src = avatarUrl;
+
+                // 3. Cập nhật Dropdown Info
+                const dropdownName = document.querySelector('.dropdown-user-name');
+                if (dropdownName) dropdownName.innerText = userName;
+                
+                const dropdownEmail = document.querySelector('.dropdown-user-role');
+                // Nếu user object có email thì dùng, không thì fake từ username
+                const emailDisplay = currentUser.username.includes('@') ? currentUser.username : `${currentUser.username.toLowerCase().replace(/\s+/g, '')}@lms.edu.vn`;
+                if (dropdownEmail) dropdownEmail.innerText = emailDisplay;
+
+                // 4. Cập nhật Banner Chào mừng
+                const greetingName = document.getElementById('greeting-name');
+                if (greetingName) {
+                    // Lấy phần tên cuối cùng để chào cho thân mật
+                    const lastName = userName.split(' ').pop();
+                    greetingName.innerText = `Chào buổi sáng, ${lastName}! ☀️`;
                 }
-                if (btnNotifications && dropdownNotifications && !btnNotifications.contains(e.target) && !dropdownNotifications.contains(e.target)) {
-                    dropdownNotifications.classList.add('hidden');
-                }
-            });
-
-            // Click vào notification item để xem chi tiết (mark per item)
-            const notificationItems = dropdownNotifications ? dropdownNotifications.querySelectorAll('.notification-item') : [];
-            notificationItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const notifId = this.dataset.id;
-                    if (notifId) {
-                        fetch(`/notifications/${notifId}/mark-read`, { method: 'POST' })
-                            .then(res => res.json())
-                            .then(() => {
-                                this.classList.remove('unread');
-                                let count = parseInt(notificationBadge.textContent) || 0;
-                                if (count > 0) {
-                                    count = Math.max(0, count - 1);
-                                    if (count === 0) {
-                                        notificationBadge.textContent = '';
-                                        notificationBadge.style.display = 'none';
-                                    } else {
-                                        notificationBadge.textContent = count;
-                                    }
-                                }
-                            })
-                            .catch(err => console.warn('Mark notification read failed', err));
-                });
-            });
-
-            // Load local user if exists && update greeting + header
-            try {
-                const raw = localStorage.getItem('lms_user');
-                if (raw) {
-                    const user = JSON.parse(raw);
-                    // Greeting
-                    const gName = document.getElementById('greeting-name');
-                    if (gName && user.full_name) gName.innerText = user.full_name.split(' ').pop() || user.full_name;
-
-                    // Header dropdown
-                    const headerAvatarImg = document.querySelector('.header-avatar img');
-                    const userNameEl = document.querySelector('.user-name');
-                    const userEmailEl = document.querySelector('.user-email');
-                    if (headerAvatarImg && user.full_name) headerAvatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=8B5CF6&color=fff`;
-                    if (userNameEl && user.full_name) userNameEl.innerText = user.full_name;
-                    if (userEmailEl && user.username) userEmailEl.innerText = user.username;
-
-                    // Sidebar small profile
-                    const sidebarName = document.querySelector('.sidebar-footer .user-profile .name');
-                    const sidebarRole = document.querySelector('.sidebar-footer .user-profile .role');
-                    const sidebarAvatar = document.querySelector('.sidebar-footer .user-profile .user-avatar');
-                    if (sidebarName && user.full_name) sidebarName.innerText = user.full_name;
-                    if (sidebarRole && user.role) sidebarRole.innerText = (user.role === 'teacher') ? 'Giảng viên' : 'Sinh viên';
-                    if (sidebarAvatar && user.full_name) {
-                        const initials = (user.full_name.split(' ').map(p => p[0]).slice(0,2).join('')).toUpperCase();
-                        sidebarAvatar.innerText = initials;
-                    }
-                }
-            } catch (err) {
-                console.warn('Failed to set local user', err);
-            }
-
-            // Click vào message item để mở chat (mark per message)
-            const messageItems = dropdownMessages ? dropdownMessages.querySelectorAll('.message-item') : [];
-            messageItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const msgId = this.dataset.id;
-                    if (msgId) {
-                        fetch(`/messages/${msgId}/mark-read`, { method: 'POST' })
-                            .then(res => res.json())
-                            .then(() => {
-                                this.classList.remove('unread');
-                                const remaining = dropdownMessages.querySelectorAll('.message-item.unread').length;
-                                const dot = btnMessages.querySelector('.badge-dot');
-                                if (dot) {
-                                    if (remaining === 0) dot.classList.remove('active');
-                                }
-                            })
-                            .catch(err => console.warn('Mark message read failed', err));
-                    }
-                    dropdownMessages.classList.add('hidden');
-                });
-            });
-
-            // View all buttons
-            const viewAllNotifications = dropdownNotifications ? dropdownNotifications.querySelector('.dropdown-view-all') : null;
-            if (viewAllNotifications) {
-                viewAllNotifications.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    // Navigate to notifications page
-                });
-            }
-
-            const viewAllMessages = dropdownMessages ? dropdownMessages.querySelector('.dropdown-view-all') : null;
-            if (viewAllMessages) {
-                viewAllMessages.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    // Navigate to messages page
-                });
             }
         });
     </script>

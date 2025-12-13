@@ -9,30 +9,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Hiệu ứng ảnh bên trái */
         .login-image {
             background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
         }
         .hidden-form { display: none; }
-        /* Custom checkbox */
         .custom-checkbox:checked {
             background-color: #2563EB;
             border-color: #2563EB;
         }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="h-screen w-full bg-gray-50">
 
     <div class="flex w-full h-full overflow-hidden bg-white shadow-2xl">
         
-        <!-- LEFT SIDE: IMAGE & BRANDING (Ẩn trên mobile) -->
+        <!-- LEFT SIDE -->
         <div class="hidden md:flex md:w-1/2 lg:w-6/12 bg-blue-600 login-image relative flex-col justify-between p-12 text-white">
-            <!-- Overlay -->
             <div class="absolute inset-0 bg-blue-900/60"></div>
-            
-            <!-- Content on top of image -->
             <div class="relative z-10">
                 <div class="flex items-center gap-3 text-2xl font-bold tracking-wide">
                     <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
@@ -41,50 +38,51 @@
                     LMS EDU
                 </div>
             </div>
-
             <div class="relative z-10 mb-8">
                 <h1 class="text-4xl font-bold mb-4 leading-tight">Học tập mọi lúc, <br>Phát triển mọi nơi.</h1>
                 <p class="text-blue-100 text-lg">Nền tảng quản lý học tập trực tuyến hàng đầu dành cho giảng viên và sinh viên.</p>
             </div>
         </div>
 
-        <!-- RIGHT SIDE: LOGIN FORM -->
-        <div class="w-full md:w-1/2 lg:w-6/12 flex items-center justify-center p-8 md:p-12 lg:p-20 overflow-y-auto">
+        <!-- RIGHT SIDE -->
+        <div class="w-full md:w-1/2 lg:w-6/12 flex items-center justify-center p-8 md:p-12 lg:p-20 overflow-y-auto relative">
+            
+            <!-- Toast Notification -->
+            <div id="toast" class="absolute top-5 right-5 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded hidden z-50 flex items-center shadow-lg transition-opacity duration-500">
+                <i class="ri-checkbox-circle-line mr-2 text-xl"></i>
+                <span class="block sm:inline" id="toast-message">Thông báo thành công!</span>
+            </div>
+
             <div class="w-full max-w-md">
                 
-                <!-- Mobile Logo (Hiện trên mobile) -->
                 <div class="md:hidden flex items-center gap-2 mb-8 text-blue-600 font-bold text-xl">
                     <i class="ri-book-open-line"></i> LMS EDU
                 </div>
 
-                <!-- SECTION: ĐĂNG NHẬP -->
-                <div id="login-form" class="form-container">
+                <!-- FORM ĐĂNG NHẬP -->
+                <div id="login-form" class="form-container fade-in">
                     <div class="mb-8">
                         <h2 class="text-3xl font-bold text-slate-900 mb-2">Đăng nhập</h2>
                         <p class="text-slate-500">Chào mừng trở lại! Vui lòng nhập thông tin.</p>
                     </div>
 
-                    <!-- Form sử dụng onsubmit để bắt sự kiện Enter hoặc Click nút submit -->
                     <form onsubmit="handleLogin(event)" class="space-y-5">
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1.5">Tên đăng nhập hoặc Email</label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                                    <i class="ri-user-line"></i>
-                                </span>
-                                <input type="text" id="username" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Nhập tên đăng nhập" required>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="ri-user-line"></i></span>
+                                <input type="text" id="username" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="Nhập tên đăng nhập" required>
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1.5">Mật khẩu</label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                                    <i class="ri-lock-line"></i>
-                                </span>
-                                <input type="password" id="password" class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="••••••••" required>
-                                <button id="toggle-password" type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600" aria-label="Toggle password visibility">
-                                    <i id="toggle-password-icon" class="ri-eye-off-line"></i>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="ri-lock-line"></i></span>
+                                <input type="password" id="password" class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="••••••••" required>
+                                <!-- Nút ẩn hiện mật khẩu -->
+                                <button type="button" onclick="togglePasswordVisibility('password', this)" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 cursor-pointer focus:outline-none">
+                                    <i class="ri-eye-off-line text-xl"></i>
                                 </button>
                             </div>
                         </div>
@@ -98,12 +96,11 @@
                         </div>
 
                         <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
-                            <span>Đăng nhập</span>
-                            <i class="ri-arrow-right-line"></i>
+                            <span>Đăng nhập</span> <i class="ri-arrow-right-line"></i>
                         </button>
                     </form>
 
-                    <!-- Demo Accounts Hint -->
+                    <!-- Demo Accounts -->
                     <div class="mt-8 p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600">
                         <p class="font-bold text-slate-800 mb-2 flex items-center gap-1"><i class="ri-information-fill text-blue-500"></i> Tài khoản Demo (Click để điền nhanh):</p>
                         <div class="grid grid-cols-2 gap-2">
@@ -121,51 +118,40 @@
                     </div>
 
                     <div class="mt-6 text-center text-sm text-slate-600">
-                        Bạn chưa có tài khoản? 
-                        <button onclick="toggleForm('register')" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">Đăng ký ngay</button>
+                        Bạn chưa có tài khoản? <button onclick="toggleForm('register')" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">Đăng ký ngay</button>
                     </div>
                 </div>
 
-                <!-- SECTION: ĐĂNG KÝ (Ẩn mặc định) -->
-                <div id="register-form" class="form-container hidden-form">
+                <!-- FORM ĐĂNG KÝ -->
+                <div id="register-form" class="form-container hidden-form fade-in">
                     <div class="mb-8">
                         <h2 class="text-3xl font-bold text-slate-900 mb-2">Tạo tài khoản</h2>
                         <p class="text-slate-500">Nhập thông tin cá nhân để bắt đầu.</p>
                     </div>
 
-                    <form id="register-form-el" onsubmit="handleRegister(event)" class="space-y-4">
+                    <form onsubmit="handleRegister(event)" class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 mb-1">Họ</label>
-                                <input id="register-first" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nguyễn" required>
+                                <input type="text" id="reg-lastname" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nguyễn" required>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 mb-1">Tên</label>
-                                <input id="register-last" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Văn A" required>
+                                <input type="text" id="reg-firstname" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Văn A" required>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                            <input id="register-email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="example@email.com" required>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Email (Tên đăng nhập)</label>
+                            <input type="text" id="reg-email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="example@email.com" required>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Mật khẩu</label>
                             <div class="relative">
-                                <input id="register-password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Tối thiểu 8 ký tự" required>
-                                <button id="toggle-register-password" type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600" aria-label="Toggle password visibility">
-                                    <i id="toggle-register-password-icon" class="ri-eye-off-line"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Xác nhận mật khẩu</label>
-                            <div class="relative">
-                                <input id="register-confirm-password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nhập lại mật khẩu" required>
-                                <button id="toggle-register-confirm-password" type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600" aria-label="Toggle confirm password visibility">
-                                    <i id="toggle-register-confirm-password-icon" class="ri-eye-off-line"></i>
+                                <input type="password" id="reg-password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none pr-10" placeholder="Tối thiểu 6 ký tự" required>
+                                <button type="button" onclick="togglePasswordVisibility('reg-password', this)" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 cursor-pointer focus:outline-none">
+                                    <i class="ri-eye-off-line text-xl"></i>
                                 </button>
                             </div>
                         </div>
@@ -174,29 +160,23 @@
                             <label class="block text-sm font-medium text-slate-700 mb-1">Tôi là</label>
                             <div class="grid grid-cols-2 gap-4">
                                 <label class="cursor-pointer">
-                                    <input id="role-student" value="student" type="radio" name="role" class="peer sr-only" checked>
-                                    <div class="w-full py-3 px-4 text-center rounded-xl border border-gray-200 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all">
-                                        Sinh viên
-                                    </div>
+                                    <input type="radio" name="reg-role" value="student" class="peer sr-only" checked>
+                                    <div class="w-full py-3 px-4 text-center rounded-xl border border-gray-200 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all font-medium">Sinh viên</div>
                                 </label>
                                 <label class="cursor-pointer">
-                                    <input id="role-teacher" value="teacher" type="radio" name="role" class="peer sr-only">
-                                    <div class="w-full py-3 px-4 text-center rounded-xl border border-gray-200 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all">
-                                        Giảng viên
-                                    </div>
+                                    <input type="radio" name="reg-role" value="teacher" class="peer sr-only">
+                                    <div class="w-full py-3 px-4 text-center rounded-xl border border-gray-200 peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition-all font-medium">Giảng viên</div>
                                 </label>
                             </div>
                         </div>
 
-                        <button id="register-submit" type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all mt-2">
-                            Tạo tài khoản
+                        <button type="submit" class="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-200 transition-all transform hover:-translate-y-0.5 mt-2">
+                            Đăng ký tài khoản
                         </button>
                     </form>
-                    <div id="register-error" class="text-sm text-red-500 mt-3" style="display:none"></div>
-                    <div id="register-success" class="text-sm text-green-600 mt-3" style="display:none"></div>
+
                     <div class="mt-6 text-center text-sm text-slate-600">
-                        Đã có tài khoản? 
-                        <button onclick="toggleForm('login')" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">Đăng nhập</button>
+                        Đã có tài khoản? <button onclick="toggleForm('login')" class="font-bold text-blue-600 hover:text-blue-700 hover:underline">Đăng nhập</button>
                     </div>
                 </div>
 
@@ -205,7 +185,7 @@
     </div>
 
     <script>
-        // Chuyển đổi Login/Register
+        // Chuyển đổi giữa Form Login và Register
         function toggleForm(formType) {
             const loginForm = document.getElementById('login-form');
             const registerForm = document.getElementById('register-form');
@@ -219,194 +199,133 @@
             }
         }
 
-        // Hàm hỗ trợ điền nhanh (Demo)
+        // Logic ẩn/hiện mật khẩu
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('ri-eye-off-line');
+                icon.classList.add('ri-eye-line');
+            } else {
+                input.type = "password";
+                icon.classList.remove('ri-eye-line');
+                icon.classList.add('ri-eye-off-line');
+            }
+        }
+
+        // Điền nhanh thông tin (Demo)
         function fillLogin(user, pass) {
             document.getElementById('username').value = user;
             document.getElementById('password').value = pass;
         }
 
-        // Toggle password visibility and initialize listeners after DOM ready
-        document.addEventListener('DOMContentLoaded', function() {
-            const togglePwdBtn = document.getElementById('toggle-password');
-            const pwd = document.getElementById('password');
-            const icon = document.getElementById('toggle-password-icon');
-
-            const toggleRegPwdBtn = document.getElementById('toggle-register-password');
-            const regPwd = document.getElementById('register-password');
-            const regPwdIcon = document.getElementById('toggle-register-password-icon');
-            const toggleRegConfirmBtn = document.getElementById('toggle-register-confirm-password');
-            const regConfirmPwd = document.getElementById('register-confirm-password');
-            const regConfirmIcon = document.getElementById('toggle-register-confirm-password-icon');
-
-            if (togglePwdBtn) {
-                togglePwdBtn.addEventListener('click', function (e) {
-                    if (pwd.type === 'password') {
-                        pwd.type = 'text';
-                        icon.classList.remove('ri-eye-off-line');
-                        icon.classList.add('ri-eye-line');
-                    } else {
-                        pwd.type = 'password';
-                        icon.classList.remove('ri-eye-line');
-                        icon.classList.add('ri-eye-off-line');
-                    }
-                });
-            }
-
-            if (toggleRegPwdBtn) {
-                toggleRegPwdBtn.addEventListener('click', function (e) {
-                    if (regPwd.type === 'password') {
-                        regPwd.type = 'text';
-                        regPwdIcon.classList.remove('ri-eye-off-line');
-                        regPwdIcon.classList.add('ri-eye-line');
-                    } else {
-                        regPwd.type = 'password';
-                        regPwdIcon.classList.remove('ri-eye-line');
-                        regPwdIcon.classList.add('ri-eye-off-line');
-                    }
-                });
-            }
-
-            if (toggleRegConfirmBtn) {
-                toggleRegConfirmBtn.addEventListener('click', function (e) {
-                    if (regConfirmPwd.type === 'password') {
-                        regConfirmPwd.type = 'text';
-                        regConfirmIcon.classList.remove('ri-eye-off-line');
-                        regConfirmIcon.classList.add('ri-eye-line');
-                    } else {
-                        regConfirmPwd.type = 'password';
-                        regConfirmIcon.classList.remove('ri-eye-line');
-                        regConfirmIcon.classList.add('ri-eye-off-line');
-                    }
-                });
-            }
-        });
-
-        // Xử lý Đăng nhập (thực tế - gọi API)
-        async function handleLogin(e) {
-            e.preventDefault(); // Ngăn form reload trang
-            const usernameInput = document.getElementById('username').value.trim();
-            const passwordInput = document.getElementById('password').value.trim();
-
-            // Tài khoản Demo (Cứng)
-            const TEACHER_ACC = { user: "Kim Vũ", pass: "123456" };
-            const STUDENT_ACC = { user: "Nguyễn Văn A", pass: "233484" };
-
-            // Nút submit để hiển thị loading
-            const btn = e.target.querySelector('button[type="submit"]');
-
-            // Try actual API login first
-            const payload = { username: usernameInput, password: passwordInput };
-            try {
-                const res = await fetch(`${window.API_BASE || 'http://localhost:8000'}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    // Save logged in user to localStorage for greeting
-                    const localUser = { username: data.username, full_name: data.full_name || data.username, role: data.role || 'student', id: data.id };
-                    localStorage.setItem('lms_user', JSON.stringify(localUser));
-                    btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
-                    btn.disabled = true;
-                    // redirect base on role
-                    setTimeout(() => {
-                        if (data.role && data.role.toLowerCase() === 'teacher') location.replace('./dashboardGV.html');
-                        else location.replace('./dashboardSV.html');
-                    }, 300);
-                    return;
-                }
-
-                // If API login fails (invalid creds) fall back to demo accounts
-                if (usernameInput === TEACHER_ACC.user && passwordInput === TEACHER_ACC.pass) {
-                    // set demo teacher in localStorage
-                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'teacher' }));
-                    btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
-                    btn.disabled = true;
-                    setTimeout(() => { location.replace('./dashboardGV.html'); }, 500);
-                    return;
-                } else if (usernameInput === STUDENT_ACC.user && passwordInput === STUDENT_ACC.pass) {
-                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'student' }));
-                    btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
-                    btn.disabled = true;
-                    setTimeout(() => { location.replace('./dashboardSV.html'); }, 500);
-                    return;
-                } else {
-                    alert("❌ Tên đăng nhập hoặc mật khẩu không đúng!\nVui lòng kiểm tra lại hoặc dùng tài khoản demo bên dưới.");
-                    btn.innerHTML = '<span>Đăng nhập</span><i class="ri-arrow-right-line"></i>';
-                    btn.disabled = false;
-                    return;
-                }
-            } catch (err) {
-                console.warn('API login failed', err);
-                // Fallback to demo behavior
-                if (usernameInput === TEACHER_ACC.user && passwordInput === TEACHER_ACC.pass) {
-                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'teacher' }));
-                    btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
-                    btn.disabled = true;
-                    setTimeout(() => { location.replace('./dashboardGV.html'); }, 500);
-                } else if (usernameInput === STUDENT_ACC.user && passwordInput === STUDENT_ACC.pass) {
-                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'student' }));
-                    btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
-                    btn.disabled = true;
-                    setTimeout(() => { location.replace('./dashboardSV.html'); }, 500);
-                } else {
-                    alert("❌ Tên đăng nhập hoặc mật khẩu không đúng!\nVui lòng kiểm tra lại hoặc dùng tài khoản demo bên dưới.");
-                    btn.innerHTML = '<span>Đăng nhập</span><i class="ri-arrow-right-line"></i>';
-                    btn.disabled = false;
-                }
-            }
+        // Hiển thị thông báo Toast
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            toastMsg.innerText = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
         }
 
-        // Xử lý Đăng ký (gọi API để tạo user)
-        async function handleRegister(e) {
+        // Xử lý Đăng Ký
+        function handleRegister(e) {
             e.preventDefault();
-            const first = document.getElementById('register-first').value.trim();
-            const last = document.getElementById('register-last').value.trim();
-            const email = document.getElementById('register-email').value.trim();
-            const password = document.getElementById('register-password').value.trim();
-            const role = document.querySelector('input[name="role"]:checked').value || 'student';
-            const errorEl = document.getElementById('register-error');
-            const successEl = document.getElementById('register-success');
-            const submitBtn = document.getElementById('register-submit');
-            errorEl.style.display = 'none'; successEl.style.display = 'none';
-            if (!first || !last || !email || !password) { errorEl.innerText = 'Vui lòng điền đầy đủ thông tin'; errorEl.style.display = 'block'; return; }
-            if (password.length < 8) { errorEl.innerText = 'Mật khẩu phải có ít nhất 8 ký tự'; errorEl.style.display = 'block'; return; }
+            
+            // Lấy dữ liệu từ form
+            const lastName = document.getElementById('reg-lastname').value;
+            const firstName = document.getElementById('reg-firstname').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const role = document.querySelector('input[name="reg-role"]:checked').value;
+            
+            const fullName = lastName + ' ' + firstName;
 
-            const confirmPassword = document.getElementById('register-confirm-password').value.trim();
-            if (password !== confirmPassword) { errorEl.innerText = 'Mật khẩu xác nhận không khớp'; errorEl.style.display = 'block'; return; }
+            // Lưu thông tin người dùng mới vào localStorage
+            const newUser = {
+                username: email, // Dùng email làm username
+                password: password,
+                name: fullName,
+                role: role
+            };
+            localStorage.setItem('registeredUser', JSON.stringify(newUser));
 
-            const payload = { username: email, password: password, full_name: `${first} ${last}`, role };
-            submitBtn.disabled = true; submitBtn.innerText = 'Đang tạo...';
-            try { 
-                const res = await fetch(`${window.API_BASE || 'http://localhost:8000'}/users`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (res.ok) {
-                    // store the registered user info locally and redirect to dashboard
-                    const localUser = { username: email, full_name: `${first} ${last}`, role };
-                    localStorage.setItem('lms_user', JSON.stringify(localUser));
-                    successEl.innerText = '🎉 Đăng ký thành công! Chuyển hướng đến Dashboard...';
-                    successEl.style.display = 'block';
-                    setTimeout(() => {
-                        if (role === 'teacher') location.replace('./dashboardGV.html');
-                        else location.replace('./dashboardSV.html');
-                    }, 700);
-                    return;
-                } else {
-                    const data = await res.json().catch(_ => null);
-                    const text = data?.detail || (await res.text()).slice(0,200);
-                    errorEl.innerText = 'Đăng ký thất bại: ' + text;
-                    errorEl.style.display = 'block';
-                    submitBtn.disabled = false; submitBtn.innerText = 'Tạo tài khoản';
-                }
-            } catch (err) {
-                console.error('Register failed', err);
-                errorEl.innerText = 'Đăng ký thất bại: ' + err.message;
-                errorEl.style.display = 'block';
-                submitBtn.disabled = false; submitBtn.innerText = 'Tạo tài khoản';
+            showToast('Đăng ký thành công! Đang chuyển hướng...', 'success');
+
+            // Delay nhỏ để người dùng thấy thông báo
+            setTimeout(() => {
+                // Chuyển về form đăng nhập
+                toggleForm('login');
+
+                // Tự động điền thông tin
+                document.getElementById('username').value = email;
+                document.getElementById('password').value = password;
+            }, 1000);
+        }
+
+        // Xử lý Đăng Nhập
+        function handleLogin(e) {
+            e.preventDefault(); 
+            
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+            const btn = e.target.querySelector('button[type="submit"]');
+
+            // 1. Kiểm tra tài khoản Demo (Hardcoded)
+            const TEACHER_ACC = { user: "Kim Vũ", pass: "123456", name: "Kim Vũ", role: "teacher" };
+            const STUDENT_ACC = { user: "Nguyễn Văn A", pass: "233484", name: "Nguyễn Văn A", role: "student" };
+
+            // 2. Kiểm tra tài khoản vừa đăng ký (từ localStorage)
+            const registeredUserJson = localStorage.getItem('registeredUser');
+            let registeredUser = null;
+            if (registeredUserJson) {
+                registeredUser = JSON.parse(registeredUserJson);
+            }
+
+            let loginSuccess = false;
+            let userData = null;
+
+            // Logic so khớp
+            if (usernameInput === TEACHER_ACC.user && passwordInput === TEACHER_ACC.pass) {
+                loginSuccess = true;
+                userData = TEACHER_ACC;
+            } 
+            else if (usernameInput === STUDENT_ACC.user && passwordInput === STUDENT_ACC.pass) {
+                loginSuccess = true;
+                userData = STUDENT_ACC;
+            }
+            else if (registeredUser && usernameInput === registeredUser.username && passwordInput === registeredUser.password) {
+                loginSuccess = true;
+                userData = registeredUser;
+            }
+
+            if (loginSuccess) {
+                // Lưu session người dùng hiện tại
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+
+                // Hiệu ứng loading
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<i class="ri-loader-4-line animate-spin"></i> Đang đăng nhập...`;
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    if (userData.role === 'teacher') {
+                        window.location.href = "index.html"; 
+                    } else {
+                        window.location.href = "dashboardSV.html"; 
+                    }
+                }, 1000);
+            } else {
+                showToast("Tên đăng nhập hoặc mật khẩu không đúng!", 'error');
+                // Rung lắc nút đăng nhập để báo lỗi (Visual feedback)
+                btn.classList.add('animate-bounce');
+                setTimeout(() => btn.classList.remove('animate-bounce'), 500);
             }
         }
     </script>
