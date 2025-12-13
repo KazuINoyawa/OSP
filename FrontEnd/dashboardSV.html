@@ -225,7 +225,7 @@
             <!-- Greeting Banner -->
             <div class="greeting-section">
                 <div class="greeting-text">
-                    <h1>Chào buổi sáng, Văn A! ☀️</h1>
+                    <h1>Chào buổi sáng, <span id="greeting-name">Văn A</span>! ☀️</h1>
                     <p>Bạn có <span class="highlight-red">3 bài tập</span> cần hoàn thành trong tuần này.</p>
                 </div>
             </div>
@@ -379,44 +379,50 @@
             const notificationBadge = document.getElementById('notification-badge');
 
             // Avatar dropdown
-            trigger.addEventListener('click', function(e) {
-                e.stopPropagation();
-                menu.classList.toggle('hidden');
-                dropdownMessages.classList.add('hidden');
-                dropdownNotifications.classList.add('hidden');
-            });
+            if (trigger && menu) {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                    if (dropdownMessages) dropdownMessages.classList.add('hidden');
+                    if (dropdownNotifications) dropdownNotifications.classList.add('hidden');
+                });
+            }
 
             // Dropdown tin nhắn
-            btnMessages.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownMessages.classList.toggle('hidden');
-                dropdownNotifications.classList.add('hidden');
-                menu.classList.add('hidden');
-            });
+            if (btnMessages && dropdownMessages) {
+                btnMessages.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMessages.classList.toggle('hidden');
+                    if (dropdownNotifications) dropdownNotifications.classList.add('hidden');
+                    if (menu) menu.classList.add('hidden');
+                });
+            }
 
             // Dropdown thông báo
-            btnNotifications.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownNotifications.classList.toggle('hidden');
-                dropdownMessages.classList.add('hidden');
-                menu.classList.add('hidden');
-            });
+            if (btnNotifications && dropdownNotifications) {
+                btnNotifications.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownNotifications.classList.toggle('hidden');
+                    if (dropdownMessages) dropdownMessages.classList.add('hidden');
+                    if (menu) menu.classList.add('hidden');
+                });
+            }
 
             // Đóng dropdown khi click ra ngoài
             document.addEventListener('click', function(e) {
-                if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                if (trigger && menu && !trigger.contains(e.target) && !menu.contains(e.target)) {
                     menu.classList.add('hidden');
                 }
-                if (!btnMessages.contains(e.target) && !dropdownMessages.contains(e.target)) {
+                if (btnMessages && dropdownMessages && !btnMessages.contains(e.target) && !dropdownMessages.contains(e.target)) {
                     dropdownMessages.classList.add('hidden');
                 }
-                if (!btnNotifications.contains(e.target) && !dropdownNotifications.contains(e.target)) {
+                if (btnNotifications && dropdownNotifications && !btnNotifications.contains(e.target) && !dropdownNotifications.contains(e.target)) {
                     dropdownNotifications.classList.add('hidden');
                 }
             });
 
             // Click vào notification item để xem chi tiết (mark per item)
-            const notificationItems = dropdownNotifications.querySelectorAll('.notification-item');
+            const notificationItems = dropdownNotifications ? dropdownNotifications.querySelectorAll('.notification-item') : [];
             notificationItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -438,13 +444,43 @@
                                 }
                             })
                             .catch(err => console.warn('Mark notification read failed', err));
-                    }
-                    dropdownNotifications.classList.add('hidden');
                 });
             });
 
+            // Load local user if exists && update greeting + header
+            try {
+                const raw = localStorage.getItem('lms_user');
+                if (raw) {
+                    const user = JSON.parse(raw);
+                    // Greeting
+                    const gName = document.getElementById('greeting-name');
+                    if (gName && user.full_name) gName.innerText = user.full_name.split(' ').pop() || user.full_name;
+
+                    // Header dropdown
+                    const headerAvatarImg = document.querySelector('.header-avatar img');
+                    const userNameEl = document.querySelector('.user-name');
+                    const userEmailEl = document.querySelector('.user-email');
+                    if (headerAvatarImg && user.full_name) headerAvatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=8B5CF6&color=fff`;
+                    if (userNameEl && user.full_name) userNameEl.innerText = user.full_name;
+                    if (userEmailEl && user.username) userEmailEl.innerText = user.username;
+
+                    // Sidebar small profile
+                    const sidebarName = document.querySelector('.sidebar-footer .user-profile .name');
+                    const sidebarRole = document.querySelector('.sidebar-footer .user-profile .role');
+                    const sidebarAvatar = document.querySelector('.sidebar-footer .user-profile .user-avatar');
+                    if (sidebarName && user.full_name) sidebarName.innerText = user.full_name;
+                    if (sidebarRole && user.role) sidebarRole.innerText = (user.role === 'teacher') ? 'Giảng viên' : 'Sinh viên';
+                    if (sidebarAvatar && user.full_name) {
+                        const initials = (user.full_name.split(' ').map(p => p[0]).slice(0,2).join('')).toUpperCase();
+                        sidebarAvatar.innerText = initials;
+                    }
+                }
+            } catch (err) {
+                console.warn('Failed to set local user', err);
+            }
+
             // Click vào message item để mở chat (mark per message)
-            const messageItems = dropdownMessages.querySelectorAll('.message-item');
+            const messageItems = dropdownMessages ? dropdownMessages.querySelectorAll('.message-item') : [];
             messageItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -467,7 +503,7 @@
             });
 
             // View all buttons
-            const viewAllNotifications = dropdownNotifications.querySelector('.dropdown-view-all');
+            const viewAllNotifications = dropdownNotifications ? dropdownNotifications.querySelector('.dropdown-view-all') : null;
             if (viewAllNotifications) {
                 viewAllNotifications.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -475,7 +511,7 @@
                 });
             }
 
-            const viewAllMessages = dropdownMessages.querySelector('.dropdown-view-all');
+            const viewAllMessages = dropdownMessages ? dropdownMessages.querySelector('.dropdown-view-all') : null;
             if (viewAllMessages) {
                 viewAllMessages.addEventListener('click', function(e) {
                     e.stopPropagation();

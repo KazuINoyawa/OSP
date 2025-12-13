@@ -227,7 +227,7 @@
             <!-- Greeting Section (Đã bỏ nút Tạo lớp ở đây) -->
             <div class="greeting-section">
                 <div class="greeting-text">
-                    <h1>Xin chào, thầy Vũ! 👋</h1>
+                    <h1>Xin chào, <span id="greeting-name">thầy Vũ</span>! 👋</h1>
                     <p>Hôm nay có <span class="highlight">26 bài</span> cần chấm điểm.</p>
                 </div>
              
@@ -485,78 +485,84 @@
             const notificationBadge = document.getElementById('notification-badge');
 
             // Bật/tắt khi click vào avatar
-            trigger.addEventListener('click', function(e) {
-                e.stopPropagation();
-                menu.classList.toggle('show');
-                dropdownMessages.classList.add('hidden');
-                dropdownNotifications.classList.add('hidden');
-            });
+            if (trigger && menu) {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle('show');
+                    if (dropdownMessages) dropdownMessages.classList.add('hidden');
+                    if (dropdownNotifications) dropdownNotifications.classList.add('hidden');
+                });
+            }
 
             // Đóng menu khi click bất cứ đâu bên ngoài
             document.addEventListener('click', function(e) {
-                if (!trigger.contains(e.target)) {
+                if (trigger && !trigger.contains(e.target) && menu) {
                     menu.classList.remove('show');
                 }
             });
 
             // Dropdown tin nhắn
-            btnMessages.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownMessages.classList.toggle('hidden');
-                dropdownNotifications.classList.add('hidden');
-                menu.classList.remove('show');
-                
-                // Mark messages as read when opened
-                const unreadMessages = dropdownMessages.querySelectorAll('.message-item.unread');
-                unreadMessages.forEach(msg => {
-                    setTimeout(() => msg.classList.remove('unread'), 300);
+            if (btnMessages && dropdownMessages) {
+                btnMessages.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMessages.classList.toggle('hidden');
+                    if (dropdownNotifications) dropdownNotifications.classList.add('hidden');
+                    if (menu) menu.classList.remove('show');
+
+                    // Mark messages as read when opened
+                    const unreadMessages = dropdownMessages.querySelectorAll('.message-item.unread');
+                    unreadMessages.forEach(msg => {
+                        setTimeout(() => msg.classList.remove('unread'), 300);
+                    });
                 });
-            });
+            }
 
             // Dropdown thông báo
-            btnNotifications.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownNotifications.classList.toggle('hidden');
-                dropdownMessages.classList.add('hidden');
-                menu.classList.remove('show');
-                
-                // Mark notifications as read when opened
-                const unreadNotifications = dropdownNotifications.querySelectorAll('.notification-item.unread');
-                let count = parseInt(notificationBadge.textContent);
-                unreadNotifications.forEach((notif, index) => {
-                    setTimeout(() => {
-                        notif.classList.remove('unread');
-                        if (count > 0) {
-                            count--;
-                            if (count === 0) {
-                                notificationBadge.textContent = '';
-                                notificationBadge.style.display = 'none';
-                            } else {
-                                notificationBadge.textContent = count;
+            if (btnNotifications && dropdownNotifications) {
+                btnNotifications.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownNotifications.classList.toggle('hidden');
+                    if (dropdownMessages) dropdownMessages.classList.add('hidden');
+                    if (menu) menu.classList.remove('show');
+                    
+                    // Mark notifications as read when opened
+                    const unreadNotifications = dropdownNotifications.querySelectorAll('.notification-item.unread');
+                    let count = parseInt(notificationBadge.textContent) || 0;
+                    unreadNotifications.forEach((notif, index) => {
+                        setTimeout(() => {
+                            notif.classList.remove('unread');
+                            if (count > 0) {
+                                count--;
+                                if (count === 0) {
+                                    notificationBadge.textContent = '';
+                                    notificationBadge.style.display = 'none';
+                                } else {
+                                    notificationBadge.textContent = count;
+                                }
                             }
-                        }
-                    }, index * 100);
+                        }, index * 100);
+                    });
                 });
-            });
+            }
 
             // Đóng dropdown khi click ra ngoài
             document.addEventListener('click', function(e) {
-                if (!btnMessages.contains(e.target) && !dropdownMessages.contains(e.target)) {
+                if (btnMessages && dropdownMessages && !btnMessages.contains(e.target) && !dropdownMessages.contains(e.target)) {
                     dropdownMessages.classList.add('hidden');
                 }
-                if (!btnNotifications.contains(e.target) && !dropdownNotifications.contains(e.target)) {
+                if (btnNotifications && dropdownNotifications && !btnNotifications.contains(e.target) && !dropdownNotifications.contains(e.target)) {
                     dropdownNotifications.classList.add('hidden');
                 }
             });
 
             // Click vào notification item để xem chi tiết (mark per item)
-            const notificationItems = dropdownNotifications.querySelectorAll('.notification-item');
+            const notificationItems = dropdownNotifications ? dropdownNotifications.querySelectorAll('.notification-item') : [];
             notificationItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.stopPropagation();
                     const notifId = this.dataset.id;
                     // mark read on server
-                    if (notifId) {
+                    if (notifId && notificationBadge) {
                         fetch(`/notifications/${notifId}/mark-read`, { method: 'POST' })
                             .then(res => res.json())
                             .then(() => {
@@ -576,12 +582,12 @@
                             .catch(err => console.warn('Mark notification read failed', err));
                     }
                     // Redirect to appropriate page or detail (placeholder)
-                    dropdownNotifications.classList.add('hidden');
+                    if (dropdownNotifications) dropdownNotifications.classList.add('hidden');
                 });
             });
 
             // Click vào message item để mở chat (mark per message)
-            const messageItems = dropdownMessages.querySelectorAll('.message-item');
+            const messageItems = dropdownMessages ? dropdownMessages.querySelectorAll('.message-item') : [];
             messageItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -592,8 +598,8 @@
                             .then(() => {
                                 this.classList.remove('unread');
                                 // remove message badge dot if none left (simple approach)
-                                const remaining = dropdownMessages.querySelectorAll('.message-item.unread').length;
-                                const dot = btnMessages.querySelector('.badge-dot');
+                                const remaining = dropdownMessages ? dropdownMessages.querySelectorAll('.message-item.unread').length : 0;
+                                const dot = btnMessages ? btnMessages.querySelector('.badge-dot') : null;
                                 if (dot) {
                                     if (remaining === 0) dot.classList.remove('active');
                                 }
@@ -601,12 +607,12 @@
                             .catch(err => console.warn('Mark message read failed', err));
                     }
                     // Open chat or navigate (placeholder)
-                    dropdownMessages.classList.add('hidden');
+                    if (dropdownMessages) dropdownMessages.classList.add('hidden');
                 });
             });
 
             // View all notifications
-            const viewAllNotifications = dropdownNotifications.querySelector('.dropdown-view-all');
+            const viewAllNotifications = dropdownNotifications ? dropdownNotifications.querySelector('.dropdown-view-all') : null;
             if (viewAllNotifications) {
                 viewAllNotifications.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -615,12 +621,38 @@
             }
 
             // View all messages
-            const viewAllMessages = dropdownMessages.querySelector('.dropdown-view-all');
+            const viewAllMessages = dropdownMessages ? dropdownMessages.querySelector('.dropdown-view-all') : null;
             if (viewAllMessages) {
                 viewAllMessages.addEventListener('click', function(e) {
                     e.stopPropagation();
                     window.location.href = '#messages-page';
                 });
+            }
+
+            // Load local user and update greeting & header
+            try {
+                const raw = localStorage.getItem('lms_user');
+                if (raw) {
+                    const user = JSON.parse(raw);
+                    const gName = document.getElementById('greeting-name');
+                    if (gName && user.full_name) gName.innerText = user.full_name.split(' ').pop() || user.full_name;
+
+                    const headerAvatarImg = document.querySelector('.header-avatar-img');
+                    const dropdownName = document.querySelector('.dropdown-user-name');
+                    const dropdownRole = document.querySelector('.dropdown-user-role');
+                    if (headerAvatarImg && user.full_name) headerAvatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=0D8ABC&color=fff`;
+                    if (dropdownName && user.full_name) dropdownName.innerText = (user.role === 'teacher' ? 'GV. ' : '') + user.full_name;
+                    if (dropdownRole && user.username) dropdownRole.innerText = user.username;
+
+                    const sidebarName = document.querySelector('.sidebar-footer .user-profile .name');
+                    const sidebarRole = document.querySelector('.sidebar-footer .user-profile .role');
+                    const sidebarAvatar = document.querySelector('.sidebar-footer .user-profile .user-avatar-img');
+                    if (sidebarName && user.full_name) sidebarName.innerText = (user.role === 'teacher' ? 'GV. ' : '') + user.full_name;
+                    if (sidebarRole && user.role) sidebarRole.innerText = 'Khoa CNTT';
+                    if (sidebarAvatar && user.full_name) sidebarAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=0D8ABC&color=fff`;
+                }
+            } catch (err) {
+                console.warn('Failed to set local user', err);
             }
         });
     </script>

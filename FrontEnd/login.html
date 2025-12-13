@@ -152,7 +152,22 @@
 
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Mật khẩu</label>
-                            <input id="register-password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Tối thiểu 8 ký tự" required>
+                            <div class="relative">
+                                <input id="register-password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Tối thiểu 8 ký tự" required>
+                                <button id="toggle-register-password" type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600" aria-label="Toggle password visibility">
+                                    <i id="toggle-register-password-icon" class="ri-eye-off-line"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Xác nhận mật khẩu</label>
+                            <div class="relative">
+                                <input id="register-confirm-password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nhập lại mật khẩu" required>
+                                <button id="toggle-register-confirm-password" type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600" aria-label="Toggle confirm password visibility">
+                                    <i id="toggle-register-confirm-password-icon" class="ri-eye-off-line"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div>
@@ -215,6 +230,14 @@
             const togglePwdBtn = document.getElementById('toggle-password');
             const pwd = document.getElementById('password');
             const icon = document.getElementById('toggle-password-icon');
+
+            const toggleRegPwdBtn = document.getElementById('toggle-register-password');
+            const regPwd = document.getElementById('register-password');
+            const regPwdIcon = document.getElementById('toggle-register-password-icon');
+            const toggleRegConfirmBtn = document.getElementById('toggle-register-confirm-password');
+            const regConfirmPwd = document.getElementById('register-confirm-password');
+            const regConfirmIcon = document.getElementById('toggle-register-confirm-password-icon');
+
             if (togglePwdBtn) {
                 togglePwdBtn.addEventListener('click', function (e) {
                     if (pwd.type === 'password') {
@@ -225,6 +248,34 @@
                         pwd.type = 'password';
                         icon.classList.remove('ri-eye-line');
                         icon.classList.add('ri-eye-off-line');
+                    }
+                });
+            }
+
+            if (toggleRegPwdBtn) {
+                toggleRegPwdBtn.addEventListener('click', function (e) {
+                    if (regPwd.type === 'password') {
+                        regPwd.type = 'text';
+                        regPwdIcon.classList.remove('ri-eye-off-line');
+                        regPwdIcon.classList.add('ri-eye-line');
+                    } else {
+                        regPwd.type = 'password';
+                        regPwdIcon.classList.remove('ri-eye-line');
+                        regPwdIcon.classList.add('ri-eye-off-line');
+                    }
+                });
+            }
+
+            if (toggleRegConfirmBtn) {
+                toggleRegConfirmBtn.addEventListener('click', function (e) {
+                    if (regConfirmPwd.type === 'password') {
+                        regConfirmPwd.type = 'text';
+                        regConfirmIcon.classList.remove('ri-eye-off-line');
+                        regConfirmIcon.classList.add('ri-eye-line');
+                    } else {
+                        regConfirmPwd.type = 'password';
+                        regConfirmIcon.classList.remove('ri-eye-line');
+                        regConfirmIcon.classList.add('ri-eye-off-line');
                     }
                 });
             }
@@ -253,6 +304,9 @@
                 });
                 if (res.ok) {
                     const data = await res.json();
+                    // Save logged in user to localStorage for greeting
+                    const localUser = { username: data.username, full_name: data.full_name || data.username, role: data.role || 'student', id: data.id };
+                    localStorage.setItem('lms_user', JSON.stringify(localUser));
                     btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
                     btn.disabled = true;
                     // redirect base on role
@@ -265,11 +319,14 @@
 
                 // If API login fails (invalid creds) fall back to demo accounts
                 if (usernameInput === TEACHER_ACC.user && passwordInput === TEACHER_ACC.pass) {
+                    // set demo teacher in localStorage
+                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'teacher' }));
                     btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
                     btn.disabled = true;
                     setTimeout(() => { location.replace('./dashboardGV.html'); }, 500);
                     return;
                 } else if (usernameInput === STUDENT_ACC.user && passwordInput === STUDENT_ACC.pass) {
+                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'student' }));
                     btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
                     btn.disabled = true;
                     setTimeout(() => { location.replace('./dashboardSV.html'); }, 500);
@@ -284,10 +341,12 @@
                 console.warn('API login failed', err);
                 // Fallback to demo behavior
                 if (usernameInput === TEACHER_ACC.user && passwordInput === TEACHER_ACC.pass) {
+                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'teacher' }));
                     btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
                     btn.disabled = true;
                     setTimeout(() => { location.replace('./dashboardGV.html'); }, 500);
                 } else if (usernameInput === STUDENT_ACC.user && passwordInput === STUDENT_ACC.pass) {
+                    localStorage.setItem('lms_user', JSON.stringify({ username: usernameInput, full_name: usernameInput, role: 'student' }));
                     btn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Đang chuyển hướng...';
                     btn.disabled = true;
                     setTimeout(() => { location.replace('./dashboardSV.html'); }, 500);
@@ -314,19 +373,28 @@
             if (!first || !last || !email || !password) { errorEl.innerText = 'Vui lòng điền đầy đủ thông tin'; errorEl.style.display = 'block'; return; }
             if (password.length < 8) { errorEl.innerText = 'Mật khẩu phải có ít nhất 8 ký tự'; errorEl.style.display = 'block'; return; }
 
+            const confirmPassword = document.getElementById('register-confirm-password').value.trim();
+            if (password !== confirmPassword) { errorEl.innerText = 'Mật khẩu xác nhận không khớp'; errorEl.style.display = 'block'; return; }
+
             const payload = { username: email, password: password, full_name: `${first} ${last}`, role };
             submitBtn.disabled = true; submitBtn.innerText = 'Đang tạo...';
-            try {
+            try { 
                 const res = await fetch(`${window.API_BASE || 'http://localhost:8000'}/users`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 if (res.ok) {
-                    successEl.innerText = '🎉 Đăng ký thành công! Vui lòng đăng nhập bằng tài khoản mới.';
+                    // store the registered user info locally and redirect to dashboard
+                    const localUser = { username: email, full_name: `${first} ${last}`, role };
+                    localStorage.setItem('lms_user', JSON.stringify(localUser));
+                    successEl.innerText = '🎉 Đăng ký thành công! Chuyển hướng đến Dashboard...';
                     successEl.style.display = 'block';
-                    submitBtn.disabled = false; submitBtn.innerText = 'Tạo tài khoản';
-                    toggleForm('login');
+                    setTimeout(() => {
+                        if (role === 'teacher') location.replace('./dashboardGV.html');
+                        else location.replace('./dashboardSV.html');
+                    }, 700);
+                    return;
                 } else {
                     const data = await res.json().catch(_ => null);
                     const text = data?.detail || (await res.text()).slice(0,200);
