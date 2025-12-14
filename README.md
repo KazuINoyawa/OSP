@@ -190,5 +190,5 @@ fetch(`${API_BASE}/scores`, {
 
 ---
 
-**Version:** 1.0.1 
-**Last Updated:** December 13, 2025
+**Version:** 1.0.2 
+**Last Updated:** December 14, 2025
