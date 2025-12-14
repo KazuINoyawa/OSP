@@ -506,28 +506,38 @@
         });
 
         // Dữ liệu bài tập mẫu cho filter
-        const assignmentsList = [
+            const assignmentsList = [
             {
                 id: 'web',
                 type: 'pending',
                 title: "Xây dựng Website bán hàng (Frontend)",
                 course: "Lập trình Web",
-                deadline: 'Hôm nay, 23:59',
+                deadline: '23:59, Hôm nay',
                 status: 'Chưa nộp',
-                icon: 'ri-code-s-slash-line',
-                color: 'blue',
-                desc: "Yêu cầu: Sử dụng ReactJS/VueJS thiết kế giao diện trang chủ và trang chi tiết sản phẩm."
+                submitted: false,
+                fileSubmitted: null,
+                submittedTime: null,
+                desc: `
+                    <p class="font-bold mb-2">Yêu cầu bài tập:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Thiết kế trang chủ</li>
+                        <li>Trang chi tiết sản phẩm</li>
+                        <li>Responsive</li>
+                        <li>Nộp source + báo cáo PDF</li>
+                    </ul>
+                `
             },
             {
                 id: 'sql',
                 type: 'pending',
                 title: "Truy vấn SQL nâng cao & Trigger",
                 course: "Cơ sở dữ liệu",
-                deadline: 'Ngày mai, 17:00',
+                deadline: '17:00, Ngày mai',
                 status: 'Chưa nộp',
-                icon: 'ri-database-2-line',
-                color: 'purple',
-                desc: "Bài thực hành số 4: Viết các Store Procedure và Trigger kiểm tra dữ liệu."
+                submitted: false,
+                fileSubmitted: null,
+                submittedTime: null,
+                desc: "<p>Viết Store Procedure và Trigger.</p>"
             },
             {
                 id: 'philosophy',
@@ -536,22 +546,13 @@
                 course: "Triết học",
                 deadline: '22/11/2025',
                 status: 'Đã nộp',
-                icon: 'ri-book-mark-line',
-                color: 'green',
-                desc: "Nộp bài thành công lúc 10:30, 21/11/2025."
-            },
-            {
-                id: 'graded',
-                type: 'graded',
-                title: "Báo cáo thực hành Packet Tracer",
-                course: "Mạng máy tính",
-                deadline: '20/11/2025',
-                status: 'Đã chấm',
-                icon: 'ri-global-line',
-                color: 'indigo',
-                desc: "Điểm số: 9.0 / 10"
+                submitted: true,
+                fileSubmitted: "Tieu_luan_Mac_Lenin.pdf",
+                submittedTime: "10:30 - 21/11/2025",
+                desc: "<p>Tiểu luận cá nhân.</p>"
             }
         ];
+
 
         // Hàm render bài tập theo loại
         function renderAssignments(type) {
@@ -629,29 +630,62 @@
             }
         }
 
-        // Mở trang chi tiết (Giả lập)
-        function openDetail(type) {
-            // Nếu là bài đã chấm, chuyển hướng
-            if (type === 'graded') {
-                window.location.href = 'chamdiem.html';
-                return;
+                function openDetail(id) {
+            const assignment = assignmentsList.find(a => a.id === id);
+            if (!assignment) return;
+
+            // Gán dữ liệu chung
+            document.getElementById('detail-title').innerText = assignment.title;
+            document.getElementById('detail-course').innerText = assignment.course;
+            document.getElementById('detail-deadline').innerText = assignment.deadline;
+            document.getElementById('detail-desc').innerHTML = assignment.desc;
+
+            const submitCard = document.querySelector('.lg\\:col-span-1');
+            submitCard.innerHTML = '';
+
+            // === TRƯỜNG HỢP 1: CHƯA NỘP ===
+            if (!assignment.submitted) {
+                submitCard.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden sticky top-6">
+                    <div class="px-6 py-4 border-b bg-gray-50 flex justify-between">
+                        <h3 class="font-bold">Bài làm của bạn</h3>
+                        <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded">
+                            Chưa nộp
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <input type="file" id="submit-file" class="mb-4 w-full">
+                        <button onclick="submitAssignment('${assignment.id}')"
+                            class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold">
+                            <i class="ri-send-plane-fill"></i> Nộp bài
+                        </button>
+                    </div>
+                </div>`;
             }
 
-            // Nếu là bài chưa nộp (web hoặc sql)
-            const data = assignmentsData[type];
-            if (data) {
-                // Cập nhật nội dung trang chi tiết
-                document.getElementById('detail-title').innerText = data.title;
-                document.getElementById('detail-course').innerText = data.course;
-                document.getElementById('detail-deadline').innerHTML = data.deadline;
-                document.getElementById('detail-file-name').innerText = data.fileName;
-                document.getElementById('detail-desc').innerHTML = data.description;
-
-                // Chuyển sang view chi tiết
-                switchView('view-detail');
-                document.querySelector('.main-content').scrollTop = 0;
+            // === TRƯỜNG HỢP 2: ĐÃ NỘP ===
+            else {
+                submitCard.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden sticky top-6">
+                    <div class="px-6 py-4 border-b bg-gray-50 flex justify-between">
+                        <h3 class="font-bold">Bài đã nộp</h3>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded">
+                            Đã nộp
+                        </span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <p><strong>File:</strong> ${assignment.fileSubmitted}</p>
+                        <p><strong>Thời gian:</strong> ${assignment.submittedTime}</p>
+                        <button class="w-full py-2 border rounded-lg">
+                            <i class="ri-download-line"></i> Tải file
+                        </button>
+                    </div>
+                </div>`;
             }
+
+            switchView('view-detail');
         }
+
         function toggleUserMenu() {
             const dropdown = document.getElementById('user-dropdown');
             dropdown.classList.toggle('hidden');
@@ -665,6 +699,25 @@
                 dropdown.classList.add('hidden');
             }
         });
+                function submitAssignment(id) {
+            const fileInput = document.getElementById('submit-file');
+            if (!fileInput.files.length) {
+                alert("Vui lòng chọn file");
+                return;
+            }
+
+            const assignment = assignmentsList.find(a => a.id === id);
+            assignment.submitted = true;
+            assignment.type = 'submitted';
+            assignment.status = 'Đã nộp';
+            assignment.fileSubmitted = fileInput.files[0].name;
+            assignment.submittedTime = new Date().toLocaleString('vi-VN');
+
+            alert("Nộp bài thành công!");
+            openDetail(id);
+        }
     </script>
+    
+
 </body>
 </html>
