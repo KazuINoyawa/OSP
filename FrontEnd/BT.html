@@ -506,52 +506,47 @@
         });
 
         // Dữ liệu bài tập mẫu cho filter
-            const assignmentsList = [
-            {
-                id: 'web',
-                type: 'pending',
-                title: "Xây dựng Website bán hàng (Frontend)",
-                course: "Lập trình Web",
-                deadline: '23:59, Hôm nay',
-                status: 'Chưa nộp',
-                submitted: false,
-                fileSubmitted: null,
-                submittedTime: null,
-                desc: `
-                    <p class="font-bold mb-2">Yêu cầu bài tập:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Thiết kế trang chủ</li>
-                        <li>Trang chi tiết sản phẩm</li>
-                        <li>Responsive</li>
-                        <li>Nộp source + báo cáo PDF</li>
-                    </ul>
-                `
-            },
-            {
-                id: 'sql',
-                type: 'pending',
-                title: "Truy vấn SQL nâng cao & Trigger",
-                course: "Cơ sở dữ liệu",
-                deadline: '17:00, Ngày mai',
-                status: 'Chưa nộp',
-                submitted: false,
-                fileSubmitted: null,
-                submittedTime: null,
-                desc: "<p>Viết Store Procedure và Trigger.</p>"
-            },
-            {
-                id: 'philosophy',
-                type: 'submitted',
-                title: "Tiểu luận triết học Mác - Lênin",
-                course: "Triết học",
-                deadline: '22/11/2025',
-                status: 'Đã nộp',
-                submitted: true,
-                fileSubmitted: "Tieu_luan_Mac_Lenin.pdf",
-                submittedTime: "10:30 - 21/11/2025",
-                desc: "<p>Tiểu luận cá nhân.</p>"
-            }
-        ];
+           const DEFAULT_ASSIGNMENTS = [
+    {
+        id: 'web',
+        type: 'pending',
+        title: "Xây dựng Website bán hàng (Frontend)",
+        course: "Lập trình Web",
+        deadline: '23:59, Hôm nay',
+        status: 'Chưa nộp',
+        submitted: false,
+        fileSubmitted: null,
+        submittedTime: null,
+        desc: `...`
+    },
+    {
+        id: 'sql',
+        type: 'pending',
+        title: "Truy vấn SQL nâng cao & Trigger",
+        course: "Cơ sở dữ liệu",
+        deadline: '17:00, Ngày mai',
+        status: 'Chưa nộp',
+        submitted: false,
+        fileSubmitted: null,
+        submittedTime: null,
+        desc: `...`
+    },
+    {
+        id: 'philosophy',
+        type: 'submitted',
+        title: "Tiểu luận triết học Mác - Lênin",
+        course: "Triết học",
+        deadline: '22/11/2025',
+        status: 'Đã nộp',
+        submitted: true,
+        fileSubmitted: "Tieu_luan_Mac_Lenin.pdf",
+        submittedTime: "10:30 - 21/11/2025",
+        desc: `...`
+    }
+];
+
+let assignmentsList = [];
+
 
 
         // Hàm render bài tập theo loại
@@ -606,7 +601,10 @@
         });
 
         // Khởi tạo mặc định
-        renderAssignments('all');
+        document.addEventListener('DOMContentLoaded', () => {
+    loadAssignmentsFromStorage();
+    renderAssignments('all');
+});
 
         // Chuyển đổi View (List <-> Detail)
         function switchView(viewId) {
@@ -700,22 +698,38 @@
             }
         });
                 function submitAssignment(id) {
-            const fileInput = document.getElementById('submit-file');
-            if (!fileInput.files.length) {
-                alert("Vui lòng chọn file");
-                return;
-            }
+    const fileInput = document.getElementById('submit-file');
+    if (!fileInput.files.length) {
+        alert("Vui lòng chọn file");
+        return;
+    }
 
-            const assignment = assignmentsList.find(a => a.id === id);
-            assignment.submitted = true;
-            assignment.type = 'submitted';
-            assignment.status = 'Đã nộp';
-            assignment.fileSubmitted = fileInput.files[0].name;
-            assignment.submittedTime = new Date().toLocaleString('vi-VN');
+    const assignment = assignmentsList.find(a => a.id === id);
 
-            alert("Nộp bài thành công!");
-            openDetail(id);
-        }
+    assignment.submitted = true;
+    assignment.type = 'submitted';
+    assignment.status = 'Đã nộp';
+    assignment.fileSubmitted = fileInput.files[0].name;
+    assignment.submittedTime = new Date().toLocaleString('vi-VN');
+
+    saveAssignmentsToStorage();   // 🔥 DÒNG QUYẾT ĐỊNH
+    alert("Nộp bài thành công!");
+    openDetail(id);
+}
+
+        function loadAssignmentsFromStorage() {
+    const data = localStorage.getItem('assignments');
+    if (data) {
+        assignmentsList = JSON.parse(data);
+    } else {
+        assignmentsList = DEFAULT_ASSIGNMENTS;
+        saveAssignmentsToStorage();
+    }
+}
+        function saveAssignmentsToStorage() {
+    localStorage.setItem('assignments', JSON.stringify(assignmentsList));
+}
+
     </script>
     
 
