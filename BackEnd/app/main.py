@@ -7,7 +7,10 @@ from .database import Base, engine
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
+app.include_router(router)
+@app.get("/")
+def root():
+    return {"status": "Backend is running"}
 # CORS middleware - for development allow all origins. In production, restrict this.
 app.add_middleware(
 	CORSMiddleware,
