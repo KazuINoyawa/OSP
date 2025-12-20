@@ -1,26 +1,6 @@
 from fastapi import FastAPI
-from .routers import user, classroom, assignment, score, auth, message, attachment, notification, peer_review
 from fastapi.middleware.cors import CORSMiddleware
 from .database import Base, engine
-
-# Tạo bảng database nếu chưa có
-Base.metadata.create_all(bind=engine)
-
-app = FastAPI()
-app.include_router(router)
-@app.get("/")
-def root():
-    return {"status": "Backend is running"}
-# CORS middleware - for development allow all origins. In production, restrict this.
-app.add_middleware(
-	CORSMiddleware,
-	allow_origins=["*"],
-	allow_credentials=True,
-	allow_methods=["*"],
-	allow_headers=["*"],
-)
-
-from fastapi import FastAPI
 from .routers import (
     user,
     classroom,
@@ -33,8 +13,22 @@ from .routers import (
     peer_review
 )
 
-app = FastAPI()
+# Khởi tạo database (SQLite)
+Base.metadata.create_all(bind=engine)
 
+# Khởi tạo FastAPI app
+app = FastAPI(title="Assignment & Submission System")
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Khi production nên giới hạn domain
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers
 app.include_router(user.router)
 app.include_router(classroom.router)
 app.include_router(assignment.router)
@@ -45,7 +39,7 @@ app.include_router(attachment.router)
 app.include_router(notification.router)
 app.include_router(peer_review.router)
 
+# Root endpoint
 @app.get("/")
 def root():
     return {"status": "Backend is running"}
-
