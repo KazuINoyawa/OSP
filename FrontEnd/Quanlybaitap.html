@@ -329,8 +329,7 @@
             scoreId: null
         };
 
-        <script>
-function openGradingModal(studentName, fileName, score, userId, assignmentId, scoreId = null) {
+        function openGradingModal(studentName, fileName, score, userId, assignmentId, scoreId = null) {
     document.getElementById('modal-student-name').innerText = 'Chấm bài: ' + studentName;
     document.getElementById('modal-file-name').innerText = 'File nộp: ' + fileName;
     document.getElementById('grading-score').value = score || '';
@@ -342,7 +341,6 @@ function openGradingModal(studentName, fileName, score, userId, assignmentId, sc
 
     document.getElementById('modal-grading').classList.remove('hidden');
 }
-</script>
 
 
 
@@ -473,10 +471,6 @@ function openGradingModal(studentName, fileName, score, userId, assignmentId, sc
 
         // Khởi tạo
         renderAssignments('all');
-        document.getElementById('grading-save-btn').addEventListener('click', function () {
-    openConfirmModal();
-});
-
     </script>
 </body>
 </html>
