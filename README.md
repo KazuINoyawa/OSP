@@ -110,6 +110,21 @@ window.API_TOKEN = 'dev-token'                // Bearer token
 These values can be overridden by setting them in the browser console before page load, or by modifying the script tags in the HTML files.
 
 ## Key Endpoints
+### Auth
+- `POST /api/auth/login` - Login for JWT token
+- `POST /api/auth/register` - Register for new
+
+### Assignment
+- `GET /api/assignments` - Get exc list
+- `POST /api/assignments` - Create new exc
+- `GET /api/assignments/{id}` - Observation the exc detail
+
+### Grading
+- `POST /api/grades/{sub_id}` - Grading
+
+### Submission
+- `POST /api/submissions` - Exc file updload
+- `GET /api/submissions/me` - Obvervation the exc submit history
 
 ### Messages
 - `GET /messages` - List messages
