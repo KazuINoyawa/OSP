@@ -329,7 +329,8 @@
             scoreId: null
         };
 
-        function openGradingModal(studentName, fileName, score, userId, assignmentId, scoreId = null) {
+        <script>
+function openGradingModal(studentName, fileName, score, userId, assignmentId, scoreId = null) {
     document.getElementById('modal-student-name').innerText = 'Chấm bài: ' + studentName;
     document.getElementById('modal-file-name').innerText = 'File nộp: ' + fileName;
     document.getElementById('grading-score').value = score || '';
@@ -341,28 +342,26 @@
 
     document.getElementById('modal-grading').classList.remove('hidden');
 }
+</script>
+
 
 
         function updateRowAfterSave(userId, assignmentId, scoreValue, scoreId) {
-    const row = document.querySelector(
-        `tr[data-user-id='${userId}'][data-assignment-id='${assignmentId}']`
-    );
-    if (!row) return;
+            const row = document.querySelector(
+                `tr[data-user-id='${userId}'][data-assignment-id='${assignmentId}']`
+            );
+            if (!row) return;
 
-    // Lưu scoreId vào row
-    row.dataset.scoreId = scoreId;
+            row.dataset.scoreId = scoreId;
 
-    // Update trạng thái
-    const status = row.querySelector('.grading-status');
-    status.innerText = `${scoreValue} / 10`;
-    status.className = 'grading-status px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-bold';
+            const status = row.querySelector('.grading-status');
+            status.innerText = `${scoreValue} / 10`;
+            status.className = 'grading-status bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold';
 
-    // Update nút hành động
-    const btn = row.querySelector('.grading-action');
-    btn.innerText = 'Sửa điểm';
-    btn.className = 'grading-action px-3 py-1.5 border border-blue-600 text-blue-600 text-xs font-bold rounded hover:bg-blue-50';
-}
-
+            const btn = row.querySelector('.grading-action');
+            btn.innerText = 'Sửa điểm';
+            btn.className = 'grading-action border border-blue-600 text-blue-600 px-3 py-1.5 rounded text-xs font-bold hover:bg-blue-50';
+        }
 
 
 
@@ -474,6 +473,10 @@
 
         // Khởi tạo
         renderAssignments('all');
+        document.getElementById('grading-save-btn').addEventListener('click', function () {
+    openConfirmModal();
+});
+
     </script>
 </body>
 </html>
