@@ -164,7 +164,7 @@
                                 <td class="px-6 py-4 text-blue-600 underline cursor-pointer">BTL_Nhom1.pdf</td>
                                 <td class="px-6 py-4 text-center"><span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded font-bold grading-status">Chưa chấm</span></td>
                                 <td class="px-6 py-4 text-right">
-                                    <button onclick="openGradingModal('Nguyễn Văn A', 'BTL_Nhom1.pdf', '', 1, 1)" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 grading-action">Chấm bài</button>
+                                    <button onclick="openGradingModal('Nguyễn Văn A', 'BTL_Nhom1.pdf', '', 1, 1,null)" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 grading-action">Chấm bài</button>
                                 </td>
                             </tr>
                             <tr class="hover:bg-blue-50">
@@ -329,39 +329,40 @@
             scoreId: null
         };
 
-        function openGradingModal(studentName, fileName, score, userId, assignmentId) {
-            document.getElementById('modal-student-name').innerText = 'Chấm bài: ' + studentName;
-            document.getElementById('modal-file-name').innerText = 'File nộp: ' + fileName;
-            document.getElementById('grading-score').value = score ?? '';
-            document.getElementById('grading-feedback').value = '';
+        function openGradingModal(studentName, fileName, score, userId, assignmentId, scoreId = null) {
+    document.getElementById('modal-student-name').innerText = 'Chấm bài: ' + studentName;
+    document.getElementById('modal-file-name').innerText = 'File nộp: ' + fileName;
+    document.getElementById('grading-score').value = score || '';
+    document.getElementById('grading-feedback').value = '';
 
-            const row = document.querySelector(
-                `tr[data-user-id='${userId}'][data-assignment-id='${assignmentId}']`
-            );
+    __grading_ctx.userId = userId;
+    __grading_ctx.assignmentId = assignmentId;
+    __grading_ctx.scoreId = scoreId;
 
-            __grading_ctx.userId = userId;
-            __grading_ctx.assignmentId = assignmentId;
-            __grading_ctx.scoreId = row?.dataset.scoreId || null;
+    document.getElementById('modal-grading').classList.remove('hidden');
+}
 
-            document.getElementById('modal-grading').classList.remove('hidden');
-        }
 
         function updateRowAfterSave(userId, assignmentId, scoreValue, scoreId) {
-            const row = document.querySelector(
-                `tr[data-user-id='${userId}'][data-assignment-id='${assignmentId}']`
-            );
-            if (!row) return;
+    const row = document.querySelector(
+        `tr[data-user-id='${userId}'][data-assignment-id='${assignmentId}']`
+    );
+    if (!row) return;
 
-            row.dataset.scoreId = scoreId;
+    // Lưu scoreId vào row
+    row.dataset.scoreId = scoreId;
 
-            const status = row.querySelector('.grading-status');
-            status.innerText = `${scoreValue} / 10`;
-            status.className = 'grading-status bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold';
+    // Update trạng thái
+    const status = row.querySelector('.grading-status');
+    status.innerText = `${scoreValue} / 10`;
+    status.className = 'grading-status px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-bold';
 
-            const btn = row.querySelector('.grading-action');
-            btn.innerText = 'Sửa điểm';
-            btn.className = 'grading-action border border-blue-600 text-blue-600 px-3 py-1.5 rounded text-xs font-bold hover:bg-blue-50';
-        }
+    // Update nút hành động
+    const btn = row.querySelector('.grading-action');
+    btn.innerText = 'Sửa điểm';
+    btn.className = 'grading-action px-3 py-1.5 border border-blue-600 text-blue-600 text-xs font-bold rounded hover:bg-blue-50';
+}
+
 
 
 
